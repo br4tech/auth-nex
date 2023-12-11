@@ -36,6 +36,18 @@ Transforme a autenticação e autorização em uma experiência segura e flexív
 
 ## Dev
 
-wire:
-   Execute na pasta CMD: `go run github.com/google/wire/cmd/wire`
+Esse projeto utiliza o viper para tratar as ENVS.
+
+Configurar o arquivo `.env` para refletir seu cenario de banco de dados.Em nosso modelo estamos utilizando uma imagem docker do mysql.
+
+- **Banco de dados:**
+  MySQL: `docker run --name auth_nex -e MYSQL_ROOT_PASSWORD=admin -d -p 3306:3306 mysql --bind-address=0.0.0.0`
+
+- **Wire:**
+  O Wire é uma biblioteca em Go que simplifica a injeção de dependência e a criação de gráficos de objetos complexos. Com o Wire, é possível definir facilmente dependências entre diferentes componentes do seu aplicativo e gerar automaticamente o código necessário para construir esses componentes
+  
+  Execute na pasta CMD: `go run github.com/google/wire/cmd/wire`
+
+- **Rodar aplicacao:**
+   `go run cmd/server/main.go  cmd/server/wire_gen.go`
 
