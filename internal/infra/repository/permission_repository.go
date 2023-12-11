@@ -13,10 +13,10 @@ func NewPermissionRepository(db *gorm.DB) IPermissionRepository {
 	return &PermissionRepository{db: db}
 }
 
-func FindRoleByName(name string) (*model.User, error) {
+func (r *PermissionRepository) FindRoleByName(name string) (*model.User, error) {
 	return nil, nil
 }
 
-func CreateRole(role *model.Role) error {
+func (r *PermissionRepository) CreateRole(role *model.Role) error {
 	return nil
 }
