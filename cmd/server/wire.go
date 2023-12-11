@@ -1,9 +1,9 @@
 package main
 
 import (
-	handler "github.com/br4tech/auth-nex/internal/auth/delivery"
-	"github.com/br4tech/auth-nex/internal/auth/repository"
-	"github.com/br4tech/auth-nex/internal/auth/usecase"
+	handler "github.com/br4tech/auth-nex/internal/infra/delivery"
+	"github.com/br4tech/auth-nex/internal/infra/repository"
+	usecase "github.com/br4tech/auth-nex/internal/usecase/auth"
 	"github.com/google/wire"
 	"gorm.io/gorm"
 )

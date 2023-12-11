@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/br4tech/auth-nex/internal/auth/model"
+	"github.com/br4tech/auth-nex/internal/infra/model"
 	"gorm.io/gorm"
 )
 

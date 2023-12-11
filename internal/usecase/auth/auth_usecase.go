@@ -3,19 +3,27 @@ package usecase
 import (
 	"time"
 
-	"github.com/br4tech/auth-nex/internal/auth/model"
-	"github.com/br4tech/auth-nex/internal/auth/repository"
+	"github.com/br4tech/auth-nex/internal/infra/model"
+	"github.com/br4tech/auth-nex/internal/infra/repository"
 	"github.com/dgrijalva/jwt-go"
 )
+
+var jwtKey = []byte("chave_secreta_do_jwt")
 
 type AuthUseCase struct {
 	authRepository repository.IAuthRepository
 }
 
-var jwtKey = []byte("chave_secreta_do_jwt")
-
 func NewAuthUseCase(authRepository repository.IAuthRepository) IAuthUseCase {
 	return &AuthUseCase{authRepository: authRepository}
+}
+
+func Authenticate(username, password string, tenantID int) (*model.User, error) {
+	return nil, nil
+}
+
+func Register(user *model.User) error {
+	return nil
 }
 
 func GenerateAccessToken(user *model.User) (string, error) {
@@ -37,6 +45,6 @@ func GenerateAccessToken(user *model.User) (string, error) {
 	return tokenString, nil
 }
 
-func ValidateAccessToken(tokenString string) (uint, error) {
-	return nil, nil
+func ValidateAccessToken(tokenString string) (int, error) {
+	return 0, nil
 }

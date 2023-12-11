@@ -34,3 +34,8 @@ O AuthNex é fácil de implementar e se integra perfeitamente a diferentes tipos
 
 Transforme a autenticação e autorização em uma experiência segura e flexível com o AuthNex em Go.
 
+## Dev
+
+wire:
+   Execute na pasta CMD: `go run github.com/google/wire/cmd/wire`
+

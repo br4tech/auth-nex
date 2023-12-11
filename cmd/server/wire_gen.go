@@ -7,9 +7,9 @@
 package main
 
 import (
-	"github.com/br4tech/auth-nex/internal/auth/delivery"
-	"github.com/br4tech/auth-nex/internal/auth/repository"
-	"github.com/br4tech/auth-nex/internal/auth/usecase"
+	"github.com/br4tech/auth-nex/internal/infra/delivery"
+	"github.com/br4tech/auth-nex/internal/infra/repository"
+	"github.com/br4tech/auth-nex/internal/usecase/auth"
 	"gorm.io/gorm"
 )
 
