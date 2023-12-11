@@ -3,12 +3,16 @@ package handler
 import (
 	"net/http"
 
-	"github.com/br4tech/auth-nex/internal/auth/usecase"
+	usecase "github.com/br4tech/auth-nex/internal/usecase/auth"
 )
 
 // AuthHandler manipula solicitações HTTP relacionadas à autenticação.
 type AuthHandler struct {
-	AuthUseCase usecase.AuthUseCase
+	authUseCase usecase.IAuthUseCase
+}
+
+func NewAuthHandler(authUseCase usecase.IAuthUseCase) *AuthHandler {
+	return &AuthHandler{authUseCase: authUseCase}
 }
 
 // AuthenticateHandler autentica um usuário.
