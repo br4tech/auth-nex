@@ -36,6 +36,11 @@ Transforme a autenticação e autorização em uma experiência segura e flexív
 
 ## Dev
 
-wire:
-   Execute na pasta CMD: `go run github.com/google/wire/cmd/wire`
+database:
+  ``` 
+    docker run --name  authnexdb -p 5432:5432 -e POSTGRES_PASSWORD=123456 -d postgres:alpine
+    docker exec -it authnexdb bash
+    psql -U postgres
+    CREATE DATABASE authnexdb;
+  ```
 
