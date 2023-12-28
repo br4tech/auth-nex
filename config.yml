@@ -7,6 +7,6 @@ database:
   port: 5432
   user: postgres
   password: 123456
-  dbname: authnex
+  dbname: authnexdb
   sslmode: disable
   timezone: America/Sao_Paulo
