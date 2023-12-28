@@ -18,15 +18,15 @@ func NewAuthUseCase(authRepository repository.IAuthRepository) IAuthUseCase {
 	return &AuthUseCase{authRepository: authRepository}
 }
 
-func Authenticate(username, password string, tenantID int) (*model.User, error) {
+func (uc *AuthUseCase) Authenticate(username, password string, tenantID int) (*model.User, error) {
 	return nil, nil
 }
 
-func Register(user *model.User) error {
+func (uc *AuthUseCase) Register(user *model.User) error {
 	return nil
 }
 
-func GenerateAccessToken(user *model.User) (string, error) {
+func (uc *AuthUseCase) GenerateAccessToken(user *model.User) (string, error) {
 	claims := &model.Claims{
 		UserName: user.UserName,
 		StandardClaims: jwt.StandardClaims{
@@ -45,6 +45,6 @@ func GenerateAccessToken(user *model.User) (string, error) {
 	return tokenString, nil
 }
 
-func ValidateAccessToken(tokenString string) (int, error) {
+func (uc *AuthUseCase) ValidateAccessToken(tokenString string) (int, error) {
 	return 0, nil
 }

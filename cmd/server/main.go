@@ -11,8 +11,7 @@ import (
 )
 
 func main() {
-	dsn := "root:admin@tcp(localhost:3306)/auth_next?charset=utf8mb4&parseTime=True"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(viper.GetString("DATABASE_URL")), &gorm.Config{})
 	if err != nil {
 		panic("Falha ao conectar ao banco de dados")
 	}
