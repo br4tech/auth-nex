@@ -1,15 +1,15 @@
 package usecase
 
 import (
-	"github.com/br4tech/auth-nex/internal/infra/model"
-	"github.com/br4tech/auth-nex/internal/infra/repository"
+	"github.com/br4tech/auth-nex/internal/core/port"
+	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type PermissionUseCase struct {
-	permissionRepository repository.IPermissionRepository
+	permissionRepository port.IPermissionRepository
 }
 
-func NewPermissionUseCase(permissionRepository repository.IPermissionRepository) IPermissionUseCase {
+func NewPermissionUseCase(permissionRepository port.IPermissionRepository) port.IPermissionUseCase {
 	return &PermissionUseCase{
 		permissionRepository: permissionRepository,
 	}

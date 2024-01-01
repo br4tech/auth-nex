@@ -4,7 +4,7 @@ app:
   
 database:
   host: localhost
-  port: 5432
+  port: 5434
   user: postgres
   password: 123456
   dbname: authnexdb

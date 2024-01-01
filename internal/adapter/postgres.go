@@ -1,9 +1,10 @@
-package database
+package adapter
 
 import (
 	"fmt"
 
 	"github.com/br4tech/auth-nex/config"
+	"github.com/br4tech/auth-nex/internal/core/port"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,7 +13,7 @@ type postgresDatabase struct {
 	Db *gorm.DB
 }
 
-func NewPostgresDatabase(cfg *config.Config) Database {
+func NewPostgresDatabase(cfg *config.Config) port.IDatabase {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
 		cfg.Db.Host,

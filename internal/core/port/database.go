@@ -1,7 +1,7 @@
-package database
+package port
 
 import "gorm.io/gorm"
 
-type Database interface {
+type IDatabase interface {
 	GetDb() *gorm.DB
 }

@@ -38,9 +38,9 @@ Transforme a autenticação e autorização em uma experiência segura e flexív
 
 database:
   ``` 
-    docker run --name  authnexdb -p 5432:5432 -e POSTGRES_PASSWORD=123456 -d postgres:alpine
+    docker run --name authnex -e POSTGRES_PASSWORD=123456 -d -p 5434:5432 postgres
     
-    docker exec -it authnexdb bash
+    docker exec -it authnex bash
 
     psql -U postgres
 
