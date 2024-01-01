@@ -8,7 +8,7 @@ import (
 type (
 	IUserUseCase interface {
 		Authenticate(username, password string, tenantID int) (*domain.User, error)
-		CreateUser(user *model.User) error
+		CreateUser(name string, email string) (*domain.User, error)
 		GenerateAccessToken(user *model.User) (string, error)
 		ValidateAccessToken(tokenString string) (int, error)
 	}
