@@ -1,5 +1,11 @@
 package domain
 
 type Tenant struct {
-	Name string `json:"name"`
+	Name string `validate:"required"`
+}
+
+func NewTenant(name string) *Tenant {
+	return &Tenant{
+		Name: name,
+	}
 }

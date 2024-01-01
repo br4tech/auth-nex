@@ -24,12 +24,15 @@ func (r *UserRepository) Authenticate(name string, tenantID uint) (*domain.User,
 	return nil, nil
 }
 
-func (r *UserRepository) CreateUser(userModel *model.User) error {
-	user := model.User{
-		Name:     userModel.Name,
-		Password: userModel.Password,
+func (r *UserRepository) CreateUser(user *domain.User) (*domain.User, error) {
+	userModel := new(model.User)
+	userModel.FromDomain(user)
+
+	_, err := r.db.Create(userModel)
+
+	if err != nil {
+		return nil, err
 	}
 
-	r.db.Create(&user)
-	return nil
+	return user, nil
 }

@@ -13,7 +13,7 @@ type (
 
 	IUserRepository interface {
 		Authenticate(name string, tenantID uint) (*domain.User, error)
-		CreateUser(userModel *model.User) error
+		CreateUser(user *domain.User) (*domain.User, error)
 	}
 
 	ITenantRepository interface {

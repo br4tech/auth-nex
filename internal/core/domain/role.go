@@ -1,5 +1,11 @@
 package domain
 
 type Role struct {
-	Name string `json:"name"`
+	Name string `validate:"required"`
+}
+
+func NewRole(name string) *Role {
+	return &Role{
+		Name: name,
+	}
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
+	validator "github.com/br4tech/auth-nex/pkg"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -23,8 +24,18 @@ func (uc *AuthUseCase) Authenticate(username, password string, tenantID int) (*d
 	return nil, nil
 }
 
-func (uc *AuthUseCase) CreateUser(user *model.User) error {
-	return nil
+func (uc *AuthUseCase) CreateUser(name string, email string, roles []domain.Role) (*domain.User, error) {
+	user := domain.NewUser(
+		name,
+		email,
+		roles,
+	)
+
+	if err := validator.ValidateStruct(user); err != nil {
+		return nil, err
+	}
+
+	return uc.userRepository.CreateUser(user), nil
 }
 
 func (uc *AuthUseCase) GenerateAccessToken(user *model.User) (string, error) {
