@@ -34,7 +34,6 @@ func NewDomainError(errorType DomainErrorType, text string) DomainError {
 	}
 }
 
-// ValidateStruct validates a structs exposed fields.
 func ValidateStruct(d any) error {
 	validate := validator.New()
 	err := validate.Struct(d)
