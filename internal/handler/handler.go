@@ -6,7 +6,7 @@ type BaseResponse struct {
 	Message string `json:"message"`
 }
 
-func Response(c echo.Context, responseCode int, message string) error {
+func HandlerResponse(c echo.Context, responseCode int, message string) error {
 	return c.JSON(responseCode, &BaseResponse{
 		Message: message,
 	})
