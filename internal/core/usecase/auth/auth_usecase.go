@@ -39,9 +39,9 @@ func (uc *AuthUseCase) CreateUser(user *dto.UserDTO) (*domain.User, error) {
 	return userModel.ToDomain(), nil
 }
 
-func (uc *AuthUseCase) GenerateAccessToken(user *model.User) (string, error) {
+func (uc *AuthUseCase) GenerateAccessToken(user *dto.UserDTO) (string, error) {
 	claims := &model.Claims{
-		UserName: user.Name,
+		Email: user.Email,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(15 * time.Minute).Unix(), // Token expira em 15 minutos
 			IssuedAt:  time.Now().Unix(),

@@ -32,3 +32,19 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 
 	return HandlerResponse(c, http.StatusOK, "Created user with successfuly!!")
 }
+
+func (h *UserHandler) GenerateToken(c echo.Context) error {
+	reqBody := new(dto.UserDTO)
+
+	if err := c.Bind(reqBody); err != nil {
+		return HandlerResponse(c, http.StatusInternalServerError, "Bad request")
+	}
+
+	token, err := h.userUseCase.GenerateAccessToken(reqBody)
+
+	if err != nil {
+		return HandlerResponse(c, http.StatusInternalServerError, "Failed to create user")
+	}
+
+	return HandlerResponse(c, http.StatusOK, token)
+}

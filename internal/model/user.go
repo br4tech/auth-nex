@@ -17,16 +17,20 @@ type User struct {
 }
 
 type Claims struct {
-	UserName string `json:"username"`
+	Email string `json:"email"`
 	jwt.StandardClaims
 }
 
 func (model User) ToDomain() *domain.User {
 	return &domain.User{
-		Name: model.Name,
+		Name:     model.Name,
+		Email:    model.Email,
+		TenantID: model.TenantID,
 	}
 }
 
 func (model User) FromDomain(entity *domain.User) {
 	model.Name = entity.Name
+	model.Email = entity.Email
+	model.TenantID = entity.TenantID
 }
