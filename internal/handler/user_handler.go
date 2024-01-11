@@ -48,3 +48,16 @@ func (h *UserHandler) GenerateToken(c echo.Context) error {
 
 	return HandlerResponse(c, http.StatusOK, token)
 }
+
+func (h *UserHandler) ValidateAccessToken(c echo.Context) error {
+	token := c.Request().Header.Get("Authorization")
+
+	claims, err := h.userUseCase.ValidateAccessToken(token)
+	if err != nil {
+		return HandlerResponse(c, http.StatusUnauthorized, "Token inválido")
+	}
+
+	_ = claims
+
+	return HandlerResponse(c, http.StatusOK, "token valido")
+}

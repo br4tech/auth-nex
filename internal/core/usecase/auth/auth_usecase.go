@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"time"
 
 	"github.com/br4tech/auth-nex/internal/core/domain"
@@ -58,6 +59,18 @@ func (uc *AuthUseCase) GenerateAccessToken(user *dto.UserDTO) (string, error) {
 	return tokenString, nil
 }
 
-func (uc *AuthUseCase) ValidateAccessToken(tokenString string) (int, error) {
-	return 0, nil
+func (uc *AuthUseCase) ValidateAccessToken(tokenString string) (*model.Claims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &model.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(*model.Claims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, errors.New("Token invalid")
 }
