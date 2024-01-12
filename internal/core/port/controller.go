@@ -6,5 +6,6 @@ type (
 	IUserHandler interface {
 		CreateUser(c echo.Context) error
 		GenerateToken(c echo.Context) error
+		ValidateAccessToken(c echo.Context) error
 	}
 )
