@@ -1,11 +1,14 @@
 package usecase
 
 import (
+	"errors"
 	"time"
 
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
+	"github.com/br4tech/auth-nex/internal/dto"
 	"github.com/br4tech/auth-nex/internal/model"
+	validator "github.com/br4tech/auth-nex/pkg"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -23,13 +26,23 @@ func (uc *AuthUseCase) Authenticate(username, password string, tenantID int) (*d
 	return nil, nil
 }
 
-func (uc *AuthUseCase) CreateUser(user *model.User) error {
-	return nil
+func (uc *AuthUseCase) CreateUser(user *dto.UserDTO) (*domain.User, error) {
+	userModel := &model.User{
+		Name:  user.Name,
+		Email: user.Email,
+	}
+
+	if err := validator.ValidateStruct(userModel); err != nil {
+		return nil, err
+	}
+	uc.userRepository.CreateUser(userModel.ToDomain())
+
+	return userModel.ToDomain(), nil
 }
 
-func (uc *AuthUseCase) GenerateAccessToken(user *model.User) (string, error) {
+func (uc *AuthUseCase) GenerateAccessToken(user *dto.UserTokenDTO) (string, error) {
 	claims := &model.Claims{
-		UserName: user.Name,
+		Email: user.Email,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(15 * time.Minute).Unix(), // Token expira em 15 minutos
 			IssuedAt:  time.Now().Unix(),
@@ -46,6 +59,18 @@ func (uc *AuthUseCase) GenerateAccessToken(user *model.User) (string, error) {
 	return tokenString, nil
 }
 
-func (uc *AuthUseCase) ValidateAccessToken(tokenString string) (int, error) {
-	return 0, nil
+func (uc *AuthUseCase) ValidateAccessToken(tokenString string) (*model.Claims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &model.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(*model.Claims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, errors.New("Token invalid")
 }

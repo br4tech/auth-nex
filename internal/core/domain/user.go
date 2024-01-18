@@ -1,7 +1,17 @@
 package domain
 
 type User struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-	Roles []Role
+	Name     string `validate:"required"`
+	Email    string `validate:"required"`
+	Roles    []Role
+	TenantID int `validate:"required"`
+}
+
+func NewUser(name string, email string, roles []Role, tenantID int) *User {
+	return &User{
+		Name:     name,
+		Email:    email,
+		Roles:    roles,
+		TenantID: tenantID,
+	}
 }

@@ -9,5 +9,9 @@ import (
 func main() {
 	cfg := config.GetConfig()
 	db := adapter.NewPostgresDatabase(&cfg)
-	server.NewEchoServer(&cfg, db.GetDb()).Start()
+
+	userHandler := InitializeUserHandler(db.GetDb())
+
+	server.NewEchoServer(&cfg, db.GetDb(), userHandler).Start()
+
 }
