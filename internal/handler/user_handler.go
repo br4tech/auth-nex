@@ -40,13 +40,13 @@ func (h *UserHandler) GenerateToken(c echo.Context) error {
 		return HandlerResponse(c, http.StatusInternalServerError, "Bad request")
 	}
 
-	token, err := h.userUseCase.GenerateAccessToken(reqBody)
+	token, err := h.userUseCase.Authenticate(reqBody)
 
 	if err != nil {
-		return HandlerResponse(c, http.StatusInternalServerError, "Failed to create user")
+		return HandlerResponse(c, http.StatusInternalServerError, "Failed to authenticate")
 	}
 
-	return HandlerResponse(c, http.StatusOK, token)
+	return HandlerResponse(c, http.StatusOK, *token)
 }
 
 func (h *UserHandler) ValidateAccessToken(c echo.Context) error {

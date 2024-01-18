@@ -10,6 +10,7 @@ import (
 	"github.com/br4tech/auth-nex/internal/model"
 	validator "github.com/br4tech/auth-nex/pkg"
 	"github.com/dgrijalva/jwt-go"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var jwtKey = []byte("chave_secreta_do_jwt")
@@ -22,8 +23,23 @@ func NewAuthUseCase(userRepository port.IUserRepository) port.IUserUseCase {
 	return &AuthUseCase{userRepository: userRepository}
 }
 
-func (uc *AuthUseCase) Authenticate(username, password string, tenantID int) (*domain.User, error) {
-	return nil, nil
+func (uc *AuthUseCase) Authenticate(userReq *dto.UserTokenDTO) (*string, error) {
+	user, err := uc.userRepository.FindUserByEmail(userReq.Email)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !comparePassword(userReq.Password, user.Password) {
+		return nil, errors.New("Incorrect password")
+	}
+
+	token, err := generateAccessToken(user.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
 }
 
 func (uc *AuthUseCase) CreateUser(user *dto.UserDTO) (*domain.User, error) {
@@ -40,9 +56,25 @@ func (uc *AuthUseCase) CreateUser(user *dto.UserDTO) (*domain.User, error) {
 	return userModel.ToDomain(), nil
 }
 
-func (uc *AuthUseCase) GenerateAccessToken(user *dto.UserTokenDTO) (string, error) {
+func (uc *AuthUseCase) ValidateAccessToken(tokenString string) (*model.Claims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &model.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(*model.Claims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, errors.New("Token invalid")
+}
+
+func generateAccessToken(email string) (string, error) {
 	claims := &model.Claims{
-		Email: user.Email,
+		Email: email,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(15 * time.Minute).Unix(), // Token expira em 15 minutos
 			IssuedAt:  time.Now().Unix(),
@@ -59,18 +91,7 @@ func (uc *AuthUseCase) GenerateAccessToken(user *dto.UserTokenDTO) (string, erro
 	return tokenString, nil
 }
 
-func (uc *AuthUseCase) ValidateAccessToken(tokenString string) (*model.Claims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &model.Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return jwtKey, nil
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if claims, ok := token.Claims.(*model.Claims); ok && token.Valid {
-		return claims, nil
-	}
-
-	return nil, errors.New("Token invalid")
+func comparePassword(plainPassword string, hashedPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(plainPassword))
+	return err == nil
 }

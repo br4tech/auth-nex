@@ -3,6 +3,7 @@ package domain
 type User struct {
 	Name     string `validate:"required"`
 	Email    string `validate:"required"`
+	Password string `validate:"required"`
 	Roles    []Role
 	TenantID int `validate:"required"`
 }

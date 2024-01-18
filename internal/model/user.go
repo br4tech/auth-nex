@@ -9,8 +9,8 @@ import (
 type User struct {
 	gorm.Model
 
-	Name     string `gorm:"unique;not null"`
-	Email    string `gorm:"not null"`
+	Name     string `gorm:"not null"`
+	Email    string `gorm:"unique;not null"`
 	Password string `gorm:"not null"`
 	Role     []Role `gorm:"many2many:user_roles;"`
 	TenantID int    `gorm:"column:tenant_id"`
