@@ -47,3 +47,11 @@ database:
     CREATE DATABASE authnexdb;
   ```
 
+  Para executar a aplicacao devemos executar o comando abaixo:
+
+  ```
+   go run cmd/api/wire_gen.go cmd/api/main.go
+   
+  ```
+   
+
