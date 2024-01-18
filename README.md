@@ -47,6 +47,7 @@ database:
     CREATE DATABASE authnexdb;
   ```
 
+
   Para executar a aplicacao devemos executar o comando abaixo:
 
   ```
@@ -54,4 +55,6 @@ database:
    
   ```
    
+
+![Diagrama em branco](https://github.com/br4tech/auth-nex/assets/26689902/13605cde-617b-46d6-a041-779d5a1bee2b)
 
