@@ -10,7 +10,7 @@ type (
 	IUserUseCase interface {
 		Authenticate(username, password string, tenantID int) (*domain.User, error)
 		CreateUser(user *dto.UserDTO) (*domain.User, error)
-		GenerateAccessToken(user *dto.UserDTO) (string, error)
+		GenerateAccessToken(user *dto.UserTokenDTO) (string, error)
 		ValidateAccessToken(tokenString string) (*model.Claims, error)
 	}
 

@@ -40,7 +40,7 @@ func (uc *AuthUseCase) CreateUser(user *dto.UserDTO) (*domain.User, error) {
 	return userModel.ToDomain(), nil
 }
 
-func (uc *AuthUseCase) GenerateAccessToken(user *dto.UserDTO) (string, error) {
+func (uc *AuthUseCase) GenerateAccessToken(user *dto.UserTokenDTO) (string, error) {
 	claims := &model.Claims{
 		Email: user.Email,
 		StandardClaims: jwt.StandardClaims{

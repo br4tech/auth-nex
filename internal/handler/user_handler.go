@@ -12,7 +12,7 @@ type UserHandler struct {
 	userUseCase port.IUserUseCase
 }
 
-func NewUserHandler(userUseCase port.IUserUseCase) port.IUserHandler {
+func NewUserHandler(userUseCase port.IUserUseCase) *UserHandler {
 	return &UserHandler{
 		userUseCase: userUseCase,
 	}
@@ -34,7 +34,7 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 }
 
 func (h *UserHandler) GenerateToken(c echo.Context) error {
-	reqBody := new(dto.UserDTO)
+	reqBody := new(dto.UserTokenDTO)
 
 	if err := c.Bind(reqBody); err != nil {
 		return HandlerResponse(c, http.StatusInternalServerError, "Bad request")
