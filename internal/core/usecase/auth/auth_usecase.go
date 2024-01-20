@@ -44,8 +44,9 @@ func (uc *AuthUseCase) Authenticate(userReq *dto.UserTokenDTO) (*string, error) 
 
 func (uc *AuthUseCase) CreateUser(user *dto.UserDTO) (*domain.User, error) {
 	userModel := &model.User{
-		Name:  user.Name,
-		Email: user.Email,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
 	}
 
 	if err := validator.ValidateStruct(userModel); err != nil {

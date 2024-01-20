@@ -25,12 +25,14 @@ func (model User) ToDomain() *domain.User {
 	return &domain.User{
 		Name:     model.Name,
 		Email:    model.Email,
+		Password: model.Password,
 		TenantID: model.TenantID,
 	}
 }
 
-func (model User) FromDomain(entity *domain.User) {
-	model.Name = entity.Name
-	model.Email = entity.Email
-	model.TenantID = entity.TenantID
+func (model *User) FromDomain(domain *domain.User) {
+	model.Name = domain.Name
+	model.Email = domain.Email
+	model.Password = domain.Password
+	model.TenantID = domain.TenantID
 }

@@ -8,10 +8,16 @@ type User struct {
 	TenantID int `validate:"required"`
 }
 
-func NewUser(name string, email string, roles []Role, tenantID int) *User {
+func NewUser(
+	name string,
+	email string,
+	password string,
+	roles []Role,
+	tenantID int) *User {
 	return &User{
 		Name:     name,
 		Email:    email,
+		Password: password,
 		Roles:    roles,
 		TenantID: tenantID,
 	}
