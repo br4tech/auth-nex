@@ -10,6 +10,7 @@ import (
 	"github.com/br4tech/auth-nex/internal/model"
 	validator "github.com/br4tech/auth-nex/pkg"
 	"github.com/dgrijalva/jwt-go"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var jwtKey = []byte("chave_secreta_do_jwt")
@@ -22,14 +23,30 @@ func NewAuthUseCase(userRepository port.IUserRepository) port.IUserUseCase {
 	return &AuthUseCase{userRepository: userRepository}
 }
 
-func (uc *AuthUseCase) Authenticate(username, password string, tenantID int) (*domain.User, error) {
-	return nil, nil
+func (uc *AuthUseCase) Authenticate(userReq *dto.UserTokenDTO) (*string, error) {
+	user, err := uc.userRepository.FindUserByEmail(userReq.Email)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !comparePassword(userReq.Password, user.Password) {
+		return nil, errors.New("Incorrect password")
+	}
+
+	token, err := generateAccessToken(user.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
 }
 
 func (uc *AuthUseCase) CreateUser(user *dto.UserDTO) (*domain.User, error) {
 	userModel := &model.User{
-		Name:  user.Name,
-		Email: user.Email,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
 	}
 
 	if err := validator.ValidateStruct(userModel); err != nil {
@@ -38,25 +55,6 @@ func (uc *AuthUseCase) CreateUser(user *dto.UserDTO) (*domain.User, error) {
 	uc.userRepository.CreateUser(userModel.ToDomain())
 
 	return userModel.ToDomain(), nil
-}
-
-func (uc *AuthUseCase) GenerateAccessToken(user *dto.UserTokenDTO) (string, error) {
-	claims := &model.Claims{
-		Email: user.Email,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(15 * time.Minute).Unix(), // Token expira em 15 minutos
-			IssuedAt:  time.Now().Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	tokenString, err := token.SignedString(jwtKey)
-	if err != nil {
-		return "", err
-	}
-
-	return tokenString, nil
 }
 
 func (uc *AuthUseCase) ValidateAccessToken(tokenString string) (*model.Claims, error) {
@@ -73,4 +71,28 @@ func (uc *AuthUseCase) ValidateAccessToken(tokenString string) (*model.Claims, e
 	}
 
 	return nil, errors.New("Token invalid")
+}
+
+func generateAccessToken(email string) (string, error) {
+	claims := &model.Claims{
+		Email: email,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(15 * time.Minute).Unix(), // Token expira em 15 minutos
+			IssuedAt:  time.Now().Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
+}
+
+func comparePassword(plainPassword string, hashedPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(plainPassword))
+	return err == nil
 }

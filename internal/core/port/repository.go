@@ -12,7 +12,7 @@ type (
 	}
 
 	IUserRepository interface {
-		Authenticate(name string, tenantID uint) (*domain.User, error)
+		FindUserByEmail(email string) (*domain.User, error)
 		CreateUser(user *domain.User) error
 	}
 
