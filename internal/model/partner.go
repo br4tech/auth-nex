@@ -14,6 +14,11 @@ type Partner struct {
 func (model Partner) ToDomain() *domain.Partner {
 	return &domain.Partner{
 		Participation: model.Participation,
-		User:          model.ToDomain().User,
+		User:          *model.User.ToDomain(),
 	}
+}
+
+func (model Partner) FromDomain(domain *domain.Partner) {
+	model.Participation = domain.Participation
+	model.User.FromDomain(&domain.User)
 }

@@ -30,3 +30,11 @@ func (model Company) ToDomain() *domain.Company {
 		Partners:          model.Partners.ToDomain(),
 	}
 }
+
+func (model *Company) convertPartners(domainPartners []domain.Partner) []Partner {
+	partners := make([]Partner, len(domainPartners))
+	for i, domainPartner := range domainPartners {
+		partners[i] = *domainPartner.FromDomain()
+	}
+	return partners
+}
