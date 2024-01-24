@@ -9,11 +9,19 @@ import (
 type User struct {
 	gorm.Model
 
-	Name     string `gorm:"not null"`
-	Email    string `gorm:"unique;not null"`
-	Password string `gorm:"not null"`
-	Role     []Role `gorm:"many2many:user_roles;"`
-	TenantID int    `gorm:"column:tenant_id"`
+	Name          string `gorm:"not null"`
+	Email         string `gorm:"unique;not null"`
+	Password      string `gorm:"not null"`
+	CPF           string `gorm:unique;not null`
+	Nationality   string `gorm:"not null"`
+	MaritalStatus string `gorm:"not null"`
+	Address       Address
+	Role          []Role    `gorm:"many2many:user_roles;"`
+	TenantID      int       `gorm:"column:tenant_id"`
+	Companies     []Company `gorm:"many2many:user_companies;"`
+}
+
+type Doctor struct {
 }
 
 type Claims struct {
