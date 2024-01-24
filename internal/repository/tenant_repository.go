@@ -15,7 +15,14 @@ func NewTenantRepository(db *gorm.DB) port.ITenantRepository {
 	return &TenantRepository{db: db}
 }
 
-func (r *TenantRepository) CreateTenant(model *model.Tenant) (*domain.Tenant, error) {
+func (r *TenantRepository) CreateTenant(tenant *domain.Tenant) (*domain.Tenant, error) {
+	tenantModel := new(model.Tenant)
+	tenantModel.FromDomain(tenant)
+
+	if err := r.db.Create(&tenantModel).Error; err != nil {
+		return nil, err
+	}
+
 	return nil, nil
 }
 func (r *TenantRepository) FindTenantByName(name string) (*domain.Tenant, error) {

@@ -2,7 +2,6 @@ package port
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type (
@@ -17,7 +16,7 @@ type (
 	}
 
 	ITenantRepository interface {
-		CreateTenant(model *model.Tenant) (*domain.Tenant, error)
+		CreateTenant(tenant *domain.Tenant) (*domain.Tenant, error)
 		FindTenantByName(name string) (*domain.Tenant, error)
 	}
 )
