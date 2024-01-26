@@ -8,11 +8,6 @@ type User struct {
 	Roles    []Role
 }
 
-type Partner struct {
-	Participation float64 `validate:"required"`
-	User          User
-}
-
 func NewUser(name string, email string, password string,
 	roles []Role, tenantID int) *User {
 	return &User{
@@ -21,11 +16,5 @@ func NewUser(name string, email string, password string,
 		Password: password,
 		Roles:    roles,
 		TenantID: tenantID,
-	}
-}
-
-func NewPartner(participation float64) *Partner {
-	return &Partner{
-		Participation: participation,
 	}
 }

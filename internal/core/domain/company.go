@@ -11,12 +11,13 @@ type Company struct {
 	Type              string // Company type (MEI, ME, LTDA, etc.)
 	TenantID          uint   `validate:"required"`
 	Schema            string
-	User              []User
+	Users             []User
 }
 
 func NewCompany(legalName string, tradeName string, cnpj string,
-	stateRegistration string, address Address, partners []Partner, activities []Activity,
-	ctype string, tenantId uint) *Company {
+	stateRegistration string, address Address, partners []Partner,
+	activities []Activity, ctype string, tenantId uint, schema string,
+	users []User) *Company {
 	return &Company{
 		LegalName:         legalName,
 		TradeName:         tradeName,
@@ -27,5 +28,7 @@ func NewCompany(legalName string, tradeName string, cnpj string,
 		Activities:        activities,
 		Type:              ctype,
 		TenantID:          tenantId,
+		Schema:            schema,
+		Users:             users,
 	}
 }
