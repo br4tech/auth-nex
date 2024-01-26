@@ -8,32 +8,61 @@ import (
 type Tenant struct {
 	gorm.Model
 
-	Id        int       `gorm:"primary_key"`
-	Name      string    `gorm:unique;not null`
-	Companies []Company `gorm:"foreignKey:TenantId"`
-	Users     []User    `gorm:"many2many:tenant_admins;"`
+	Id        int       `gorm:"primary_key;"`
+	Name      string    `gorm:"unique;not null;"`
+	Companies []Company `gorm:"many2many:tenant_companies;"`
+	Users     []User    `gorm:"many2many:tenant_users;"`
 }
 
 func (model Tenant) ToDomain() *domain.Tenant {
-	domainTenant := &domain.Tenant{
+	return &domain.Tenant{
 		Name:      model.Name,
-		Companies: make([]domain.Company, len(model.Company)),
-		Users:     make([]domain.User, len(model.Users)),
+		Companies: model.convertCompaniesToDomain(),
+		Users:     model.convertUsersToDomain(),
 	}
-
-	for i, company := range model.Companies {
-		domainTenant.Companies[i] = *company.ToDomain()
-	}
-
-	for i, user := range model.Users {
-		domainTenant.Users[i] = *user.ToDomain()
-	}
-
-	return domainTenant
 }
 
 func (model Tenant) FromDomain(domain *domain.Tenant) {
 	model.Name = domain.Name
-	model.Companies = domain.Companies
-	model.Users = domain.Users
+	model.Companies = convertCompaniesFromDomain(domain.Companies, model.Id)
+	model.Users = convertUsersFromDomain(domain.Users)
+}
+
+func (model *Tenant) convertCompaniesToDomain() []domain.Company {
+	domainCompanies := make([]domain.Company, len(model.Companies))
+	for i, company := range model.Companies {
+		domainCompanies[i] = *company.ToDomain()
+	}
+	return domainCompanies
+}
+
+func (model *Tenant) convertUsersToDomain() []domain.User {
+	domainUsers := make([]domain.User, len(model.Users))
+	for i, user := range model.Users {
+		domainUsers[i] = *user.ToDomain()
+	}
+	return domainUsers
+}
+
+func convertCompaniesFromDomain(domainCompanies []domain.Company, tenantId int) []Company {
+	modelCompanies := make([]Company, len(domainCompanies))
+	for i, domainCompany := range domainCompanies {
+		modelCompanies[i] = Company{
+			LegalName: domainCompany.LegalName,
+			TradeName: domainCompany.TradeName,
+			TenantID:  tenantId,
+		}
+	}
+	return modelCompanies
+}
+
+func convertUsersFromDomain(domainUsers []domain.User) []User {
+	modelUsers := make([]User, len(domainUsers))
+	for i, domainUser := range domainUsers {
+		modelUsers[i] = User{
+			Name:  domainUser.Name,
+			Email: domainUser.Email,
+		}
+	}
+	return modelUsers
 }

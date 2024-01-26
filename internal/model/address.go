@@ -7,13 +7,15 @@ import (
 
 type Address struct {
 	gorm.Model
-	Street     string `gorm:"not null"`
-	Number     string `gorm:"not null"`
-	Complement string
-	District   string
-	City       string `gorm:"not null"`
-	State      string `gorm:"not null"`
-	ZipCode    string `gorm:"not null"`
+	Street          string `gorm:"not null"`
+	Number          string `gorm:"not null"`
+	Complement      string
+	District        string
+	City            string `gorm:"not null"`
+	State           string `gorm:"not null"`
+	ZipCode         string `gorm:"not null"`
+	AddressableID   uint
+	AddressableType string
 }
 
 func (model Address) ToDomain() *domain.Address {

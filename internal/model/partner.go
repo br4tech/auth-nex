@@ -8,17 +8,16 @@ import (
 type Partner struct {
 	gorm.Model
 	Participation float64 `gorm:"not null"`
-	User          User
+	UserId        int
+	CompanyId     int
 }
 
 func (model Partner) ToDomain() *domain.Partner {
 	return &domain.Partner{
 		Participation: model.Participation,
-		User:          *model.User.ToDomain(),
 	}
 }
 
 func (model Partner) FromDomain(domain *domain.Partner) {
 	model.Participation = domain.Participation
-	model.User.FromDomain(&domain.User)
 }
