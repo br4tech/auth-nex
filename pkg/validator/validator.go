@@ -26,7 +26,6 @@ func (e DomainError) Type() DomainErrorType {
 	return e.errorType
 }
 
-// NewDomainError returns a domain error that formats as the given type and text.
 func NewDomainError(errorType DomainErrorType, text string) DomainError {
 	return DomainError{
 		err:       text,

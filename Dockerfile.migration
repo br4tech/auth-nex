@@ -1,0 +1,9 @@
+FROM golang:1.21.0 AS builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN go build -o migration cmd/migration/migration.go
+
+CMD ["./migration"]

@@ -8,7 +8,7 @@ import (
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/dto"
 	"github.com/br4tech/auth-nex/internal/model"
-	validator "github.com/br4tech/auth-nex/pkg"
+	"github.com/br4tech/auth-nex/pkg/validator"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )

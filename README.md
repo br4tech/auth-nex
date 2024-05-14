@@ -36,24 +36,55 @@ Transforme a autenticação e autorização em uma experiência segura e flexív
 
 ## Dev
 
-database:
-  ``` 
-    docker run --name authnex -e POSTGRES_PASSWORD=123456 -d -p 5434:5432 postgres
-    
-    docker exec -it authnex bash
+1. Clone este repositório para o seu ambiente local:
 
-    psql -U postgres
+```bash
+git clone https://github.com/br4tech/go-with-gemini.git
+cd go-with-gemini
 
-    CREATE DATABASE authnexdb;
-  ```
+```
 
 
-  Para executar a aplicacao devemos executar o comando abaixo:
+2. Gerar o arquivo do wire:
 
-  ```
-   go run cmd/api/wire_gen.go cmd/api/main.go
-   
-  ```
+```bash
+go run github.com/google/wire/cmd/wire
+
+```
+
+3. Executar aplicacao:
+
+Com docker:
+
+```bash
+ docker-compose build
+
+ docker-compose up
+
+```
+
+Sem docker
+ 
+```bash
+ docker start gemini
+
+ go run cmd/wire_gen.go cmd/main.go
+
+```
+
+Obs: 
+
+Caso nao tenha o banco criado execute os comando, abaixo antes de tudo:
+
+```bash
+
+  docker run --name authnext -e POSTGRES_PASSWORD=123456 -d -p 5434:5432 postgres
+  
+  docker exec -it authnext bash
+
+  psql -U postgres
+
+  CREATE DATABASE authdb;
    
 
 ![Diagrama em branco](https://github.com/br4tech/auth-nex/assets/26689902/13605cde-617b-46d6-a041-779d5a1bee2b)
