@@ -1,11 +1,15 @@
 package domain
 
 type Tenant struct {
-	Name string `validate:"required"`
+	Name      string `validate:"required"`
+	Companies []Company
+	Users     []User
 }
 
-func NewTenant(name string) *Tenant {
+func NewTenant(name string, companies []Company, users []User) *Tenant {
 	return &Tenant{
-		Name: name,
+		Name:      name,
+		Companies: companies,
+		Users:     users,
 	}
 }

@@ -18,6 +18,10 @@ func AuthnexMigrate(db port.IDatabase) {
 	db.GetDb().Migrator().CreateTable(
 		&model.Tenant{},
 		&model.User{},
+		&model.Company{},
+		&model.Activity{},
+		&model.Address{},
+		&model.Partner{},
 		&model.Role{},
 	)
 }
