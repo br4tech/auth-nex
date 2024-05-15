@@ -22,7 +22,7 @@ func (model Tenant) ToDomain() *domain.Tenant {
 	}
 }
 
-func (model Tenant) FromDomain(domain *domain.Tenant) {
+func (model *Tenant) FromDomain(domain *domain.Tenant) {
 	model.Name = domain.Name
 	model.Companies = convertCompaniesFromDomain(domain.Companies, model.Id)
 	model.Users = convertUsersFromDomain(domain.Users)

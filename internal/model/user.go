@@ -27,7 +27,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (model User) ToDomain() *domain.User {
+func (model *User) ToDomain() *domain.User {
 	return &domain.User{
 		Name:     model.Name,
 		Email:    model.Email,

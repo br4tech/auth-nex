@@ -11,7 +11,13 @@ func main() {
 	db := adapter.NewPostgresDatabase(&cfg)
 
 	userHandler := InitializeUserHandler(db.GetDb())
+	tenantHandler := InitializeTenantHandler(db.GetDb())
 
-	server.NewEchoServer(&cfg, db.GetDb(), userHandler).Start()
+	server.NewEchoServer(
+		&cfg,
+		db.GetDb(),
+		userHandler,
+		tenantHandler,
+	).Start()
 
 }

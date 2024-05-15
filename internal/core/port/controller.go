@@ -8,4 +8,8 @@ type (
 		GenerateToken(c echo.Context) error
 		ValidateAccessToken(c echo.Context) error
 	}
+
+	ITenantHandler interface {
+		CreateTenant(c echo.Context) error
+	}
 )

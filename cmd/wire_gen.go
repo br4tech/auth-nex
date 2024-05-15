@@ -8,6 +8,7 @@ package main
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/usecase/auth"
+	"github.com/br4tech/auth-nex/internal/core/usecase/tenant"
 	"github.com/br4tech/auth-nex/internal/handler"
 	"github.com/br4tech/auth-nex/internal/repository"
 	"gorm.io/gorm"
@@ -17,7 +18,16 @@ import (
 
 func InitializeUserHandler(db *gorm.DB) *handler.UserHandler {
 	iUserRepository := repository.NewUserRepository(db)
-	iUserUseCase := usecase.NewAuthUseCase(iUserRepository)
+	iUserUseCase :=auth.NewAuthUseCase(iUserRepository)
 	userHandler := handler.NewUserHandler(iUserUseCase)
 	return userHandler
 }
+
+
+func InitializeTenantHandler(db *gorm.DB) *handler.TenantHandler {
+	iTenantRepository := repository.NewTenantRepository(db)
+	iTenantUseCase := tenant.NewTenantUseCase(iTenantRepository)
+	tenantHandler := handler.NewTenantHandler(iTenantUseCase)
+	return 	tenantHandler
+}
+

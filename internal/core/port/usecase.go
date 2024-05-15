@@ -18,6 +18,6 @@ type (
 	}
 
 	ITenantUseCase interface {
-		CreateTenant(name string) error
+		CreateTenant(tenant *dto.TenantDTO) (*domain.Tenant, error)
 	}
 )

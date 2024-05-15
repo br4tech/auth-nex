@@ -30,7 +30,7 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 		return HandlerResponse(c, http.StatusInternalServerError, "Failed to create user")
 	}
 
-	return HandlerResponse(c, http.StatusOK, "Created user with successfuly!!")
+	return HandlerResponse(c, http.StatusOK, "Created user with successfully!!")
 }
 
 func (h *UserHandler) GenerateToken(c echo.Context) error {
