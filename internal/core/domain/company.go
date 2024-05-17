@@ -3,7 +3,7 @@ package domain
 type Company struct {
 	LegalName         string `validate:"required"`
 	TradeName         string `validate:"required"`
-	CNPJ              string `validate:"required"`
+	Document          string `validate:"required"`
 	StateRegistration string `validate:"required"`
 	Address           Address
 	Partners          []Partner
@@ -14,14 +14,14 @@ type Company struct {
 	Users             []User
 }
 
-func NewCompany(legalName string, tradeName string, cnpj string,
+func NewCompany(legalName string, tradeName string, document string,
 	stateRegistration string, address Address, partners []Partner,
 	activities []Activity, ctype string, tenantId uint, schema string,
 	users []User) *Company {
 	return &Company{
 		LegalName:         legalName,
 		TradeName:         tradeName,
-		CNPJ:              cnpj,
+		Document:          document,
 		StateRegistration: stateRegistration,
 		Address:           address,
 		Partners:          partners,
