@@ -6,13 +6,18 @@ import (
 
 type (
 	IPermissionRepository interface {
-		CreateRole(role *domain.Role) error
-		FindRoleByName(name string) (*domain.User, error)
+		FindRoleByName(name string) (*domain.Role, error)
+		CreateRole(role *domain.Role) (*domain.Role, error)
 	}
 
 	IUserRepository interface {
 		FindUserByEmail(email string) (*domain.User, error)
 		CreateUser(user *domain.User) error
+	}
+
+	ICompanyRepository interface {
+		FindCompanyById(id int) (*domain.Company, error)
+		CreateCompany(company *domain.Company) (*domain.Company, error)
 	}
 
 	ITenantRepository interface {

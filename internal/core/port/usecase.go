@@ -17,6 +17,11 @@ type (
 		CreateRole(name string) error
 	}
 
+	ICompanyUseCase interface {
+		FindCompanyById(id int) (*domain.Company, error)
+		CreateCompany(company *domain.Company) (*domain.Company, error)
+	}
+
 	ITenantUseCase interface {
 		CreateTenant(tenant *dto.TenantDTO) (*domain.Tenant, error)
 	}
