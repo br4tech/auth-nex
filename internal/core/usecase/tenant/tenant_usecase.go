@@ -6,6 +6,8 @@ import (
 	"github.com/br4tech/auth-nex/internal/dto"
 	"github.com/br4tech/auth-nex/internal/model"
 	"github.com/br4tech/auth-nex/pkg/validator"
+
+	"github.com/jinzhu/copier"
 )
 
 type TenantUseCase struct {
@@ -17,8 +19,11 @@ func NewTenantUseCase(tenantRepository port.ITenantRepository) port.ITenantUseCa
 }
 
 func (uc *TenantUseCase) CreateTenant(tenant *dto.TenantDTO) (*domain.Tenant, error) {
-	tenantModel := &model.Tenant{
-		Name: tenant.Name,
+	tenantModel := &model.Tenant{}
+	err := copier.Copy(tenantModel, tenant)
+
+	if err != nil {
+		return nil, err
 	}
 
 	if err := validator.ValidateStruct(tenantModel); err != nil {

@@ -22,12 +22,6 @@ func (model Tenant) ToDomain() *domain.Tenant {
 	}
 }
 
-func (model *Tenant) FromDomain(domain *domain.Tenant) {
-	model.Name = domain.Name
-	model.Companies = convertCompaniesFromDomain(domain.Companies, model.Id)
-	model.Users = convertUsersFromDomain(domain.Users)
-}
-
 func (model *Tenant) convertCompaniesToDomain() []domain.Company {
 	domainCompanies := make([]domain.Company, len(model.Companies))
 	for i, company := range model.Companies {
@@ -42,6 +36,12 @@ func (model *Tenant) convertUsersToDomain() []domain.User {
 		domainUsers[i] = *user.ToDomain()
 	}
 	return domainUsers
+}
+
+func (model *Tenant) FromDomain(domain *domain.Tenant) {
+	model.Name = domain.Name
+	model.Companies = convertCompaniesFromDomain(domain.Companies, model.Id)
+	model.Users = convertUsersFromDomain(domain.Users)
 }
 
 func convertCompaniesFromDomain(domainCompanies []domain.Company, tenantId int) []Company {
