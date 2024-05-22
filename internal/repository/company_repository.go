@@ -11,7 +11,7 @@ type CompanyRepository struct {
 	db *gorm.DB
 }
 
-func NewCompany(db *gorm.DB) port.ICompanyRepository {
+func NewCompanyRepository(db *gorm.DB) port.ICompanyRepository {
 	return &CompanyRepository{db: db}
 }
 

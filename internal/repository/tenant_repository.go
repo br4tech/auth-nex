@@ -23,8 +23,10 @@ func (r *TenantRepository) CreateTenant(tenant *domain.Tenant) (*domain.Tenant, 
 		return nil, err
 	}
 
-	return nil, nil
+	tenant.Id = tenantModel.Id
+	return tenant, nil
 }
+
 func (r *TenantRepository) FindTenantByName(name string) (*domain.Tenant, error) {
 	return nil, nil
 }
