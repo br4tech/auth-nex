@@ -16,6 +16,7 @@ type Tenant struct {
 
 func (model Tenant) ToDomain() *domain.Tenant {
 	return &domain.Tenant{
+		Id:        model.Id,
 		Name:      model.Name,
 		Companies: model.convertCompaniesToDomain(),
 		Users:     model.convertUsersToDomain(),
@@ -39,6 +40,7 @@ func (model *Tenant) convertUsersToDomain() []domain.User {
 }
 
 func (model *Tenant) FromDomain(domain *domain.Tenant) {
+	model.Id = domain.Id
 	model.Name = domain.Name
 	model.Companies = convertCompaniesFromDomain(domain.Companies, model.Id)
 	model.Users = convertUsersFromDomain(domain.Users)
