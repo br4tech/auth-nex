@@ -26,8 +26,14 @@ func (uc *PermissionUseCase) FindRoleByName(name string) (*domain.Role, error) {
 	return role, nil
 }
 
-func (uc *PermissionUseCase) CreateRole(name string) error {
-	role := &model.Role{Name: name}
+func (uc *PermissionUseCase) CreateRole(name string) (*domain.Role, error) {
+	roleModel := &model.Role{Name: name}
 
-	return uc.permissionRepository.CreateRole(role)
+	roleCreated, err := uc.permissionRepository.CreateRole(roleModel.ToDomain())
+
+	if err != nil {
+		return nil, err
+	}
+
+	return roleCreated, nil
 }
