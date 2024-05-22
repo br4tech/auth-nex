@@ -6,23 +6,22 @@ import (
 	"github.com/br4tech/auth-nex/internal/model"
 )
 
-type (
-	IUserUseCase interface {
-		Authenticate(userReq *dto.UserTokenDTO) (*string, error)
-		CreateUser(user *dto.UserDTO) (*domain.User, error)
-		ValidateAccessToken(tokenString string) (*model.Claims, error)
-	}
+type IUserUseCase interface {
+	Authenticate(userReq *dto.UserTokenDTO) (*string, error)
+	CreateUser(user *domain.User) (*domain.User, error)
+	ValidateAccessToken(tokenString string) (*model.Claims, error)
+}
 
-	IPermissionUseCase interface {
-		CreateRole(name string) error
-	}
+type IPermissionUseCase interface {
+	FindRoleByName(name string) (*domain.Role, error)
+	CreateRole(name string) (*domain.Role, error)
+}
 
-	ICompanyUseCase interface {
-		FindCompanyById(id int) (*domain.Company, error)
-		CreateCompany(company *domain.Company) (*domain.Company, error)
-	}
+type ICompanyUseCase interface {
+	FindCompanyById(id int) (*domain.Company, error)
+	CreateCompany(company *domain.Company) (*domain.Company, error)
+}
 
-	ITenantUseCase interface {
-		CreateTenant(tenant *dto.TenantDTO) (*domain.Tenant, error)
-	}
-)
+type ITenantUseCase interface {
+	CreateTenantWithCompanyAndAdmin(tenant *dto.TenantDTO) (*domain.Tenant, error)
+}
