@@ -25,7 +25,7 @@ func (h *TenantHandler) CreateTenant(c echo.Context) error {
 		return HandlerResponse(c, http.StatusInternalServerError, "Bad request")
 	}
 
-	_, err := h.tenantUseCase.CreateTenant(reqBody)
+	_, err := h.tenantUseCase.CreateTenantWithCompanyAndAdmin(reqBody)
 	if err != nil {
 		return HandlerResponse(c, http.StatusInternalServerError, "Failed do create tenant")
 	}
