@@ -1,4 +1,4 @@
-package usecase
+package auth
 
 import (
 	"errors"
@@ -10,6 +10,7 @@ import (
 	"github.com/br4tech/auth-nex/internal/model"
 	"github.com/br4tech/auth-nex/pkg/validator"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/jinzhu/copier"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -42,11 +43,12 @@ func (uc *AuthUseCase) Authenticate(userReq *dto.UserTokenDTO) (*string, error) 
 	return &token, nil
 }
 
-func (uc *AuthUseCase) CreateUser(user *dto.UserDTO) (*domain.User, error) {
-	userModel := &model.User{
-		Name:     user.Name,
-		Email:    user.Email,
-		Password: user.Password,
+func (uc *AuthUseCase) CreateUser(user *domain.User) (*domain.User, error) {
+	userModel := &model.User{}
+
+	errUser := copier.Copy(userModel, user)
+	if errUser != nil {
+		return nil, errUser
 	}
 
 	if err := validator.ValidateStruct(userModel); err != nil {

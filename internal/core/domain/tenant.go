@@ -1,6 +1,7 @@
 package domain
 
 type Tenant struct {
+	Id        int
 	Name      string `validate:"required"`
 	Companies []Company
 	Users     []User

@@ -4,7 +4,7 @@ import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type TenantRepository struct {
@@ -23,8 +23,10 @@ func (r *TenantRepository) CreateTenant(tenant *domain.Tenant) (*domain.Tenant, 
 		return nil, err
 	}
 
-	return nil, nil
+	tenant.Id = tenantModel.Id
+	return tenant, nil
 }
+
 func (r *TenantRepository) FindTenantByName(name string) (*domain.Tenant, error) {
 	return nil, nil
 }

@@ -19,7 +19,7 @@ type User struct {
 	TenantId      int
 	Tenant        Tenant
 	Companies     []Company `gorm:"many2many:user_companies;"`
-	Role          []Role    `gorm:"many2many:user_roles;"`
+	ProfileId     int
 }
 
 type Claims struct {
@@ -27,13 +27,13 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (model User) ToDomain() *domain.User {
+func (model *User) ToDomain() *domain.User {
 	return &domain.User{
-		Name:     model.Name,
-		Email:    model.Email,
-		Password: model.Password,
-		TenantId: model.TenantId,
-		Roles:    []domain.Role{},
+		Name:      model.Name,
+		Email:     model.Email,
+		Password:  model.Password,
+		TenantId:  model.TenantId,
+		ProfileId: model.ProfileId,
 	}
 }
 
@@ -42,4 +42,5 @@ func (model *User) FromDomain(domain *domain.User) {
 	model.Email = domain.Email
 	model.Password = domain.Password
 	model.TenantId = domain.TenantId
+	model.ProfileId = domain.ProfileId
 }

@@ -39,8 +39,8 @@ Transforme a autenticação e autorização em uma experiência segura e flexív
 1. Clone este repositório para o seu ambiente local:
 
 ```bash
-git clone https://github.com/br4tech/go-with-gemini.git
-cd go-with-gemini
+git clone git@github.com:br4tech/auth-nex.git
+cd auth-nex
 
 ```
 
@@ -49,7 +49,11 @@ cd go-with-gemini
 
 ```bash
 go run github.com/google/wire/cmd/wire
+``` 
+ Para ignorar o vendor ao criar o wire_gen:
 
+```bash 
+GOFLAGS=-mod=mod go run github.com/google/wire/cmd/wire
 ```
 
 3. Executar aplicacao:
@@ -66,7 +70,7 @@ Com docker:
 Sem docker
  
 ```bash
- docker start gemini
+ docker start authnext
 
  go run cmd/wire_gen.go cmd/main.go
 
@@ -85,7 +89,7 @@ Caso nao tenha o banco criado execute os comando, abaixo antes de tudo:
   psql -U postgres
 
   CREATE DATABASE authdb;
-   
+```   
 
 ![Diagrama em branco](https://github.com/br4tech/auth-nex/assets/26689902/13605cde-617b-46d6-a041-779d5a1bee2b)
 
