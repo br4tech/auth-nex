@@ -12,12 +12,13 @@ type Partner struct {
 	CompanyId     int
 }
 
-func (model Partner) ToDomain() *domain.Partner {
+func (model *Partner) ToDomain() *domain.Partner {
 	return &domain.Partner{
+		UserId:        model.UserId,
 		Participation: model.Participation,
 	}
 }
 
-func (model Partner) FromDomain(domain *domain.Partner) {
+func (model *Partner) FromDomain(domain *domain.Partner) {
 	model.Participation = domain.Participation
 }
