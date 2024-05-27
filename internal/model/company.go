@@ -9,7 +9,7 @@ type Company struct {
 	gorm.Model
 	LegalName         string   `gorm:"not null"`
 	TradeName         string   `gorm:"not null"`
-	Document          string   `gorm:unique;not null`
+	Document          string   `gorm:"unique;not null"`
 	StateRegistration string   `gorm:"not null"`
 	Address           *Address `gorm:"polymorphic:Addressable;"`
 	Type              string   // Company type (MEI, ME, LTDA, etc.)
@@ -20,7 +20,7 @@ type Company struct {
 	Activities        []Activity
 }
 
-func (model Company) ToDomain() *domain.Company {
+func (model *Company) ToDomain() *domain.Company {
 	companyDomain := &domain.Company{
 		LegalName:         model.LegalName,
 		TradeName:         model.TradeName,

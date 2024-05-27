@@ -12,7 +12,7 @@ type Activity struct {
 	CompanyID   uint   `gorm:"column:comapany_id"`
 }
 
-func (model Activity) ToDomain() *domain.Activity {
+func (model *Activity) ToDomain() *domain.Activity {
 	return &domain.Activity{
 		CNAE:        model.CNAE,
 		Description: model.Description,
@@ -20,8 +20,8 @@ func (model Activity) ToDomain() *domain.Activity {
 	}
 }
 
-func (model Activity) FromDomain(domain *domain.Activity) {
+func (model *Activity) FromDomain(domain *domain.Activity) {
 	model.CNAE = domain.CNAE
-	model.Description = domain.CNAE
+	model.Description = domain.Description
 	model.CompanyID = domain.CompanyID
 }

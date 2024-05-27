@@ -18,7 +18,7 @@ type Address struct {
 	AddressableType string
 }
 
-func (model Address) ToDomain() *domain.Address {
+func (model *Address) ToDomain() *domain.Address {
 	return &domain.Address{
 		Street:     model.Street,
 		Number:     model.Number,
@@ -30,7 +30,7 @@ func (model Address) ToDomain() *domain.Address {
 	}
 }
 
-func (model Address) FromDomain(domain *domain.Address) {
+func (model *Address) FromDomain(domain *domain.Address) {
 	model.Street = domain.Street
 	model.Number = domain.Number
 	model.Complement = domain.Complement
