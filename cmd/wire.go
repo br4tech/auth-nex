@@ -11,10 +11,9 @@ import (
 	"github.com/br4tech/auth-nex/internal/handler"
 	"github.com/br4tech/auth-nex/internal/repository"
 	"github.com/google/wire"
-	"gorm.io/gorm"
 )
 
-func InitializeUserHandler(db *gorm.DB) port.IUserHandler {
+func InitializeUserHandler(db port.IDatabase) port.IUserHandler {
 	wire.Build(
 		repository.NewUserRepository,
 		auth.NewAuthUseCase,
@@ -25,7 +24,7 @@ func InitializeUserHandler(db *gorm.DB) port.IUserHandler {
 	return &handler.UserHandler{}
 }
 
-func InitializeTenantHandler(db *gorm.DB) port.ITenantHandler {
+func InitializeTenantHandler(db port.IDatabase) port.ITenantHandler {
 	wire.Build(
 		repository.NewTenantRepository,
 		repository.NewCompanyRepository,

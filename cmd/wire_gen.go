@@ -13,19 +13,18 @@ import (
 	"github.com/br4tech/auth-nex/internal/core/usecase/tenant"
 	"github.com/br4tech/auth-nex/internal/handler"
 	"github.com/br4tech/auth-nex/internal/repository"
-	"gorm.io/gorm"
 )
 
 // Injectors from wire.go:
 
-func InitializeUserHandler(db *gorm.DB) port.IUserHandler {
+func InitializeUserHandler(db port.IDatabase) port.IUserHandler {
 	iUserRepository := repository.NewUserRepository(db)
 	iUserUseCase := auth.NewAuthUseCase(iUserRepository)
 	userHandler := handler.NewUserHandler(iUserUseCase)
 	return userHandler
 }
 
-func InitializeTenantHandler(db *gorm.DB) port.ITenantHandler {
+func InitializeTenantHandler(db port.IDatabase) port.ITenantHandler {
 	iTenantRepository := repository.NewTenantRepository(db)
 	iCompanyRepository := repository.NewCompanyRepository(db)
 	iCompanyUseCase := company.NewCompanyUseCase(iCompanyRepository)
