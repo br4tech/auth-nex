@@ -4,14 +4,13 @@ import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
-	"gorm.io/gorm"
 )
 
 type PermissionRepository struct {
-	db *gorm.DB
+	db port.IDatabase
 }
 
-func NewPermissionRepository(db *gorm.DB) port.IPermissionRepository {
+func NewPermissionRepository(db port.IDatabase) port.IPermissionRepository {
 	return &PermissionRepository{db: db}
 }
 
@@ -29,9 +28,10 @@ func (r *PermissionRepository) CreateRole(role *domain.Role) (*domain.Role, erro
 	roleModel := new(model.Role)
 	roleModel.FromDomain(role)
 
-	if err := r.db.Create(&roleModel).Error; err != nil {
+	_, err := r.db.Create(roleModel)
+	if err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	return roleModel.ToDomain(), nil
 }

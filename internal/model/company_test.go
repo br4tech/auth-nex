@@ -13,7 +13,7 @@ func TestCompany_ToDomain(t *testing.T) {
 		TradeName:         "Nome Fantasia",
 		Document:          "12345678901234",
 		StateRegistration: "123456789",
-		Address: &Address{
+		Address: Address{
 			Street:     "Rua Exemplo",
 			Number:     "123",
 			Complement: "Apto 456",
