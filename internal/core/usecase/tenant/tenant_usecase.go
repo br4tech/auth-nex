@@ -78,5 +78,8 @@ func (uc *TenantUseCase) CreateTenantWithCompanyAndAdmin(tenant *dto.TenantDTO) 
 		return nil, err
 	}
 
+	tenantModel.Companies = append(tenantModel.Companies, *companyModel)
+	tenantModel.Users = append(tenantModel.Users, *userModel)
+
 	return tenantModel.ToDomain(), nil
 }
