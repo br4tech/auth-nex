@@ -15,7 +15,6 @@ func TestCompanyUseCase_CreateCompany(t *testing.T) {
 	defer ctrl.Finish()
 
 	companyRepoMock := mock.NewMockICompanyRepository(ctrl)
-
 	companyUsecase := NewCompanyUseCase(companyRepoMock)
 
 	companyDomain := &domain.Company{
