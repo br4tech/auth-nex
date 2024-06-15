@@ -104,34 +104,34 @@ func (m *MockIPermissionUseCase) EXPECT() *MockIPermissionUseCaseMockRecorder {
 	return m.recorder
 }
 
-// CreateRole mocks base method.
-func (m *MockIPermissionUseCase) CreateRole(name string) (*domain.Role, error) {
+// CreateProfile mocks base method.
+func (m *MockIPermissionUseCase) CreateProfile(name string) (*domain.Profile, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateRole", name)
-	ret0, _ := ret[0].(*domain.Role)
+	ret := m.ctrl.Call(m, "CreateProfile", name)
+	ret0, _ := ret[0].(*domain.Profile)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateRole indicates an expected call of CreateRole.
-func (mr *MockIPermissionUseCaseMockRecorder) CreateRole(name interface{}) *gomock.Call {
+// CreateProfile indicates an expected call of CreateProfile.
+func (mr *MockIPermissionUseCaseMockRecorder) CreateProfile(name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateRole", reflect.TypeOf((*MockIPermissionUseCase)(nil).CreateRole), name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProfile", reflect.TypeOf((*MockIPermissionUseCase)(nil).CreateProfile), name)
 }
 
-// FindRoleByName mocks base method.
-func (m *MockIPermissionUseCase) FindRoleByName(name string) (*domain.Role, error) {
+// FindProfileByName mocks base method.
+func (m *MockIPermissionUseCase) FindProfileByName(name string) (*domain.Profile, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindRoleByName", name)
-	ret0, _ := ret[0].(*domain.Role)
+	ret := m.ctrl.Call(m, "FindProfileByName", name)
+	ret0, _ := ret[0].(*domain.Profile)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindRoleByName indicates an expected call of FindRoleByName.
-func (mr *MockIPermissionUseCaseMockRecorder) FindRoleByName(name interface{}) *gomock.Call {
+// FindProfileByName indicates an expected call of FindProfileByName.
+func (mr *MockIPermissionUseCaseMockRecorder) FindProfileByName(name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindRoleByName", reflect.TypeOf((*MockIPermissionUseCase)(nil).FindRoleByName), name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindProfileByName", reflect.TypeOf((*MockIPermissionUseCase)(nil).FindProfileByName), name)
 }
 
 // MockICompanyUseCase is a mock of ICompanyUseCase interface.
