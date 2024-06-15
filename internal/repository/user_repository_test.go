@@ -21,13 +21,16 @@ func TestUserRepository_CreateUser(t *testing.T) {
 	repo := NewUserRepository(mockDB)
 	mockGormDB := &gorm.DB{}
 
+	cpfPtr := "123.456.789-00"
+	profileIdPtr := 1
+
 	user := &domain.User{
 		Name:      "João Silva",
 		Email:     "joao@example.com",
 		Password:  "senha123",
-		CPF:       "123.456.789-00",
+		CPF:       &cpfPtr,
 		TenantId:  1,
-		ProfileId: 2,
+		ProfileId: &profileIdPtr,
 	}
 
 	userModel := new(model.User)
