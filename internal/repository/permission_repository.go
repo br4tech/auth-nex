@@ -14,24 +14,24 @@ func NewPermissionRepository(db port.IDatabase) port.IPermissionRepository {
 	return &PermissionRepository{db: db}
 }
 
-func (r *PermissionRepository) FindRoleByName(name string) (*domain.Role, error) {
-	var roleModel model.Role
+func (r *PermissionRepository) FindProfileByName(name string) (*domain.Profile, error) {
+	var profileModel model.Profile
 
-	if err := r.db.Where("name=?", name).First(&roleModel).Error; err != nil {
+	if err := r.db.Where("name=?", name).First(&profileModel).Error; err != nil {
 		return nil, err
 	}
 
-	return roleModel.ToDomain(), nil
+	return profileModel.ToDomain(), nil
 }
 
-func (r *PermissionRepository) CreateRole(role *domain.Role) (*domain.Role, error) {
-	roleModel := new(model.Role)
-	roleModel.FromDomain(role)
+func (r *PermissionRepository) CreateProfile(role *domain.Profile) (*domain.Profile, error) {
+	profileModel := new(model.Profile)
+	profileModel.FromDomain(role)
 
-	_, err := r.db.Create(roleModel)
+	_, err := r.db.Create(profileModel)
 	if err != nil {
 		return nil, err
 	}
 
-	return roleModel.ToDomain(), nil
+	return profileModel.ToDomain(), nil
 }
