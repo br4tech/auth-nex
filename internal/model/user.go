@@ -9,10 +9,11 @@ import (
 type User struct {
 	gorm.Model
 
+	Id            int     `gorm:"unique;not null"`
 	Name          string  `gorm:"not null"`
 	Email         string  `gorm:"unique;not null"`
 	Password      string  `gorm:"not null"`
-	CPF           string  `gorm:unique;not null`
+	CPF           string  `gorm:"unique;not null"`
 	Nationality   string  `gorm:"not null"`
 	MaritalStatus string  `gorm:"not null"`
 	Address       Address `gorm:"polymorphic:Addressable;"`
@@ -27,7 +28,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (model *User) ToDomain() *domain.User {
+func (model User) ToDomain() *domain.User {
 	return &domain.User{
 		Name:      model.Name,
 		Email:     model.Email,

@@ -7,21 +7,23 @@ import (
 
 type Company struct {
 	gorm.Model
-	LegalName         string   `gorm:"not null"`
-	TradeName         string   `gorm:"not null"`
-	Document          string   `gorm:unique;not null`
-	StateRegistration string   `gorm:"not null"`
-	Address           *Address `gorm:"polymorphic:Addressable;"`
-	Type              string   // Company type (MEI, ME, LTDA, etc.)
-	TenantID          int      `gorm:"column:tenant_id"`
-	Schema            string   `gorm:"not null"`
-	User              []User   `gorm:"many2many:user_companies;"`
+	Id                int
+	LegalName         string  `gorm:"not null"`
+	TradeName         string  `gorm:"not null"`
+	Document          string  `gorm:"unique;not null"`
+	StateRegistration string  `gorm:"not null"`
+	Address           Address `gorm:"polymorphic:Addressable;"`
+	Type              string  // Company type (MEI, ME, LTDA, etc.)
+	TenantID          int     `gorm:"column:tenant_id"`
+	Schema            string  `gorm:"not null"`
+	User              []User  `gorm:"many2many:user_companies;"`
 	Partners          []Partner
 	Activities        []Activity
 }
 
 func (model Company) ToDomain() *domain.Company {
 	companyDomain := &domain.Company{
+		Id:                model.Id,
 		LegalName:         model.LegalName,
 		TradeName:         model.TradeName,
 		Document:          model.Document,
@@ -31,9 +33,7 @@ func (model Company) ToDomain() *domain.Company {
 		Schema:            model.Schema,
 	}
 
-	if model.Address != nil {
-		companyDomain.Address = *model.Address.ToDomain()
-	}
+	companyDomain.Address = *model.Address.ToDomain()
 
 	if model.Partners != nil {
 		companyDomain.Partners = model.convertPartnersToDomain()
@@ -42,7 +42,7 @@ func (model Company) ToDomain() *domain.Company {
 	return companyDomain
 }
 
-func (model *Company) convertPartnersToDomain() []domain.Partner {
+func (model Company) convertPartnersToDomain() []domain.Partner {
 	domainPartners := make([]domain.Partner, len(model.Partners))
 	for i, partner := range model.Partners {
 		domainPartners[i] = *partner.ToDomain()
@@ -51,11 +51,12 @@ func (model *Company) convertPartnersToDomain() []domain.Partner {
 }
 
 func (model *Company) FromDomain(domain *domain.Company) {
+	model.Id = domain.Id
 	model.LegalName = domain.LegalName
 	model.TradeName = domain.TradeName
 	model.Document = domain.Document
 	model.StateRegistration = domain.StateRegistration
-	model.Address = &Address{
+	model.Address = Address{
 		Street:     domain.Address.Street,
 		Number:     domain.Address.Number,
 		Complement: domain.Address.Complement,

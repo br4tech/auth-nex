@@ -38,7 +38,10 @@ func (uc *CompanyUseCase) CreateCompany(company *domain.Company) (*domain.Compan
 		return nil, err
 	}
 
-	uc.companyRepository.CreateCompany(companyModel.ToDomain())
+	createdCompany, err := uc.companyRepository.CreateCompany(companyModel.ToDomain())
+	if err != nil {
+		return nil, err
+	}
 
-	return companyModel.ToDomain(), nil
+	return createdCompany, nil
 }

@@ -10,8 +10,8 @@ func main() {
 	cfg := config.GetConfig()
 	db := adapter.NewPostgresDatabase(&cfg)
 
-	userHandler := InitializeUserHandler(db.GetDb())
-	tenantHandler := InitializeTenantHandler(db.GetDb())
+	userHandler := InitializeUserHandler(db)
+	tenantHandler := InitializeTenantHandler(db)
 
 	server.NewEchoServer(
 		&cfg,

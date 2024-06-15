@@ -5,14 +5,13 @@ import (
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 type UserRepository struct {
-	db *gorm.DB
+	db port.IDatabase
 }
 
-func NewUserRepository(db *gorm.DB) port.IUserRepository {
+func NewUserRepository(db port.IDatabase) port.IUserRepository {
 	return &UserRepository{db: db}
 }
 
@@ -26,25 +25,24 @@ func (r *UserRepository) FindUserByEmail(email string) (*domain.User, error) {
 	return user.ToDomain(), nil
 }
 
-func (r *UserRepository) CreateUser(user *domain.User) error {
+func (r *UserRepository) CreateUser(user *domain.User) (*domain.User, error) {
 	userModel := new(model.User)
 	userModel.FromDomain(user)
 
 	hashedPassword, err := hashPassword(userModel.Password)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	userModel.Password = hashedPassword
 
-	result := r.db.Create(userModel)
-
-	if result.Error != nil {
-		return result.Error
+	_, err = r.db.Create(userModel)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil
+	return userModel.ToDomain(), nil
 }
 
 func hashPassword(password string) (string, error) {

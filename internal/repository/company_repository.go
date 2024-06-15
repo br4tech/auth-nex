@@ -4,14 +4,13 @@ import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
-	"gorm.io/gorm"
 )
 
 type CompanyRepository struct {
-	db *gorm.DB
+	db port.IDatabase
 }
 
-func NewCompanyRepository(db *gorm.DB) port.ICompanyRepository {
+func NewCompanyRepository(db port.IDatabase) port.ICompanyRepository {
 	return &CompanyRepository{db: db}
 }
 
@@ -29,9 +28,10 @@ func (r CompanyRepository) CreateCompany(company *domain.Company) (*domain.Compa
 	companyModel := new(model.Company)
 	companyModel.FromDomain(company)
 
-	if err := r.db.Create(&companyModel).Error; err != nil {
+	_, err := r.db.Create(companyModel)
+	if err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	return companyModel.ToDomain(), nil
 }

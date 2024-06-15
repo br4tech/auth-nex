@@ -12,12 +12,12 @@ type Role struct {
 	Users []User `gorm:"many2many:user_roles"`
 }
 
-func (model Role) ToDomain() *domain.Role {
+func (model *Role) ToDomain() *domain.Role {
 	return &domain.Role{
 		Name: model.Name,
 	}
 }
 
-func (model Role) FromDomain(domain *domain.Role) {
+func (model *Role) FromDomain(domain *domain.Role) {
 	model.Name = domain.Name
 }

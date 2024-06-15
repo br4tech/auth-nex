@@ -36,3 +36,23 @@ func NewPostgresDatabase(cfg *config.Config) port.IDatabase {
 func (p *postgresDatabase) GetDb() *gorm.DB {
 	return p.Db
 }
+
+func (p *postgresDatabase) Where(query interface{}, args ...interface{}) *gorm.DB {
+	return p.Db.Where(query, args...)
+}
+
+func (p *postgresDatabase) First(dest interface{}, conds ...interface{}) *gorm.DB {
+	return p.Db.First(dest, conds...)
+}
+
+func (p *postgresDatabase) Create(value interface{}) (*gorm.DB, error) {
+	create := p.Db.Create(value)
+	if create.Error != nil {
+		return nil, create.Error
+	}
+	return create, nil
+}
+
+func (p *postgresDatabase) Error() error {
+	return p.Db.Error
+}
