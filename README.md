@@ -44,16 +44,16 @@ cd auth-nex
 
 ```
 
-
-2. Gerar o arquivo do wire:
+2. Gerar/Atualizar o arquivo do wire(DI):
 
 ```bash
-go run github.com/google/wire/cmd/wire
+  go run github.com/google/wire/cmd/wire
 ``` 
- Para ignorar o vendor ao criar o wire_gen:
+
+Obs: Para ignorar o vendor ao criar o wire_gen:
 
 ```bash 
-GOFLAGS=-mod=mod go run github.com/google/wire/cmd/wire
+  GOFLAGS=-mod=mod go run github.com/google/wire/cmd/wire
 ```
 
 3. Executar aplicacao:
@@ -64,21 +64,17 @@ Com docker:
  docker-compose build
 
  docker-compose up
-
 ```
 
-Sem docker
+4. Sem docker e docker-compose
  
 ```bash
- docker start authnext
-
  go run cmd/wire_gen.go cmd/main.go
-
 ```
 
-Obs: 
+Obs: Caso execute sem o docker e compose, voce precisa ter um banco postgresql com o database `authdb` criado
 
-Caso nao tenha o banco criado execute os comando, abaixo antes de tudo:
+4.1. Podemos subir uma imagem do postgresql, conforme abaixo e criar o banco `authdb` e executar o passo 4
 
 ```bash
 
@@ -90,6 +86,26 @@ Caso nao tenha o banco criado execute os comando, abaixo antes de tudo:
 
   CREATE DATABASE authdb;
 ```   
+5. Para criar os arquivos de mock, podemos executar o exemplo:
+
+```bash
+  mockgen -source=internal/core/port/nome-da-interface -destination=internal/mock/mock_nome-da-interface.go --package=mock
+```
+
+Observação: Caso não possua instalado o mockgem, será necessário seguir os passos abaixo:
+
+```bash
+  sudo apt install mockgen
+  go install github.com/golang/mock/mockgen@v1.6.0
+```
+
+6. Rodar os testes e ver o coverage:
+
+```bash
+    go test -coverprofile=coverage.out ./...
+
+    go tool cover -html=coverage.out
+```
 
 ![Diagrama em branco](https://github.com/br4tech/auth-nex/assets/26689902/13605cde-617b-46d6-a041-779d5a1bee2b)
 
