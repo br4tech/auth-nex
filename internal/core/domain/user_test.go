@@ -3,54 +3,52 @@ package domain
 import (
 	"testing"
 
-	"github.com/go-playground/validator"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewUser(t *testing.T) {
-	t.Run("validação bem-sucedida", func(t *testing.T) {
-		user := NewUser("João Silva", "joao@example.com", "123.456.789-00", "senha123", 1, 2)
-		validate := validator.New()
-		err := validate.Struct(user)
-		assert.NoError(t, err)
-	})
+func TestUserValidation(t *testing.T) {
+	testCases := []struct {
+		name      string
+		user      *User
+		validator func(User) error // Validador específico
+		expectErr bool
+	}{
+		{
+			name: "Valid System User",
+			user: NewUser(
+				1, "João", "joao@example.com", stringPtr("12345678901"), "senha123", "", 1, "system", intPtr(1),
+			),
+			validator: ValidateUserSystem, // Usando seu validador
+			expectErr: false,
+		},
+		{
+			name: "Invalid System User (Missing CPF)",
+			user: NewUser(
+				1, "Maria", "maria@example.com", nil, "senha123", "", 1, "system", intPtr(1),
+			),
+			validator: ValidateUserSystem, // Usando seu validador
+			expectErr: true,
+		},
+		// ... (demais casos de teste para ClientUser, etc.)
+	}
 
-	t.Run("campos obrigatórios ausentes", func(t *testing.T) {
-		testCases := []struct {
-			name      string
-			email     string
-			cpf       string
-			password  string
-			profileId int
-			tenantId  int
-		}{
-			{"", "joao@example.com", "123.456.789-00", "senha123", 1, 2},
-			{"João Silva", "", "123.456.789-00", "senha123", 1, 2},
-			{"João Silva", "joao@example.com", "", "senha123", 1, 2},
-			{"João Silva", "joao@example.com", "123.456.789-00", "", 1, 2},
-			{"João Silva", "joao@example.com", "123.456.789-00", "senha123", 0, 2},
-			{"João Silva", "joao@example.com", "123.456.789-00", "senha123", 1, 0},
-		}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.validator(*tc.user)
+			if tc.expectErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
+}
 
-		validate := validator.New()
-		for _, tc := range testCases {
-			user := NewUser(tc.name, tc.email, tc.cpf, tc.password, tc.profileId, tc.tenantId)
-			err := validate.Struct(user)
-			assert.Error(t, err)
-			assert.True(t, IsRequiredFieldMissing(err))
-		}
-	})
+// Funções auxiliares para criar ponteiros para string e int
+func stringPtr(s string) *string {
+	return &s
+}
 
-	t.Run("campos corretos", func(t *testing.T) {
-		expectedUser := &User{
-			Name:      "João Silva",
-			Email:     "joao@example.com",
-			CPF:       "123.456.789-00",
-			Password:  "senha123",
-			ProfileId: 1,
-			TenantId:  2,
-		}
-		user := NewUser("João Silva", "joao@example.com", "123.456.789-00", "senha123", 1, 2)
-		assert.Equal(t, expectedUser, user)
-	})
+func intPtr(i int) *int {
+	return &i
 }

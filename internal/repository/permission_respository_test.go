@@ -18,41 +18,41 @@ func TestPermissionRepository_CreateRole(t *testing.T) {
 	mockDB := mock.NewMockIDatabase(ctrl)
 	repo := NewPermissionRepository(mockDB)
 
-	role := &domain.Role{
-		Name: "Test Role",
+	profile := &domain.Profile{
+		Name: "Admin",
 	}
 
-	roleModel := new(model.Role)
-	roleModel.FromDomain(role)
+	profileModel := new(model.Profile)
+	profileModel.FromDomain(profile)
 
 	t.Run("Success", func(t *testing.T) {
 		mockGormDB := &gorm.DB{}
 
-		mockDB.EXPECT().Create(roleModel).Return(mockGormDB, nil)
+		mockDB.EXPECT().Create(profileModel).Return(mockGormDB, nil)
 
-		result, err := repo.CreateRole(role)
+		result, err := repo.CreateProfile(profile)
 		if err != nil {
-			t.Fatalf("CreateRole returned an error: %v", err)
+			t.Fatalf("CreateProfile returned an error: %v", err)
 		}
 
 		if result == nil {
-			t.Fatal("CreateRole returned a nil result")
+			t.Fatal("CreateProfile returned a nil result")
 		}
 	})
 
 	t.Run("Error", func(t *testing.T) {
 		expectedError := errors.New("database error")
 
-		mockDB.EXPECT().Create(roleModel).Return(nil, expectedError)
+		mockDB.EXPECT().Create(profileModel).Return(nil, expectedError)
 
-		_, err := repo.CreateRole(role)
+		_, err := repo.CreateProfile(profile)
 
 		if err == nil {
-			t.Fatal("CreateRole did not return an error")
+			t.Fatal("CreateProfile did not return an error")
 		}
 
 		if err != expectedError {
-			t.Fatalf("CreateRole returned unexpected error: %v", err)
+			t.Fatalf("CreateProfile returned unexpected error: %v", err)
 		}
 	})
 }

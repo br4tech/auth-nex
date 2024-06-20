@@ -5,19 +5,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type Role struct {
+type Profile struct {
 	gorm.Model
 
 	Name  string `gorm:"unique;not null"`
-	Users []User `gorm:"many2many:user_roles"`
+	Users []User `gorm:"many2many:user_profiles"`
 }
 
-func (model *Role) ToDomain() *domain.Role {
-	return &domain.Role{
+func (model *Profile) ToDomain() *domain.Profile {
+	return &domain.Profile{
 		Name: model.Name,
 	}
 }
 
-func (model *Role) FromDomain(domain *domain.Role) {
+func (model *Profile) FromDomain(domain *domain.Profile) {
 	model.Name = domain.Name
 }

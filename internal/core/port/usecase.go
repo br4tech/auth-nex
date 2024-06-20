@@ -13,8 +13,8 @@ type IUserUseCase interface {
 }
 
 type IPermissionUseCase interface {
-	FindRoleByName(name string) (*domain.Role, error)
-	CreateRole(name string) (*domain.Role, error)
+	FindProfileByName(name string) (*domain.Profile, error)
+	CreateProfile(name string) (*domain.Profile, error)
 }
 
 type ICompanyUseCase interface {
