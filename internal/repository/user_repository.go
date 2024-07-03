@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
@@ -8,17 +10,26 @@ import (
 )
 
 type UserRepository struct {
-	db port.IDatabase
+	db port.IDatabase[model.User]
 }
 
-func NewUserRepository(db port.IDatabase) port.IUserRepository {
+func NewUserRepository(db port.IDatabase[model.User]) port.IUserRepository {
 	return &UserRepository{db: db}
 }
 
 func (r *UserRepository) FindUserByEmail(email string) (*domain.User, error) {
-	var user model.User
+	user, err := r.db.FindOne(context.Background(), "email=?", email)
+	if err != nil {
+		return nil, err
+	}
 
-	if err := r.db.Where("email=?", email).First(&user).Error; err != nil {
+	return user.ToDomain(), nil
+}
+
+func (r *UserRepository) FindByPhone(phone string) (*domain.User, error) {
+
+	user, err := r.db.FindOne(context.Background(), "phone=?", phone)
+	if err != nil {
 		return nil, err
 	}
 

@@ -1,16 +1,18 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type CompanyRepository struct {
-	db port.IDatabase
+	db port.IDatabase[model.Company]
 }
 
-func NewCompanyRepository(db port.IDatabase) port.ICompanyRepository {
+func NewCompanyRepository(db port.IDatabase[model.Company]) port.ICompanyRepository {
 	return &CompanyRepository{db: db}
 }
 
@@ -28,7 +30,7 @@ func (r CompanyRepository) CreateCompany(company *domain.Company) (*domain.Compa
 	companyModel := new(model.Company)
 	companyModel.FromDomain(company)
 
-	_, err := r.db.Create(companyModel)
+	_, err := r.db.Create(context.Background(), companyModel)
 	if err != nil {
 		return nil, err
 	}

@@ -5,112 +5,66 @@
 package mock
 
 import (
+	context "context"
 	reflect "reflect"
 
 	gomock "go.uber.org/mock/gomock"
-	gorm "gorm.io/gorm"
 )
 
 // MockIDatabase is a mock of IDatabase interface.
-type MockIDatabase struct {
+type MockIDatabase[T any] struct {
 	ctrl     *gomock.Controller
-	recorder *MockIDatabaseMockRecorder
+	recorder *MockIDatabaseMockRecorder[T]
 }
 
 // MockIDatabaseMockRecorder is the mock recorder for MockIDatabase.
-type MockIDatabaseMockRecorder struct {
-	mock *MockIDatabase
+type MockIDatabaseMockRecorder[T any] struct {
+	mock *MockIDatabase[T]
 }
 
 // NewMockIDatabase creates a new mock instance.
-func NewMockIDatabase(ctrl *gomock.Controller) *MockIDatabase {
-	mock := &MockIDatabase{ctrl: ctrl}
-	mock.recorder = &MockIDatabaseMockRecorder{mock}
+func NewMockIDatabase[T any](ctrl *gomock.Controller) *MockIDatabase[T] {
+	mock := &MockIDatabase[T]{ctrl: ctrl}
+	mock.recorder = &MockIDatabaseMockRecorder[T]{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockIDatabase) EXPECT() *MockIDatabaseMockRecorder {
+func (m *MockIDatabase[T]) EXPECT() *MockIDatabaseMockRecorder[T] {
 	return m.recorder
 }
 
 // Create mocks base method.
-func (m *MockIDatabase) Create(value interface{}) (*gorm.DB, error) {
+func (m *MockIDatabase[T]) Create(ctx context.Context, value *any) (*any, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", value)
-	ret0, _ := ret[0].(*gorm.DB)
+	ret := m.ctrl.Call(m, "Create", ctx, value)
+	ret0, _ := ret[0].(*any)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockIDatabaseMockRecorder) Create(value interface{}) *gomock.Call {
+func (mr *MockIDatabaseMockRecorder[T]) Create(ctx, value interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIDatabase)(nil).Create), value)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIDatabase[T])(nil).Create), ctx, value)
 }
 
-// Error mocks base method.
-func (m *MockIDatabase) Error() error {
+// FindOne mocks base method.
+func (m *MockIDatabase[T]) FindOne(ctx context.Context, conds ...interface{}) (T, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Error")
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Error indicates an expected call of Error.
-func (mr *MockIDatabaseMockRecorder) Error() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Error", reflect.TypeOf((*MockIDatabase)(nil).Error))
-}
-
-// First mocks base method.
-func (m *MockIDatabase) First(dest interface{}, conds ...interface{}) *gorm.DB {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{dest}
+	varargs := []interface{}{ctx}
 	for _, a := range conds {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "First", varargs...)
-	ret0, _ := ret[0].(*gorm.DB)
-	return ret0
+	ret := m.ctrl.Call(m, "FindOne", varargs...)
+	ret0, _ := ret[0].(T)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
-// First indicates an expected call of First.
-func (mr *MockIDatabaseMockRecorder) First(dest interface{}, conds ...interface{}) *gomock.Call {
+// FindOne indicates an expected call of FindOne.
+func (mr *MockIDatabaseMockRecorder[T]) FindOne(ctx interface{}, conds ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{dest}, conds...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "First", reflect.TypeOf((*MockIDatabase)(nil).First), varargs...)
-}
-
-// GetDb mocks base method.
-func (m *MockIDatabase) GetDb() *gorm.DB {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetDb")
-	ret0, _ := ret[0].(*gorm.DB)
-	return ret0
-}
-
-// GetDb indicates an expected call of GetDb.
-func (mr *MockIDatabaseMockRecorder) GetDb() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDb", reflect.TypeOf((*MockIDatabase)(nil).GetDb))
-}
-
-// Where mocks base method.
-func (m *MockIDatabase) Where(query interface{}, args ...interface{}) *gorm.DB {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{query}
-	for _, a := range args {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "Where", varargs...)
-	ret0, _ := ret[0].(*gorm.DB)
-	return ret0
-}
-
-// Where indicates an expected call of Where.
-func (mr *MockIDatabaseMockRecorder) Where(query interface{}, args ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{query}, args...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Where", reflect.TypeOf((*MockIDatabase)(nil).Where), varargs...)
+	varargs := append([]interface{}{ctx}, conds...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOne", reflect.TypeOf((*MockIDatabase[T])(nil).FindOne), varargs...)
 }

@@ -12,6 +12,7 @@ type (
 
 	IUserRepository interface {
 		FindUserByEmail(email string) (*domain.User, error)
+		FindByPhone(phone string) (*domain.User, error)
 		CreateUser(user *domain.User) (*domain.User, error)
 	}
 

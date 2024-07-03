@@ -19,6 +19,9 @@ func TestTenantUseCase_CreateTenantWithCompanyAndAdmin(t *testing.T) {
 	companyUseCaseMock := mock.NewMockICompanyUseCase(ctrl)
 	userUseCaseMock := mock.NewMockIUserUseCase(ctrl)
 
+	cpfPtr := "123.456.789-00"
+	profileIdPtr := 1
+
 	tenantUseCase := NewTenantUseCase(tenantRepoMock, companyUseCaseMock, userUseCaseMock)
 
 	tenantDTO := &dto.TenantDTO{
@@ -39,13 +42,13 @@ func TestTenantUseCase_CreateTenantWithCompanyAndAdmin(t *testing.T) {
 			},
 			Type: "LTDA",
 		},
-		User: dto.UserDTO{
+		User: dto.UserSystemDTO{
 			Name:     "João Silva",
 			Email:    "joao@email.com",
 			CPF:      "12345678901",
 			Password: "senha_forte",
 			TenantId: 1,
-			Roles:    []string{"admin"},
+			Roles:    "system",
 		},
 	}
 
@@ -71,11 +74,12 @@ func TestTenantUseCase_CreateTenantWithCompanyAndAdmin(t *testing.T) {
 	}
 
 	userDomain := &domain.User{
-		Name:     "João Silva",
-		Email:    "joao@email.com",
-		CPF:      "12345678901",
-		Password: "senha_forte",
-		TenantId: 1,
+		Name:      "João Silva",
+		Email:     "joao@email.com",
+		CPF:       &cpfPtr,
+		Password:  "senha_forte",
+		ProfileId: &profileIdPtr,
+		TenantId:  1,
 	}
 
 	t.Run("success", func(t *testing.T) {

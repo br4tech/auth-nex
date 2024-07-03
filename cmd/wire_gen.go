@@ -8,9 +8,9 @@ package main
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/port"
-	"github.com/br4tech/auth-nex/internal/core/usecase/auth"
 	"github.com/br4tech/auth-nex/internal/core/usecase/company"
 	"github.com/br4tech/auth-nex/internal/core/usecase/tenant"
+	"github.com/br4tech/auth-nex/internal/core/usecase/user"
 	"github.com/br4tech/auth-nex/internal/handler"
 	"github.com/br4tech/auth-nex/internal/repository"
 )
@@ -19,7 +19,7 @@ import (
 
 func InitializeUserHandler(db port.IDatabase) port.IUserHandler {
 	iUserRepository := repository.NewUserRepository(db)
-	iUserUseCase := auth.NewAuthUseCase(iUserRepository)
+	iUserUseCase := user.NewAuthUseCase(iUserRepository)
 	userHandler := handler.NewUserHandler(iUserUseCase)
 	return userHandler
 }
@@ -29,7 +29,7 @@ func InitializeTenantHandler(db port.IDatabase) port.ITenantHandler {
 	iCompanyRepository := repository.NewCompanyRepository(db)
 	iCompanyUseCase := company.NewCompanyUseCase(iCompanyRepository)
 	iUserRepository := repository.NewUserRepository(db)
-	iUserUseCase := auth.NewAuthUseCase(iUserRepository)
+	iUserUseCase := user.NewAuthUseCase(iUserRepository)
 	iTenantUseCase := tenant.NewTenantUseCase(iTenantRepository, iCompanyUseCase, iUserUseCase)
 	tenantHandler := handler.NewTenantHandler(iTenantUseCase)
 	return tenantHandler

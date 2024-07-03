@@ -22,6 +22,5 @@ func AuthnexMigrate(db port.IDatabase) {
 		&model.Activity{},
 		&model.Address{},
 		&model.Partner{},
-		&model.Role{},
 	)
 }

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"errors"
 	"testing"
 
@@ -24,7 +25,7 @@ func TestCompanyRepository_CreateCompany(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockDB := mock.NewMockIDatabase(ctrl)
+	mockDB := mock.NewMockIDatabase[model.Company](ctrl)
 	repo := NewCompanyRepository(mockDB)
 
 	company := &domain.Company{
@@ -57,24 +58,29 @@ func TestCompanyRepository_CreateCompany(t *testing.T) {
 	companyModel.FromDomain(company)
 
 	t.Run("Success", func(t *testing.T) {
-		mockGormDB := &gorm.DB{}
+		mockDB.EXPECT().Create(gomock.Any(), gomock.Any()).
+			DoAndReturn(func(ctx context.Context, value *model.Company) (*model.Company, error) {
+				value.Id = 123
+				return value, nil
+			})
 
-		mockDB.EXPECT().Create(companyModel).Return(mockGormDB, nil)
+		repo := NewCompanyRepository(mockDB)
 
-		result, err := repo.CreateCompany(company)
+		createdCompany, err := repo.CreateCompany(company)
+
 		if err != nil {
-			t.Fatalf("CreateCompany returned an error: %v", err)
+			t.Errorf("Erro inesperado: %v", err)
 		}
 
-		if result == nil {
-			t.Fatal("CreateCompany returned a nil result")
+		if createdCompany.Id != 123 {
+			t.Errorf("ID do usuário criado incorreto. Esperado: %d, Obtido: %d", 123, createdCompany.Id)
 		}
 	})
 
 	t.Run("Error", func(t *testing.T) {
 		expectedError := errors.New("database error")
 
-		mockDB.EXPECT().Create(companyModel).Return(nil, expectedError)
+		mockDB.EXPECT().Create(gomock.Any(), gomock.Any()).Return(nil, expectedError)
 
 		_, err := repo.CreateCompany(company)
 

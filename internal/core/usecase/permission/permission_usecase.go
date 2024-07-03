@@ -16,20 +16,20 @@ func NewPermissionUseCase(permissionRepository port.IPermissionRepository) port.
 	}
 }
 
-func (uc *PermissionUseCase) FindRoleByName(name string) (*domain.Role, error) {
-	role, err := uc.permissionRepository.FindRoleByName(name)
+func (uc *PermissionUseCase) FindProfileByName(name string) (*domain.Profile, error) {
+	profile, err := uc.permissionRepository.FindProfileByName(name)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return role, nil
+	return profile, nil
 }
 
-func (uc *PermissionUseCase) CreateRole(name string) (*domain.Role, error) {
-	roleModel := &model.Role{Name: name}
+func (uc *PermissionUseCase) CreateProfile(name string) (*domain.Profile, error) {
+	profileModel := &model.Profile{Name: name}
 
-	roleCreated, err := uc.permissionRepository.CreateRole(roleModel.ToDomain())
+	roleCreated, err := uc.permissionRepository.CreateProfile(profileModel.ToDomain())
 
 	if err != nil {
 		return nil, err

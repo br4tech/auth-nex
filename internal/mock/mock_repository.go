@@ -102,6 +102,21 @@ func (mr *MockIUserRepositoryMockRecorder) CreateUser(user interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockIUserRepository)(nil).CreateUser), user)
 }
 
+// FindByPhone mocks base method.
+func (m *MockIUserRepository) FindByPhone(phone string) (*domain.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByPhone", phone)
+	ret0, _ := ret[0].(*domain.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByPhone indicates an expected call of FindByPhone.
+func (mr *MockIUserRepositoryMockRecorder) FindByPhone(phone interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByPhone", reflect.TypeOf((*MockIUserRepository)(nil).FindByPhone), phone)
+}
+
 // FindUserByEmail mocks base method.
 func (m *MockIUserRepository) FindUserByEmail(email string) (*domain.User, error) {
 	m.ctrl.T.Helper()

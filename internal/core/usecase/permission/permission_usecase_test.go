@@ -10,21 +10,21 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestPermissionUseCase_CreateRole(t *testing.T) {
+func TestPermissionUseCase_CreateProfile(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	permissionRepoMock := mock.NewMockIPermissionRepository(ctrl)
 	permissionUseCase := NewPermissionUseCase(permissionRepoMock)
 
-	permissionDomain := &domain.Role{
+	permissionDomain := &domain.Profile{
 		Name: "admin",
 	}
 
 	t.Run("sucess", func(t *testing.T) {
-		permissionRepoMock.EXPECT().CreateRole(gomock.Any()).Return(permissionDomain, nil)
+		permissionRepoMock.EXPECT().CreateProfile(gomock.Any()).Return(permissionDomain, nil)
 
-		createdPermission, _ := permissionUseCase.CreateRole("admin")
+		createdPermission, _ := permissionUseCase.CreateProfile("admin")
 
 		assert.Equal(t, permissionDomain.Name, createdPermission.Name)
 	})
@@ -32,9 +32,9 @@ func TestPermissionUseCase_CreateRole(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
 		permissionInvalid := errors.New("Name invalid")
 
-		permissionRepoMock.EXPECT().CreateRole(gomock.Any()).Return(nil, permissionInvalid)
+		permissionRepoMock.EXPECT().CreateProfile(gomock.Any()).Return(nil, permissionInvalid)
 
-		createdPermission, err := permissionUseCase.CreateRole("admin")
+		createdPermission, err := permissionUseCase.CreateProfile("admin")
 
 		assert.Error(t, err)
 		assert.Nil(t, createdPermission)

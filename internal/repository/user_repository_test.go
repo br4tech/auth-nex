@@ -83,3 +83,55 @@ func TestUserRepository_CreateUser(t *testing.T) {
 		assert.NoError(t, err)
 	})
 }
+
+func TestUserRepository_FindUserByEmail(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockDB := mock.NewMockIDatabase(ctrl)
+	repo := NewUserRepository(mockDB)
+
+	t.Run("Success", func(t *testing.T) {
+		email := "joao@example.com"
+		expectedUser := &model.User{
+			Id:        1,
+			Name:      "João Silva",
+			Email:     email,
+			Password:  "hashed_password",
+			CPF:       "123.456.789-00",
+			TenantId:  1,
+			ProfileId: 1,
+		}
+
+		mockDB.EXPECT().Where("email=?", email).Return(mockDB) // Retorna o próprio mock para encadear a chamada
+		mockDB.EXPECT().First(gomock.Any()).DoAndReturn(func(user *model.User) *gorm.DB {
+			*user = *expectedUser
+			return &gorm.DB{}
+		})
+
+		user, err := repo.FindUserByEmail(email)
+		assert.NoError(t, err)
+		assert.NotNil(t, user)
+
+		assert.Equal(t, expectedUser.ToDomain().Id, user.Id)
+		assert.Equal(t, expectedUser.ToDomain().Name, user.Name)
+		assert.Equal(t, expectedUser.ToDomain().Email, user.Email)
+		assert.Equal(t, expectedUser.ToDomain().Password, user.Password)
+		assert.Equal(t, expectedUser.ToDomain().CPF, user.CPF)
+		assert.Equal(t, expectedUser.ToDomain().TenantId, user.TenantId)
+		assert.Equal(t, expectedUser.ToDomain().ProfileId, user.ProfileId)
+	})
+
+	t.Run("UserNotFound", func(t *testing.T) {
+		email := "naoexiste@example.com"
+		mockDB.EXPECT().Where("email=?", email).Return(mockDB)
+		mockDB.EXPECT().First(gomock.Any()).Return(&gorm.DB{Error: gorm.ErrRecordNotFound})
+
+		user, err := repo.FindUserByEmail(email)
+		assert.Error(t, err)
+		assert.Nil(t, user)
+	})
+}
+
+func TestUserRepository_FindByPhone(t *testing.T) {
+}

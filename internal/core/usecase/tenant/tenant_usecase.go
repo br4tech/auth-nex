@@ -3,9 +3,9 @@ package tenant
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
+	"github.com/br4tech/auth-nex/internal/core/validator"
 	"github.com/br4tech/auth-nex/internal/dto"
 	"github.com/br4tech/auth-nex/internal/model"
-	"github.com/br4tech/auth-nex/pkg/validator"
 
 	"github.com/jinzhu/copier"
 )

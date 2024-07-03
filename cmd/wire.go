@@ -5,9 +5,9 @@ package main
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/port"
-	"github.com/br4tech/auth-nex/internal/core/usecase/auth"
 	"github.com/br4tech/auth-nex/internal/core/usecase/company"
 	"github.com/br4tech/auth-nex/internal/core/usecase/tenant"
+	"github.com/br4tech/auth-nex/internal/core/usecase/user"
 	"github.com/br4tech/auth-nex/internal/handler"
 	"github.com/br4tech/auth-nex/internal/repository"
 	"github.com/google/wire"
@@ -16,7 +16,7 @@ import (
 func InitializeUserHandler(db port.IDatabase) port.IUserHandler {
 	wire.Build(
 		repository.NewUserRepository,
-		auth.NewAuthUseCase,
+		user.NewAuthUseCase,
 		handler.NewUserHandler,
 		wire.Bind(new(port.IUserHandler), new(*handler.UserHandler)),
 	)
@@ -30,7 +30,7 @@ func InitializeTenantHandler(db port.IDatabase) port.ITenantHandler {
 		repository.NewCompanyRepository,
 		repository.NewUserRepository,
 		company.NewCompanyUseCase,
-		auth.NewAuthUseCase,
+		user.NewAuthUseCase,
 		tenant.NewTenantUseCase,
 		handler.NewTenantHandler,
 

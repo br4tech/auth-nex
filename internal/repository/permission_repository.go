@@ -7,10 +7,10 @@ import (
 )
 
 type PermissionRepository struct {
-	db port.IDatabase
+	db port.IDatabase[model.Company]
 }
 
-func NewPermissionRepository(db port.IDatabase) port.IPermissionRepository {
+func NewPermissionRepository(db port.IDatabase[model.Company]) port.IPermissionRepository {
 	return &PermissionRepository{db: db}
 }
 
