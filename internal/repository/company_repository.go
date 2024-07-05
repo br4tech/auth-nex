@@ -17,13 +17,12 @@ func NewCompanyRepository(db port.IDatabase[model.Company]) port.ICompanyReposit
 }
 
 func (r CompanyRepository) FindCompanyById(id int) (*domain.Company, error) {
-	var companyModel model.Company
-
-	if err := r.db.Where("id=?", id).First(&companyModel).Error; err != nil {
+	company, err := r.db.FindOne(context.Background(), "id=?", id)
+	if err != nil {
 		return nil, err
 	}
 
-	return companyModel.ToDomain(), nil
+	return company.ToDomain(), nil
 }
 
 func (r CompanyRepository) CreateCompany(company *domain.Company) (*domain.Company, error) {

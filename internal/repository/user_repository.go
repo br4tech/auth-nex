@@ -48,7 +48,7 @@ func (r *UserRepository) CreateUser(user *domain.User) (*domain.User, error) {
 
 	userModel.Password = hashedPassword
 
-	_, err = r.db.Create(userModel)
+	_, err = r.db.Create(context.Background(), userModel)
 	if err != nil {
 		return nil, err
 	}
