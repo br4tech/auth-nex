@@ -1,7 +1,6 @@
 package adapter
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/br4tech/auth-nex/config"
@@ -10,11 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type PostgresDatabase struct {
+type postgresDatabase struct {
 	Db *gorm.DB
 }
 
-func NewPostgresDatabase(cfg *config.Config) port.IDatabase[any] {
+func NewPostgresDatabase(cfg *config.Config) port.IDatabase {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
 		cfg.Db.Host,
@@ -31,26 +30,29 @@ func NewPostgresDatabase(cfg *config.Config) port.IDatabase[any] {
 		panic("Falha ao conectar ao banco de dados")
 	}
 
-	return &PostgresDatabase{Db: db}
+	return &postgresDatabase{Db: db}
 }
 
-func (p *PostgresDatabase) FindOne(ctx context.Context, conds ...interface{}) (any, error) {
-	var result any
-
-	query := p.Db.WithContext(ctx).Model(&result)
-	if err := query.WithContext(ctx).Find(&result).Error; err != nil {
-		return nil, err
-	}
-
-	return result, nil
+func (p *postgresDatabase) GetDb() *gorm.DB {
+	return p.Db
 }
 
-func (p *PostgresDatabase) Create(ctx context.Context, value ...interface{}) (*any, error) { // Alterado para retornar *any
-	db := p.Db
+func (p *postgresDatabase) Where(query interface{}, args ...interface{}) *gorm.DB {
+	return p.Db.Where(query, args...)
+}
 
-	if err := db.WithContext(ctx).Create(value).Error; err != nil {
-		return nil, err
+func (p *postgresDatabase) First(dest interface{}, conds ...interface{}) *gorm.DB {
+	return p.Db.First(dest, conds...)
+}
+
+func (p *postgresDatabase) Create(value interface{}) (*gorm.DB, error) {
+	create := p.Db.Create(value)
+	if create.Error != nil {
+		return nil, create.Error
 	}
+	return create, nil
+}
 
-	return value, nil
+func (p *postgresDatabase) Error() error {
+	return p.Db.Error
 }

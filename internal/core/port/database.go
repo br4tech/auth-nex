@@ -1,8 +1,11 @@
 package port
 
-import "context"
+import "gorm.io/gorm"
 
-type IDatabase[T any] interface {
-	FindOne(ctx context.Context, conds ...interface{}) (T, error)
-	Create(ctx context.Context, value ...interface{}) (*any, error)
+type IDatabase interface {
+	GetDb() *gorm.DB
+	Where(query interface{}, args ...interface{}) *gorm.DB
+	First(dest interface{}, conds ...interface{}) *gorm.DB
+	Create(value interface{}) (*gorm.DB, error)
+	Error() error
 }

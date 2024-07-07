@@ -1,38 +1,37 @@
 package repository
 
 import (
-	"context"
-
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type PermissionRepository struct {
-	db port.IDatabase[model.Profile]
+	db port.IDatabase
 }
 
-func NewPermissionRepository(db port.IDatabase[model.Profile]) port.IPermissionRepository {
+func NewPermissionRepository(db port.IDatabase) port.IPermissionRepository {
 	return &PermissionRepository{db: db}
 }
 
-func (r *PermissionRepository) FindProfileByName(name string) (*domain.Profile, error) {
-	profile, err := r.db.FindOne(context.Background(), "name=?", name)
-	if err != nil {
+func (r *PermissionRepository) FindRoleByName(name string) (*domain.Profile, error) {
+	var roleModel model.Profile
+
+	if err := r.db.Where("name=?", name).First(&roleModel).Error; err != nil {
 		return nil, err
 	}
 
-	return profile.ToDomain(), nil
+	return roleModel.ToDomain(), nil
 }
 
-func (r *PermissionRepository) CreateProfile(role *domain.Profile) (*domain.Profile, error) {
-	profileModel := new(model.Profile)
-	profileModel.FromDomain(role)
+func (r *PermissionRepository) CreateRole(role *domain.Profile) (*domain.Profile, error) {
+	roleModel := new(model.Profile)
+	roleModel.FromDomain(role)
 
-	_, err := r.db.Create(context.Background(), profileModel)
+	_, err := r.db.Create(roleModel)
 	if err != nil {
 		return nil, err
 	}
 
-	return profileModel.ToDomain(), nil
+	return roleModel.ToDomain(), nil
 }

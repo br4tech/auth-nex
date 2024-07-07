@@ -6,8 +6,8 @@ import (
 
 type (
 	IPermissionRepository interface {
-		FindProfileByName(name string) (*domain.Profile, error)
-		CreateProfile(role *domain.Profile) (*domain.Profile, error)
+		FindRoleByName(name string) (*domain.Profile, error)
+		CreateRole(role *domain.Profile) (*domain.Profile, error)
 	}
 
 	IUserRepository interface {

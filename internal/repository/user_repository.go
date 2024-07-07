@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"context"
-
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
@@ -10,16 +8,17 @@ import (
 )
 
 type UserRepository struct {
-	db port.IDatabase[model.User]
+	db port.IDatabase
 }
 
-func NewUserRepository(db port.IDatabase[model.User]) port.IUserRepository {
+func NewUserRepository(db port.IDatabase) port.IUserRepository {
 	return &UserRepository{db: db}
 }
 
 func (r *UserRepository) FindUserByEmail(email string) (*domain.User, error) {
-	user, err := r.db.FindOne(context.Background(), "email=?", email)
-	if err != nil {
+	var user model.User
+
+	if err := r.db.Where("email=?", email).First(&user).Error; err != nil {
 		return nil, err
 	}
 
@@ -27,9 +26,9 @@ func (r *UserRepository) FindUserByEmail(email string) (*domain.User, error) {
 }
 
 func (r *UserRepository) FindByPhone(phone string) (*domain.User, error) {
+	var user model.User
 
-	user, err := r.db.FindOne(context.Background(), "phone=?", phone)
-	if err != nil {
+	if err := r.db.Where("phone=?", phone).First(&user).Error; err != nil {
 		return nil, err
 	}
 
@@ -48,7 +47,7 @@ func (r *UserRepository) CreateUser(user *domain.User) (*domain.User, error) {
 
 	userModel.Password = hashedPassword
 
-	_, err = r.db.Create(context.Background(), userModel)
+	_, err = r.db.Create(userModel)
 	if err != nil {
 		return nil, err
 	}
