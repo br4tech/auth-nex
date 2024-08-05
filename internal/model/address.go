@@ -2,11 +2,10 @@ package model
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"gorm.io/gorm"
 )
 
 type Address struct {
-	gorm.Model
+	Model
 	Street          string `gorm:"not null"`
 	Number          string `gorm:"not null"`
 	Complement      string

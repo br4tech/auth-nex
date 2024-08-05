@@ -2,11 +2,10 @@ package model
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"gorm.io/gorm"
 )
 
 type Company struct {
-	gorm.Model
+	Model
 	Id                int
 	LegalName         string  `gorm:"not null"`
 	TradeName         string  `gorm:"not null"`

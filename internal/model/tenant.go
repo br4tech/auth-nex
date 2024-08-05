@@ -2,13 +2,10 @@ package model
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"gorm.io/gorm"
 )
 
 type Tenant struct {
-	gorm.Model
-
-	Id        int       `gorm:"primary_key;"`
+	Model
 	Name      string    `gorm:"unique;not null;"`
 	Companies []Company `gorm:"many2many:tenant_companies;"`
 	Users     []User    `gorm:"many2many:tenant_users;"`

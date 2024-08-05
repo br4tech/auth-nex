@@ -2,11 +2,10 @@ package model
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"gorm.io/gorm"
 )
 
 type Activity struct {
-	gorm.Model
+	Model
 	CNAE        string `gorm:"not null"`
 	Description string `gorm:"not null"`
 	CompanyID   uint   `gorm:"column:comapany_id"`

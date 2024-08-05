@@ -3,13 +3,10 @@ package model
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/dgrijalva/jwt-go"
-	"gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
-
-	Id        int    `gorm:"unique;not null"`
+	Model
 	Name      string `gorm:"not null"`
 	Email     string `gorm:"unique;not null"`
 	CPF       string `gorm:"unique;not null"`

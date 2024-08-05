@@ -2,11 +2,10 @@ package model
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"gorm.io/gorm"
 )
 
 type Profile struct {
-	gorm.Model
+	Model
 
 	Name  string `gorm:"unique;not null"`
 	Users []User `gorm:"many2many:user_profiles"`

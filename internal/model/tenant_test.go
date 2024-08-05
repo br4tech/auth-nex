@@ -9,7 +9,6 @@ import (
 
 func TestTenant_ToDomain(t *testing.T) {
 	tenant := Tenant{
-		Id:   123,
 		Name: "Tenant Exemplo",
 		Companies: []Company{
 			{LegalName: "Empresa A", TradeName: "Nome A", TenantID: 123},
@@ -23,7 +22,6 @@ func TestTenant_ToDomain(t *testing.T) {
 
 	domainTenant := tenant.ToDomain()
 
-	assert.Equal(t, tenant.Id, domainTenant.Id)
 	assert.Equal(t, tenant.Name, domainTenant.Name)
 	assert.Equal(t, len(tenant.Companies), len(domainTenant.Companies))
 	assert.Equal(t, len(tenant.Users), len(domainTenant.Users))
@@ -31,7 +29,6 @@ func TestTenant_ToDomain(t *testing.T) {
 
 func TestTenant_FromDomain(t *testing.T) {
 	domainTenant := domain.Tenant{
-		Id:   123,
 		Name: "Tenant Exemplo",
 		Companies: []domain.Company{
 			{LegalName: "Empresa A", TradeName: "Nome A"},
@@ -46,7 +43,6 @@ func TestTenant_FromDomain(t *testing.T) {
 	tenant := Tenant{}
 	tenant.FromDomain(&domainTenant)
 
-	assert.Equal(t, domainTenant.Id, tenant.Id)
 	assert.Equal(t, domainTenant.Name, tenant.Name)
 	assert.Equal(t, len(domainTenant.Companies), len(tenant.Companies))
 	assert.Equal(t, len(domainTenant.Users), len(tenant.Users))
