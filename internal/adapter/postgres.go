@@ -52,6 +52,32 @@ func (adapter *PostgresAdapter[T]) FindAll() ([]T, error) {
 	return results, nil
 }
 
+func (adapter *PostgresAdapter[T]) FindById(id int) (*T, error) {
+	if adapter.Db == nil {
+		return nil, errors.New("database connection not established")
+	}
+
+	var result T
+	if err := adapter.Db.First(&result, id).Error; err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+func (adapter *PostgresAdapter[T]) FindBy(field string, value string) ([]*T, error) {
+	if adapter.Db == nil {
+		return nil, errors.New("database connection not established")
+	}
+
+	var results []*T
+	if err := adapter.Db.Where(field+"= ?", value).Find(&results).Error; err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
 func (adapter *PostgresAdapter[T]) Create(entity T) (int, error) {
 	if adapter.Db == nil {
 		return 0, errors.New("database connection not established")
