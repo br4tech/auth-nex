@@ -1,10 +1,11 @@
-package repository
+package repositories
 
 import (
 	"errors"
 	"testing"
 
 	"github.com/br4tech/auth-nex/internal/core/domain"
+	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/mock"
 	"github.com/br4tech/auth-nex/internal/model"
 	"github.com/stretchr/testify/assert"
@@ -17,7 +18,7 @@ func TestUserRepository_CreateUser(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockDB := mock.NewMockIDatabase(ctrl)
+	mockDB := mock.NewMockIDatabase[port.IModel](ctrl)
 	repo := NewUserRepository(mockDB)
 	mockGormDB := &gorm.DB{}
 
@@ -88,13 +89,12 @@ func TestUserRepository_FindUserByEmail(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockDB := mock.NewMockIDatabase(ctrl)
+	mockDB := mock.NewMockIDatabase[port.IModel](ctrl)
 	repo := NewUserRepository(mockDB)
 
 	t.Run("Success", func(t *testing.T) {
 		email := "joao@example.com"
 		expectedUser := &model.User{
-			Id:        1,
 			Name:      "João Silva",
 			Email:     email,
 			Password:  "hashed_password",

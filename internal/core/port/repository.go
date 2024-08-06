@@ -5,9 +5,9 @@ import (
 )
 
 type (
-	IPermissionRepository interface {
-		FindRoleByName(name string) (*domain.Profile, error)
-		CreateRole(role *domain.Profile) (*domain.Profile, error)
+	IProfileRepository interface {
+		FindByName(name string) (*domain.Profile, error)
+		Create(role *domain.Profile) (*domain.Profile, error)
 	}
 
 	IUserRepository interface {
@@ -17,12 +17,12 @@ type (
 	}
 
 	ICompanyRepository interface {
-		FindCompanyById(id int) (*domain.Company, error)
-		CreateCompany(company *domain.Company) (*domain.Company, error)
+		FindById(id int) (*domain.Company, error)
+		Create(company *domain.Company) (*domain.Company, error)
 	}
 
 	ITenantRepository interface {
-		CreateTenant(tenant *domain.Tenant) (*domain.Tenant, error)
-		FindTenantByName(name string) (*domain.Tenant, error)
+		Create(tenant *domain.Tenant) (*domain.Tenant, error)
+		FindByName(name string) (*domain.Tenant, error)
 	}
 )

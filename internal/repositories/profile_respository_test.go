@@ -1,10 +1,11 @@
-package repository
+package repositories
 
 import (
 	"errors"
 	"testing"
 
 	"github.com/br4tech/auth-nex/internal/core/domain"
+	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/mock"
 	"github.com/br4tech/auth-nex/internal/model"
 	"go.uber.org/mock/gomock"
@@ -15,8 +16,8 @@ func TestPermissionRepository_CreateRole(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockDB := mock.NewMockIDatabase(ctrl)
-	repo := NewPermissionRepository(mockDB)
+	mockDB := mock.NewMockIDatabase[port.IModel](ctrl)
+	repo := NewProfileRepository(mockDB)
 
 	profile := &domain.Profile{
 		Name: "Admin",
@@ -30,7 +31,7 @@ func TestPermissionRepository_CreateRole(t *testing.T) {
 
 		mockDB.EXPECT().Create(profileModel).Return(mockGormDB, nil)
 
-		result, err := repo.CreateProfile(profile)
+		result, err := repo.Create(profile)
 		if err != nil {
 			t.Fatalf("CreateProfile returned an error: %v", err)
 		}
@@ -45,7 +46,7 @@ func TestPermissionRepository_CreateRole(t *testing.T) {
 
 		mockDB.EXPECT().Create(profileModel).Return(nil, expectedError)
 
-		_, err := repo.CreateProfile(profile)
+		_, err := repo.Create(profile)
 
 		if err == nil {
 			t.Fatal("CreateProfile did not return an error")

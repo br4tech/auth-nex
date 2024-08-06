@@ -1,4 +1,4 @@
-package repository
+package repositories
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/br4tech/auth-nex/internal/core/domain"
+	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/mock"
 	"github.com/br4tech/auth-nex/internal/model"
 	"go.uber.org/mock/gomock"
@@ -25,7 +26,7 @@ func TestCompanyRepository_CreateCompany(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockDB := mock.NewMockIDatabase[model.Company](ctrl)
+	mockDB := mock.NewMockIDatabase[port.IModel](ctrl)
 	repo := NewCompanyRepository(mockDB)
 
 	company := &domain.Company{
@@ -58,7 +59,7 @@ func TestCompanyRepository_CreateCompany(t *testing.T) {
 	companyModel.FromDomain(company)
 
 	t.Run("Success", func(t *testing.T) {
-		mockDB.EXPECT().Create(gomock.Any(), gomock.Any()).
+		mockDB.EXPECT().Create(gomock.Any()).
 			DoAndReturn(func(ctx context.Context, value *model.Company) (*model.Company, error) {
 				value.Id = 123
 				return value, nil
@@ -66,7 +67,7 @@ func TestCompanyRepository_CreateCompany(t *testing.T) {
 
 		repo := NewCompanyRepository(mockDB)
 
-		createdCompany, err := repo.CreateCompany(company)
+		createdCompany, err := repo.Create(company)
 
 		if err != nil {
 			t.Errorf("Erro inesperado: %v", err)
@@ -80,9 +81,9 @@ func TestCompanyRepository_CreateCompany(t *testing.T) {
 	t.Run("Error", func(t *testing.T) {
 		expectedError := errors.New("database error")
 
-		mockDB.EXPECT().Create(gomock.Any(), gomock.Any()).Return(nil, expectedError)
+		mockDB.EXPECT().Create(gomock.Any()).Return(nil, expectedError)
 
-		_, err := repo.CreateCompany(company)
+		_, err := repo.Create(company)
 
 		if err == nil {
 			t.Fatal("CreateCompany did not return an error")

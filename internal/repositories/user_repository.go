@@ -1,4 +1,4 @@
-package repository
+package repositories
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"

@@ -5,25 +5,26 @@
 package mock
 
 import (
-	context "context"
 	reflect "reflect"
 
+	port "github.com/br4tech/auth-nex/internal/core/port"
 	gomock "go.uber.org/mock/gomock"
+	gorm "gorm.io/gorm"
 )
 
 // MockIDatabase is a mock of IDatabase interface.
-type MockIDatabase[T any] struct {
+type MockIDatabase[T port.IModel] struct {
 	ctrl     *gomock.Controller
 	recorder *MockIDatabaseMockRecorder[T]
 }
 
 // MockIDatabaseMockRecorder is the mock recorder for MockIDatabase.
-type MockIDatabaseMockRecorder[T any] struct {
+type MockIDatabaseMockRecorder[T port.IModel] struct {
 	mock *MockIDatabase[T]
 }
 
 // NewMockIDatabase creates a new mock instance.
-func NewMockIDatabase[T any](ctrl *gomock.Controller) *MockIDatabase[T] {
+func NewMockIDatabase[T port.IModel](ctrl *gomock.Controller) *MockIDatabase[T] {
 	mock := &MockIDatabase[T]{ctrl: ctrl}
 	mock.recorder = &MockIDatabaseMockRecorder[T]{mock}
 	return mock
@@ -35,41 +36,112 @@ func (m *MockIDatabase[T]) EXPECT() *MockIDatabaseMockRecorder[T] {
 }
 
 // Create mocks base method.
-func (m *MockIDatabase[T]) Create(ctx context.Context, value ...interface{}) (*any, error) {
+func (m *MockIDatabase[T]) Create(entity T) (int, error) {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{ctx}
-	for _, a := range value {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "Create", varargs...)
-	ret0, _ := ret[0].(*any)
+	ret := m.ctrl.Call(m, "Create", entity)
+	ret0, _ := ret[0].(int)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockIDatabaseMockRecorder[T]) Create(ctx interface{}, value ...interface{}) *gomock.Call {
+func (mr *MockIDatabaseMockRecorder[T]) Create(entity interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{ctx}, value...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIDatabase[T])(nil).Create), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIDatabase[T])(nil).Create), entity)
 }
 
-// FindOne mocks base method.
-func (m *MockIDatabase[T]) FindOne(ctx context.Context, conds ...interface{}) (T, error) {
+// FindAll mocks base method.
+func (m *MockIDatabase[T]) FindAll() ([]T, error) {
 	m.ctrl.T.Helper()
-	varargs := []interface{}{ctx}
-	for _, a := range conds {
-		varargs = append(varargs, a)
-	}
-	ret := m.ctrl.Call(m, "FindOne", varargs...)
-	ret0, _ := ret[0].(T)
+	ret := m.ctrl.Call(m, "FindAll")
+	ret0, _ := ret[0].([]T)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindOne indicates an expected call of FindOne.
-func (mr *MockIDatabaseMockRecorder[T]) FindOne(ctx interface{}, conds ...interface{}) *gomock.Call {
+// FindAll indicates an expected call of FindAll.
+func (mr *MockIDatabaseMockRecorder[T]) FindAll() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{ctx}, conds...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOne", reflect.TypeOf((*MockIDatabase[T])(nil).FindOne), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindAll", reflect.TypeOf((*MockIDatabase[T])(nil).FindAll))
+}
+
+// FindBy mocks base method.
+func (m *MockIDatabase[T]) FindBy(field, value string) ([]*T, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindBy", field, value)
+	ret0, _ := ret[0].([]*T)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindBy indicates an expected call of FindBy.
+func (mr *MockIDatabaseMockRecorder[T]) FindBy(field, value interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindBy", reflect.TypeOf((*MockIDatabase[T])(nil).FindBy), field, value)
+}
+
+// FindById mocks base method.
+func (m *MockIDatabase[T]) FindById(id int) (*T, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindById", id)
+	ret0, _ := ret[0].(*T)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindById indicates an expected call of FindById.
+func (mr *MockIDatabaseMockRecorder[T]) FindById(id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockIDatabase[T])(nil).FindById), id)
+}
+
+// GetDb mocks base method.
+func (m *MockIDatabase[T]) GetDb() *gorm.DB {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDb")
+	ret0, _ := ret[0].(*gorm.DB)
+	return ret0
+}
+
+// GetDb indicates an expected call of GetDb.
+func (mr *MockIDatabaseMockRecorder[T]) GetDb() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDb", reflect.TypeOf((*MockIDatabase[T])(nil).GetDb))
+}
+
+// MockIModel is a mock of IModel interface.
+type MockIModel struct {
+	ctrl     *gomock.Controller
+	recorder *MockIModelMockRecorder
+}
+
+// MockIModelMockRecorder is the mock recorder for MockIModel.
+type MockIModelMockRecorder struct {
+	mock *MockIModel
+}
+
+// NewMockIModel creates a new mock instance.
+func NewMockIModel(ctrl *gomock.Controller) *MockIModel {
+	mock := &MockIModel{ctrl: ctrl}
+	mock.recorder = &MockIModelMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIModel) EXPECT() *MockIModelMockRecorder {
+	return m.recorder
+}
+
+// GetId mocks base method.
+func (m *MockIModel) GetId() int {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetId")
+	ret0, _ := ret[0].(int)
+	return ret0
+}
+
+// GetId indicates an expected call of GetId.
+func (mr *MockIModelMockRecorder) GetId() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetId", reflect.TypeOf((*MockIModel)(nil).GetId))
 }

@@ -1,10 +1,11 @@
-package repository
+package repositories
 
 import (
 	"errors"
 	"testing"
 
 	"github.com/br4tech/auth-nex/internal/core/domain"
+	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/mock"
 	"github.com/br4tech/auth-nex/internal/model"
 	"go.uber.org/mock/gomock"
@@ -15,7 +16,7 @@ func TestTenantRepository_CreateTenant(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockDB := mock.NewMockIDatabase(ctrl)
+	mockDB := mock.NewMockIDatabase[port.IModel](ctrl)
 	repo := NewTenantRepository(mockDB)
 
 	tenant := &domain.Tenant{
@@ -39,7 +40,7 @@ func TestTenantRepository_CreateTenant(t *testing.T) {
 
 		mockDB.EXPECT().Create(tenantModel).Return(mockGormDB, nil)
 
-		result, err := repo.CreateTenant(tenant)
+		result, err := repo.Create(tenant)
 		if err != nil {
 			t.Fatalf("CreateTenant returned an error: %v", err)
 		}
@@ -57,7 +58,7 @@ func TestTenantRepository_CreateTenant(t *testing.T) {
 		expectedError := errors.New("database error")
 		mockDB.EXPECT().Create(tenantModel).Return(nil, expectedError)
 
-		_, err := repo.CreateTenant(tenant)
+		_, err := repo.Create(tenant)
 
 		if err == nil {
 			t.Fatal("CreateTenant did not return an error")

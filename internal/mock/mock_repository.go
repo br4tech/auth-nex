@@ -11,57 +11,57 @@ import (
 	gomock "go.uber.org/mock/gomock"
 )
 
-// MockIPermissionRepository is a mock of IPermissionRepository interface.
-type MockIPermissionRepository struct {
+// MockIProfileRepository is a mock of IProfileRepository interface.
+type MockIProfileRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockIPermissionRepositoryMockRecorder
+	recorder *MockIProfileRepositoryMockRecorder
 }
 
-// MockIPermissionRepositoryMockRecorder is the mock recorder for MockIPermissionRepository.
-type MockIPermissionRepositoryMockRecorder struct {
-	mock *MockIPermissionRepository
+// MockIProfileRepositoryMockRecorder is the mock recorder for MockIProfileRepository.
+type MockIProfileRepositoryMockRecorder struct {
+	mock *MockIProfileRepository
 }
 
-// NewMockIPermissionRepository creates a new mock instance.
-func NewMockIPermissionRepository(ctrl *gomock.Controller) *MockIPermissionRepository {
-	mock := &MockIPermissionRepository{ctrl: ctrl}
-	mock.recorder = &MockIPermissionRepositoryMockRecorder{mock}
+// NewMockIProfileRepository creates a new mock instance.
+func NewMockIProfileRepository(ctrl *gomock.Controller) *MockIProfileRepository {
+	mock := &MockIProfileRepository{ctrl: ctrl}
+	mock.recorder = &MockIProfileRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockIPermissionRepository) EXPECT() *MockIPermissionRepositoryMockRecorder {
+func (m *MockIProfileRepository) EXPECT() *MockIProfileRepositoryMockRecorder {
 	return m.recorder
 }
 
-// CreateProfile mocks base method.
-func (m *MockIPermissionRepository) CreateProfile(role *domain.Profile) (*domain.Profile, error) {
+// Create mocks base method.
+func (m *MockIProfileRepository) Create(role *domain.Profile) (*domain.Profile, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateProfile", role)
+	ret := m.ctrl.Call(m, "Create", role)
 	ret0, _ := ret[0].(*domain.Profile)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateProfile indicates an expected call of CreateProfile.
-func (mr *MockIPermissionRepositoryMockRecorder) CreateProfile(role interface{}) *gomock.Call {
+// Create indicates an expected call of Create.
+func (mr *MockIProfileRepositoryMockRecorder) Create(role interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProfile", reflect.TypeOf((*MockIPermissionRepository)(nil).CreateProfile), role)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIProfileRepository)(nil).Create), role)
 }
 
-// FindProfileByName mocks base method.
-func (m *MockIPermissionRepository) FindProfileByName(name string) (*domain.Profile, error) {
+// FindByName mocks base method.
+func (m *MockIProfileRepository) FindByName(name string) (*domain.Profile, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindProfileByName", name)
+	ret := m.ctrl.Call(m, "FindByName", name)
 	ret0, _ := ret[0].(*domain.Profile)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindProfileByName indicates an expected call of FindProfileByName.
-func (mr *MockIPermissionRepositoryMockRecorder) FindProfileByName(name interface{}) *gomock.Call {
+// FindByName indicates an expected call of FindByName.
+func (mr *MockIProfileRepositoryMockRecorder) FindByName(name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindProfileByName", reflect.TypeOf((*MockIPermissionRepository)(nil).FindProfileByName), name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByName", reflect.TypeOf((*MockIProfileRepository)(nil).FindByName), name)
 }
 
 // MockIUserRepository is a mock of IUserRepository interface.
@@ -155,34 +155,34 @@ func (m *MockICompanyRepository) EXPECT() *MockICompanyRepositoryMockRecorder {
 	return m.recorder
 }
 
-// CreateCompany mocks base method.
-func (m *MockICompanyRepository) CreateCompany(company *domain.Company) (*domain.Company, error) {
+// Create mocks base method.
+func (m *MockICompanyRepository) Create(company *domain.Company) (*domain.Company, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateCompany", company)
+	ret := m.ctrl.Call(m, "Create", company)
 	ret0, _ := ret[0].(*domain.Company)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateCompany indicates an expected call of CreateCompany.
-func (mr *MockICompanyRepositoryMockRecorder) CreateCompany(company interface{}) *gomock.Call {
+// Create indicates an expected call of Create.
+func (mr *MockICompanyRepositoryMockRecorder) Create(company interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCompany", reflect.TypeOf((*MockICompanyRepository)(nil).CreateCompany), company)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockICompanyRepository)(nil).Create), company)
 }
 
-// FindCompanyById mocks base method.
-func (m *MockICompanyRepository) FindCompanyById(id int) (*domain.Company, error) {
+// FindById mocks base method.
+func (m *MockICompanyRepository) FindById(id int) (*domain.Company, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindCompanyById", id)
+	ret := m.ctrl.Call(m, "FindById", id)
 	ret0, _ := ret[0].(*domain.Company)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindCompanyById indicates an expected call of FindCompanyById.
-func (mr *MockICompanyRepositoryMockRecorder) FindCompanyById(id interface{}) *gomock.Call {
+// FindById indicates an expected call of FindById.
+func (mr *MockICompanyRepositoryMockRecorder) FindById(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindCompanyById", reflect.TypeOf((*MockICompanyRepository)(nil).FindCompanyById), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockICompanyRepository)(nil).FindById), id)
 }
 
 // MockITenantRepository is a mock of ITenantRepository interface.
@@ -208,32 +208,32 @@ func (m *MockITenantRepository) EXPECT() *MockITenantRepositoryMockRecorder {
 	return m.recorder
 }
 
-// CreateTenant mocks base method.
-func (m *MockITenantRepository) CreateTenant(tenant *domain.Tenant) (*domain.Tenant, error) {
+// Create mocks base method.
+func (m *MockITenantRepository) Create(tenant *domain.Tenant) (*domain.Tenant, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateTenant", tenant)
+	ret := m.ctrl.Call(m, "Create", tenant)
 	ret0, _ := ret[0].(*domain.Tenant)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateTenant indicates an expected call of CreateTenant.
-func (mr *MockITenantRepositoryMockRecorder) CreateTenant(tenant interface{}) *gomock.Call {
+// Create indicates an expected call of Create.
+func (mr *MockITenantRepositoryMockRecorder) Create(tenant interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTenant", reflect.TypeOf((*MockITenantRepository)(nil).CreateTenant), tenant)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockITenantRepository)(nil).Create), tenant)
 }
 
-// FindTenantByName mocks base method.
-func (m *MockITenantRepository) FindTenantByName(name string) (*domain.Tenant, error) {
+// FindByName mocks base method.
+func (m *MockITenantRepository) FindByName(name string) (*domain.Tenant, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindTenantByName", name)
+	ret := m.ctrl.Call(m, "FindByName", name)
 	ret0, _ := ret[0].(*domain.Tenant)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindTenantByName indicates an expected call of FindTenantByName.
-func (mr *MockITenantRepositoryMockRecorder) FindTenantByName(name interface{}) *gomock.Call {
+// FindByName indicates an expected call of FindByName.
+func (mr *MockITenantRepositoryMockRecorder) FindByName(name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindTenantByName", reflect.TypeOf((*MockITenantRepository)(nil).FindTenantByName), name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByName", reflect.TypeOf((*MockITenantRepository)(nil).FindByName), name)
 }
