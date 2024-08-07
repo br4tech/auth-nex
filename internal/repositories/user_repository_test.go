@@ -51,7 +51,7 @@ func TestUserRepository_CreateUser(t *testing.T) {
 			},
 		)
 
-		createdUser, err := repo.CreateUser(user)
+		createdUser, err := repo.Create(user)
 		assert.NoError(t, err)
 		assert.NotNil(t, createdUser)
 		assert.Equal(t, user.Name, createdUser.Name)
@@ -79,7 +79,7 @@ func TestUserRepository_CreateUser(t *testing.T) {
 			},
 		)
 
-		_, err := repo.CreateUser(user)
+		_, err := repo.Create(user)
 
 		assert.NoError(t, err)
 	})
@@ -94,6 +94,7 @@ func TestUserRepository_FindUserByEmail(t *testing.T) {
 
 	t.Run("Success", func(t *testing.T) {
 		email := "joao@example.com"
+
 		expectedUser := &model.User{
 			Name:      "João Silva",
 			Email:     email,
@@ -103,13 +104,9 @@ func TestUserRepository_FindUserByEmail(t *testing.T) {
 			ProfileId: 1,
 		}
 
-		mockDB.EXPECT().Where("email=?", email).Return(mockDB) // Retorna o próprio mock para encadear a chamada
-		mockDB.EXPECT().First(gomock.Any()).DoAndReturn(func(user *model.User) *gorm.DB {
-			*user = *expectedUser
-			return &gorm.DB{}
-		})
+		mockDB.EXPECT().FindBy("email", email).Return(expectedUser) // Retorna o próprio mock para encadear a chamada
 
-		user, err := repo.FindUserByEmail(email)
+		user, err := repo.FindByEmail(email)
 		assert.NoError(t, err)
 		assert.NotNil(t, user)
 
@@ -124,10 +121,9 @@ func TestUserRepository_FindUserByEmail(t *testing.T) {
 
 	t.Run("UserNotFound", func(t *testing.T) {
 		email := "naoexiste@example.com"
-		mockDB.EXPECT().Where("email=?", email).Return(mockDB)
-		mockDB.EXPECT().First(gomock.Any()).Return(&gorm.DB{Error: gorm.ErrRecordNotFound})
+		mockDB.EXPECT().FindBy("email", email).Return(mockDB)
 
-		user, err := repo.FindUserByEmail(email)
+		user, err := repo.FindByEmail(email)
 		assert.Error(t, err)
 		assert.Nil(t, user)
 	})

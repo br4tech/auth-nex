@@ -6,6 +6,7 @@ import (
 
 	"github.com/br4tech/auth-nex/config"
 	"github.com/br4tech/auth-nex/internal/core/port"
+	"github.com/br4tech/auth-nex/internal/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -92,3 +93,10 @@ func (adapter *PostgresAdapter[T]) Create(entity T) (int, error) {
 
 	return id, nil
 }
+
+// Implementação da interface IDatabase para cada modelo
+var _ port.IDatabase[model.Tenant] = (*PostgresAdapter[model.Tenant])(nil)
+var _ port.IDatabase[model.User] = (*PostgresAdapter[model.User])(nil)
+var _ port.IDatabase[model.Profile] = (*PostgresAdapter[model.Profile])(nil)
+var _ port.IDatabase[model.Partner] = (*PostgresAdapter[model.Partner])(nil)
+var _ port.IDatabase[model.Company] = (*PostgresAdapter[model.Company])(nil)

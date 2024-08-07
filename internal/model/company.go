@@ -20,7 +20,11 @@ type Company struct {
 	Activities        []Activity
 }
 
-func (model Company) ToDomain() *domain.Company {
+func (model Company) GetId() int {
+	return model.Id
+}
+
+func (model *Company) ToDomain() *domain.Company {
 	companyDomain := &domain.Company{
 		Id:                model.Id,
 		LegalName:         model.LegalName,
@@ -41,7 +45,7 @@ func (model Company) ToDomain() *domain.Company {
 	return companyDomain
 }
 
-func (model Company) convertPartnersToDomain() []domain.Partner {
+func (model *Company) convertPartnersToDomain() []domain.Partner {
 	domainPartners := make([]domain.Partner, len(model.Partners))
 	for i, partner := range model.Partners {
 		domainPartners[i] = *partner.ToDomain()

@@ -17,7 +17,6 @@ type User struct {
 	Role      string `gorm:"not null"`
 	ProfileId int    `gorm:"unique;not null"`
 	Profile   Profile
-	Companies []Company `gorm:"many2many:user_companies;"`
 }
 
 type Claims struct {
@@ -25,7 +24,11 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (model User) ToDomain() *domain.User {
+func (model User) GetId() int {
+	return model.Id
+}
+
+func (model *User) ToDomain() *domain.User {
 	return &domain.User{
 		Name:      model.Name,
 		Email:     model.Email,

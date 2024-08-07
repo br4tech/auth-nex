@@ -11,6 +11,10 @@ type Profile struct {
 	Users []User `gorm:"many2many:user_profiles"`
 }
 
+func (model Profile) GetId() int {
+	return model.Id
+}
+
 func (model *Profile) ToDomain() *domain.Profile {
 	return &domain.Profile{
 		Name: model.Name,

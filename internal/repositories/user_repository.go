@@ -1,41 +1,59 @@
 package repositories
 
 import (
+	"errors"
+
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserRepository struct {
-	db port.IDatabase
+type UserRepository[T port.IModel] struct {
+	db port.IDatabase[T]
 }
 
-func NewUserRepository(db port.IDatabase) port.IUserRepository {
-	return &UserRepository{db: db}
+func NewUserRepository[T port.IModel](db port.IDatabase[T]) port.IUserRepository {
+	return &UserRepository[T]{db: db}
 }
 
-func (r *UserRepository) FindUserByEmail(email string) (*domain.User, error) {
-	var user model.User
+func (r *UserRepository[T]) FindByEmail(email string) (*domain.User, error) {
+	var userEntity T
 
-	if err := r.db.Where("email=?", email).First(&user).Error; err != nil {
+	_, err := r.db.FindBy("email", email)
+	if err != nil {
 		return nil, err
 	}
 
-	return user.ToDomain(), nil
+	userModel, ok := any(&userEntity).(*model.User)
+	if !ok {
+		return nil, errors.New("failed to convert entity to user model")
+	}
+
+	userDomain := userModel.ToDomain()
+
+	return userDomain, nil
 }
 
-func (r *UserRepository) FindByPhone(phone string) (*domain.User, error) {
-	var user model.User
+func (r *UserRepository[T]) FindByPhone(phone string) (*domain.User, error) {
+	var userEntity T
 
-	if err := r.db.Where("phone=?", phone).First(&user).Error; err != nil {
+	_, err := r.db.FindBy("phone", phone)
+	if err != nil {
 		return nil, err
 	}
 
-	return user.ToDomain(), nil
+	userModel, ok := any(&userEntity).(*model.User)
+	if !ok {
+		return nil, errors.New("failed to convert entity to user model")
+	}
+
+	userDomain := userModel.ToDomain()
+
+	return userDomain, nil
 }
 
-func (r *UserRepository) CreateUser(user *domain.User) (*domain.User, error) {
+func (r *UserRepository[T]) Create(user *domain.User) (*domain.User, error) {
 	userModel := new(model.User)
 	userModel.FromDomain(user)
 
@@ -47,12 +65,19 @@ func (r *UserRepository) CreateUser(user *domain.User) (*domain.User, error) {
 
 	userModel.Password = hashedPassword
 
-	_, err = r.db.Create(userModel)
+	userEntity, ok := any(userModel).(T)
+	if !ok {
+		return nil, errors.New("entity type invalid to user")
+	}
+
+	userId, err := r.db.Create(userEntity)
 	if err != nil {
 		return nil, err
 	}
 
-	return userModel.ToDomain(), nil
+	user.Id = userId
+
+	return user, nil
 }
 
 func hashPassword(password string) (string, error) {

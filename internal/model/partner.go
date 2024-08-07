@@ -11,6 +11,10 @@ type Partner struct {
 	CompanyId     int
 }
 
+func (model Partner) GetId() int {
+	return model.Id
+}
+
 func (model *Partner) ToDomain() *domain.Partner {
 	return &domain.Partner{
 		UserId:        model.UserId,

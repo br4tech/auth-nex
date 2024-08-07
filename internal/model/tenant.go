@@ -11,6 +11,10 @@ type Tenant struct {
 	Users     []User    `gorm:"many2many:tenant_users;"`
 }
 
+func (model Tenant) GetId() int {
+	return model.Id
+}
+
 func (model Tenant) ToDomain() *domain.Tenant {
 	return &domain.Tenant{
 		Id:        model.Id,

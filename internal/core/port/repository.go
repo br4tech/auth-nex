@@ -11,9 +11,9 @@ type (
 	}
 
 	IUserRepository interface {
-		FindUserByEmail(email string) (*domain.User, error)
+		FindByEmail(email string) (*domain.User, error)
 		FindByPhone(phone string) (*domain.User, error)
-		CreateUser(user *domain.User) (*domain.User, error)
+		Create(user *domain.User) (*domain.User, error)
 	}
 
 	ICompanyRepository interface {

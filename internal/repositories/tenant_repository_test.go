@@ -9,7 +9,6 @@ import (
 	"github.com/br4tech/auth-nex/internal/mock"
 	"github.com/br4tech/auth-nex/internal/model"
 	"go.uber.org/mock/gomock"
-	"gorm.io/gorm"
 )
 
 func TestTenantRepository_CreateTenant(t *testing.T) {
@@ -36,9 +35,7 @@ func TestTenantRepository_CreateTenant(t *testing.T) {
 	tenantModel.FromDomain(tenant)
 
 	t.Run("Success", func(t *testing.T) {
-		mockGormDB := &gorm.DB{}
-
-		mockDB.EXPECT().Create(tenantModel).Return(mockGormDB, nil)
+		mockDB.EXPECT().Create(tenantModel).Return(tenant.Id, nil)
 
 		result, err := repo.Create(tenant)
 		if err != nil {
@@ -56,7 +53,7 @@ func TestTenantRepository_CreateTenant(t *testing.T) {
 
 	t.Run("Error", func(t *testing.T) {
 		expectedError := errors.New("database error")
-		mockDB.EXPECT().Create(tenantModel).Return(nil, expectedError)
+		mockDB.EXPECT().Create(tenantModel).Return(0, expectedError)
 
 		_, err := repo.Create(tenant)
 
