@@ -6,14 +6,13 @@ import (
 
 type Company struct {
 	Model
-	Id                int
 	LegalName         string  `gorm:"not null"`
 	TradeName         string  `gorm:"not null"`
 	Document          string  `gorm:"unique;not null"`
 	StateRegistration string  `gorm:"not null"`
 	Address           Address `gorm:"polymorphic:Addressable;"`
 	Type              string  // Company type (MEI, ME, LTDA, etc.)
-	TenantID          int     `gorm:"column:tenant_id"`
+	TenantId          int     `gorm:"column:tenant_id"`
 	Schema            string  `gorm:"not null"`
 	User              []User  `gorm:"many2many:user_companies;"`
 	Partners          []Partner
@@ -24,7 +23,7 @@ func (model Company) GetId() int {
 	return model.Id
 }
 
-func (model *Company) ToDomain() *domain.Company {
+func (model Company) ToDomain() *domain.Company {
 	companyDomain := &domain.Company{
 		Id:                model.Id,
 		LegalName:         model.LegalName,
@@ -32,7 +31,7 @@ func (model *Company) ToDomain() *domain.Company {
 		Document:          model.Document,
 		StateRegistration: model.StateRegistration,
 		Type:              model.Type,
-		TenantID:          uint(model.TenantID),
+		TenantId:          uint(model.TenantId),
 		Schema:            model.Schema,
 	}
 
@@ -69,6 +68,19 @@ func (model *Company) FromDomain(domain *domain.Company) {
 		ZipCode:    domain.Address.ZipCode,
 	}
 	model.Type = domain.Type
-	model.TenantID = int(domain.TenantID)
+	model.TenantId = int(domain.TenantId)
 	model.Schema = domain.Schema
+	model.Partners = convertPartnersFromDomain(domain.Partners)
+}
+
+func convertPartnersFromDomain(domainPartners []domain.Partner) []Partner {
+	modelPartnes := make([]Partner, len(domainPartners))
+	for i, domainPartner := range domainPartners {
+		modelPartnes[i] = Partner{
+			Participation: domainPartner.Participation,
+			UserId:        domainPartner.UserId,
+			CompanyId:     domainPartner.CompanyId,
+		}
+	}
+	return modelPartnes
 }

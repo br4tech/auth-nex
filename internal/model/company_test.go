@@ -23,7 +23,7 @@ func TestCompany_ToDomain(t *testing.T) {
 			ZipCode:    "12345-678",
 		},
 		Type:     "LTDA",
-		TenantID: 1,
+		TenantId: 1,
 		Schema:   "public",
 		Partners: []Partner{
 			{
@@ -41,7 +41,7 @@ func TestCompany_ToDomain(t *testing.T) {
 	assert.Equal(t, company.StateRegistration, domainCompany.StateRegistration)
 	assert.Equal(t, company.Address.ToDomain(), &domainCompany.Address)
 	assert.Equal(t, company.Type, domainCompany.Type)
-	assert.Equal(t, uint(company.TenantID), domainCompany.TenantID)
+	assert.Equal(t, uint(company.TenantId), domainCompany.TenantId)
 	assert.Equal(t, company.Schema, domainCompany.Schema)
 	assert.Equal(t, len(company.Partners), len(domainCompany.Partners))
 }
@@ -62,7 +62,7 @@ func TestCompany_FromDomain(t *testing.T) {
 			ZipCode:    "12345-678",
 		},
 		Type:     "LTDA",
-		TenantID: 1,
+		TenantId: 1,
 		Schema:   "public",
 	}
 
@@ -84,6 +84,6 @@ func TestCompany_FromDomain(t *testing.T) {
 	assert.Equal(t, domainCompany.Address.ZipCode, company.Address.ZipCode)
 
 	assert.Equal(t, domainCompany.Type, company.Type)
-	assert.Equal(t, int(domainCompany.TenantID), company.TenantID)
+	assert.Equal(t, int(domainCompany.TenantId), company.TenantId)
 	assert.Equal(t, domainCompany.Schema, company.Schema)
 }

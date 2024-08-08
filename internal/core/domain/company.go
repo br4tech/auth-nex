@@ -10,7 +10,7 @@ type Company struct {
 	Partners          []Partner
 	Activities        []Activity
 	Type              string // Company type (MEI, ME, LTDA, etc.)
-	TenantID          uint   `validate:"required"`
+	TenantId          uint   `validate:"required"`
 	Schema            string
 	Users             []User
 }
@@ -29,7 +29,7 @@ func NewCompany(id int, legalName string, tradeName string, document string,
 		Partners:          partners,
 		Activities:        activities,
 		Type:              ctype,
-		TenantID:          tenantId,
+		TenantId:          tenantId,
 		Schema:            schema,
 		Users:             users,
 	}

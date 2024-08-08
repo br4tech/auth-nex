@@ -36,14 +36,12 @@ func (r *TenantRepository[T]) Create(tenant *domain.Tenant) (*domain.Tenant, err
 }
 
 func (r *TenantRepository[T]) FindByName(name string) (*domain.Tenant, error) {
-	var tenantEntity T
-
-	_, err := r.db.FindBy("name", name)
+	tenantEntity, err := r.db.FindBy("name", name)
 	if err != nil {
 		return nil, err
 	}
 
-	tenantModel, ok := any(&tenantEntity).(*model.Tenant)
+	tenantModel, ok := any(tenantEntity[0]).(*model.Tenant)
 	if !ok {
 		return nil, errors.New("failed to convert entity to tenant model")
 	}

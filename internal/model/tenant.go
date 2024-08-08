@@ -53,7 +53,7 @@ func convertCompaniesFromDomain(domainCompanies []domain.Company, tenantId int) 
 		modelCompanies[i] = Company{
 			LegalName: domainCompany.LegalName,
 			TradeName: domainCompany.TradeName,
-			TenantID:  tenantId,
+			TenantId:  tenantId,
 		}
 	}
 	return modelCompanies

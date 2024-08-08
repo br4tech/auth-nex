@@ -11,8 +11,8 @@ func TestTenant_ToDomain(t *testing.T) {
 	tenant := Tenant{
 		Name: "Tenant Exemplo",
 		Companies: []Company{
-			{LegalName: "Empresa A", TradeName: "Nome A", TenantID: 123},
-			{LegalName: "Empresa B", TradeName: "Nome B", TenantID: 123},
+			{LegalName: "Empresa A", TradeName: "Nome A", TenantId: 123},
+			{LegalName: "Empresa B", TradeName: "Nome B", TenantId: 123},
 		},
 		Users: []User{
 			{Name: "João", Email: "joao@example.com"},

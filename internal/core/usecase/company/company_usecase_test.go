@@ -26,13 +26,13 @@ func TestCompanyUseCase_CreateCompany(t *testing.T) {
 		Partners:          []domain.Partner{},
 		Activities:        []domain.Activity{},
 		Type:              "LTDA",
-		TenantID:          1,
+		TenantId:          1,
 		Schema:            "app-0000",
 		Users:             []domain.User{},
 	}
 
 	t.Run("success", func(t *testing.T) {
-		companyRepoMock.EXPECT().CreateCompany(gomock.Any()).Return(companyDomain, nil)
+		companyRepoMock.EXPECT().Create(gomock.Any()).Return(companyDomain, nil)
 
 		createdCompany, _ := companyUsecase.CreateCompany(companyDomain)
 
@@ -41,7 +41,7 @@ func TestCompanyUseCase_CreateCompany(t *testing.T) {
 
 	t.Run("error", func(t *testing.T) {
 		companyInvalid := errors.New("Error in company")
-		companyRepoMock.EXPECT().CreateCompany(gomock.Any()).Return(nil, companyInvalid)
+		companyRepoMock.EXPECT().Create(gomock.Any()).Return(nil, companyInvalid)
 
 		createdCompany, err := companyUsecase.CreateCompany(companyDomain)
 

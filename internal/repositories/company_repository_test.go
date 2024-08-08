@@ -1,32 +1,21 @@
 package repositories
 
 import (
-	"context"
 	"errors"
 	"testing"
 
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/mock"
 	"github.com/br4tech/auth-nex/internal/model"
+	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
-	"gorm.io/gorm"
 )
 
-type gormDBWithError struct {
-	*gorm.DB
-	err error
-}
-
-func (g *gormDBWithError) Error() error {
-	return g.err
-}
-
-func TestCompanyRepository_CreateCompany(t *testing.T) {
+func TestCompanyRepository_Create(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockDB := mock.NewMockIDatabase[port.IModel](ctrl)
+	mockDB := mock.NewMockIDatabase[model.Company](ctrl)
 	repo := NewCompanyRepository(mockDB)
 
 	company := &domain.Company{
@@ -44,7 +33,7 @@ func TestCompanyRepository_CreateCompany(t *testing.T) {
 			ZipCode:    "12345-678",
 		},
 		Type:     "LTDA",
-		TenantID: 1,
+		TenantId: 1,
 		Schema:   "public",
 		Partners: []domain.Partner{
 			{
@@ -59,23 +48,12 @@ func TestCompanyRepository_CreateCompany(t *testing.T) {
 	companyModel.FromDomain(company)
 
 	t.Run("Success", func(t *testing.T) {
-		mockDB.EXPECT().Create(gomock.Any()).
-			DoAndReturn(func(ctx context.Context, value *model.Company) (*model.Company, error) {
-				value.Id = 123
-				return value, nil
-			})
+		mockDB.EXPECT().Create(companyModel).Return(company.Id, nil)
 
-		repo := NewCompanyRepository(mockDB)
-
-		createdCompany, err := repo.Create(company)
-
-		if err != nil {
-			t.Errorf("Erro inesperado: %v", err)
-		}
-
-		if createdCompany.Id != 123 {
-			t.Errorf("ID do usuário criado incorreto. Esperado: %d, Obtido: %d", 123, createdCompany.Id)
-		}
+		result, err := repo.Create(company)
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, company.Id, result.Id)
 	})
 
 	t.Run("Error", func(t *testing.T) {
