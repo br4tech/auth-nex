@@ -6,21 +6,20 @@ type Company struct {
 	TradeName         string `validate:"required"`
 	Document          string `validate:"required"`
 	StateRegistration string `validate:"required"`
-	Address           Address
-	Partners          []Partner
-	Activities        []Activity
 	Type              string // Company type (MEI, ME, LTDA, etc.)
 	TenantId          uint   `validate:"required"`
 	Schema            string
+	Address           Address
 	Users             []User
+	Partners          []Partner
+	Activities        []Activity
 }
 
-func NewCompany(id int, legalName string, tradeName string, document string,
+func NewCompany(legalName string, tradeName string, document string,
 	stateRegistration string, address Address, partners []Partner,
 	activities []Activity, ctype string, tenantId uint, schema string,
 	users []User) *Company {
 	return &Company{
-		Id:                id,
 		LegalName:         legalName,
 		TradeName:         tradeName,
 		Document:          document,

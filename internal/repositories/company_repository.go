@@ -19,7 +19,7 @@ func NewCompanyRepository[T port.IModel](db port.IDatabase[T]) port.ICompanyRepo
 func (r *CompanyRepository[T]) FindById(id int) (*domain.Company, error) {
 	var companyEntity T
 
-	_, err := r.db.FindById(id)
+	_, err := r.db.FindBy("id = ?", id)
 	if err != nil {
 		return nil, err
 	}

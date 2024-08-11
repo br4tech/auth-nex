@@ -18,12 +18,12 @@ func NewUserRepository[T port.IModel](db port.IDatabase[T]) port.IUserRepository
 }
 
 func (r *UserRepository[T]) FindByEmail(email string) (*domain.User, error) {
-	userEntity, err := r.db.FindBy("email", email)
+	userEntity, err := r.db.FindBy("email=?", email)
 	if err != nil {
 		return nil, err
 	}
 
-	userModel, ok := any(userEntity[0]).(*model.User)
+	userModel, ok := any(userEntity).(*model.User)
 	if !ok {
 		return nil, errors.New("failed to convert entity to user model")
 	}
@@ -36,7 +36,7 @@ func (r *UserRepository[T]) FindByEmail(email string) (*domain.User, error) {
 func (r *UserRepository[T]) FindByPhone(phone string) (*domain.User, error) {
 	var userEntity T
 
-	_, err := r.db.FindBy("phone", phone)
+	_, err := r.db.FindBy("phone=?", phone)
 	if err != nil {
 		return nil, err
 	}

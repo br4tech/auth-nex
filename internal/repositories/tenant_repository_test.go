@@ -50,13 +50,8 @@ func TestTenantRepository_Create(t *testing.T) {
 
 		_, err := repo.Create(tenant)
 
-		if err == nil {
-			t.Fatal("CreateTenant did not return an error")
-		}
-
-		if err != expectedError {
-			t.Fatalf("CreateTenant returned unexpected error: %v", err)
-		}
+		assert.Error(t, err)
+		assert.EqualError(t, err, "database error")
 	})
 }
 
@@ -70,21 +65,26 @@ func TestTenantRepository_FindByName(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		name := "APP-000000000"
 
-		expectedTenants := []*model.Tenant{
-			{
-				Name: name,
-			},
+		expectedTenants := model.Tenant{
+			Name: name,
 		}
 
-		mockDB.EXPECT().FindBy("name", name).DoAndReturn(
-			func(f, v string) ([]*model.Tenant, error) {
-				return expectedTenants, nil
-			},
-		)
+		mockDB.EXPECT().FindBy("name=?", name).Return(&expectedTenants, nil)
 
 		tenant, err := repo.FindByName(name)
 		assert.NoError(t, err)
 		assert.NotNil(t, tenant)
-		assert.Equal(t, expectedTenants[0].Name, tenant.Name)
+		assert.Equal(t, expectedTenants.Name, tenant.Name)
+	})
+
+	t.Run("TenantNotFound", func(t *testing.T) {
+		name := "APP-000000001"
+		mockDB.EXPECT().FindBy("name=?", name).DoAndReturn(func(f, v string) ([]*model.User, error) {
+			return nil, errors.New("TenantNotFound")
+		})
+
+		tenant, err := repo.FindByName(name)
+		assert.Error(t, err)
+		assert.Nil(t, tenant)
 	})
 }

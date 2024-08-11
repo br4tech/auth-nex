@@ -5,8 +5,8 @@ import "gorm.io/gorm"
 type IDatabase[T IModel] interface {
 	GetDb() *gorm.DB
 	FindAll() ([]T, error)
-	FindById(id int) (*T, error)
-	FindBy(field string, value string) ([]*T, error)
+	Find(query interface{}, args ...interface{}) ([]*T, error)
+	FindBy(query interface{}, args ...interface{}) (*T, error)
 	Create(entity T) (int, error)
 }
 

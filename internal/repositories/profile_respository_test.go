@@ -8,11 +8,11 @@ import (
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/mock"
 	"github.com/br4tech/auth-nex/internal/model"
+	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
-	"gorm.io/gorm"
 )
 
-func TestPermissionRepository_CreateRole(t *testing.T) {
+func TestPermissionRepository_Create(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -20,6 +20,7 @@ func TestPermissionRepository_CreateRole(t *testing.T) {
 	repo := NewProfileRepository(mockDB)
 
 	profile := &domain.Profile{
+		Id:   1,
 		Name: "Admin",
 	}
 
@@ -27,33 +28,59 @@ func TestPermissionRepository_CreateRole(t *testing.T) {
 	profileModel.FromDomain(profile)
 
 	t.Run("Success", func(t *testing.T) {
-		mockGormDB := &gorm.DB{}
-
-		mockDB.EXPECT().Create(profileModel).Return(mockGormDB, nil)
+		mockDB.EXPECT().Create(profileModel).Return(profile.Id, nil)
 
 		result, err := repo.Create(profile)
-		if err != nil {
-			t.Fatalf("CreateProfile returned an error: %v", err)
-		}
-
-		if result == nil {
-			t.Fatal("CreateProfile returned a nil result")
-		}
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
 	})
 
 	t.Run("Error", func(t *testing.T) {
 		expectedError := errors.New("database error")
 
-		mockDB.EXPECT().Create(profileModel).Return(nil, expectedError)
+		mockDB.EXPECT().Create(profileModel).Return(0, expectedError)
 
 		_, err := repo.Create(profile)
+		assert.Error(t, err)
+		assert.EqualError(t, err, "database error")
+	})
+}
 
-		if err == nil {
-			t.Fatal("CreateProfile did not return an error")
+func TestPermissionRepository_FindByName(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockDB := mock.NewMockIDatabase[model.Profile](ctrl)
+	repo := NewProfileRepository(mockDB)
+
+	t.Run("Sucess", func(t *testing.T) {
+		name := "Admin"
+
+		expectedProfiles := []*model.Profile{
+			{Name: name},
 		}
 
-		if err != expectedError {
-			t.Fatalf("CreateProfile returned unexpected error: %v", err)
-		}
+		mockDB.EXPECT().FindBy("name", name).DoAndReturn(
+			func(f, v string) ([]*model.Profile, error) {
+				return expectedProfiles, nil
+			},
+		)
+
+		profile, err := repo.FindByName(name)
+		assert.NoError(t, err)
+		assert.NotNil(t, profile)
+		assert.Equal(t, expectedProfiles[0].Name, profile.Name)
+	})
+
+	t.Run("ProfileNotFound", func(t *testing.T) {
+		name := "TesteA"
+
+		mockDB.EXPECT().FindBy("name", name).DoAndReturn(func(f, v string) ([]*model.User, error) {
+			return nil, errors.New("ProfileNotFound")
+		})
+
+		profile, err := repo.FindByName(name)
+		assert.Error(t, err)
+		assert.Nil(t, profile)
 	})
 }

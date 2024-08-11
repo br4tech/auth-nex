@@ -50,6 +50,26 @@ func (mr *MockIDatabaseMockRecorder[T]) Create(entity interface{}) *gomock.Call 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIDatabase[T])(nil).Create), entity)
 }
 
+// Find mocks base method.
+func (m *MockIDatabase[T]) Find(query interface{}, args ...interface{}) ([]*T, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{query}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "Find", varargs...)
+	ret0, _ := ret[0].([]*T)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Find indicates an expected call of Find.
+func (mr *MockIDatabaseMockRecorder[T]) Find(query interface{}, args ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{query}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockIDatabase[T])(nil).Find), varargs...)
+}
+
 // FindAll mocks base method.
 func (m *MockIDatabase[T]) FindAll() ([]T, error) {
 	m.ctrl.T.Helper()
@@ -66,33 +86,23 @@ func (mr *MockIDatabaseMockRecorder[T]) FindAll() *gomock.Call {
 }
 
 // FindBy mocks base method.
-func (m *MockIDatabase[T]) FindBy(field, value string) ([]*T, error) {
+func (m *MockIDatabase[T]) FindBy(query interface{}, args ...interface{}) (*T, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindBy", field, value)
-	ret0, _ := ret[0].([]*T)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindBy indicates an expected call of FindBy.
-func (mr *MockIDatabaseMockRecorder[T]) FindBy(field, value interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindBy", reflect.TypeOf((*MockIDatabase[T])(nil).FindBy), field, value)
-}
-
-// FindById mocks base method.
-func (m *MockIDatabase[T]) FindById(id int) (*T, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindById", id)
+	varargs := []interface{}{query}
+	for _, a := range args {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "FindBy", varargs...)
 	ret0, _ := ret[0].(*T)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindById indicates an expected call of FindById.
-func (mr *MockIDatabaseMockRecorder[T]) FindById(id interface{}) *gomock.Call {
+// FindBy indicates an expected call of FindBy.
+func (mr *MockIDatabaseMockRecorder[T]) FindBy(query interface{}, args ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockIDatabase[T])(nil).FindById), id)
+	varargs := append([]interface{}{query}, args...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindBy", reflect.TypeOf((*MockIDatabase[T])(nil).FindBy), varargs...)
 }
 
 // GetDb mocks base method.

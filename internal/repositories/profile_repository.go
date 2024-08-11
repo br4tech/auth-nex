@@ -17,12 +17,12 @@ func NewProfileRepository[T port.IModel](db port.IDatabase[T]) port.IProfileRepo
 }
 
 func (r *ProfileRepository[T]) FindByName(name string) (*domain.Profile, error) {
-	profileEntity, err := r.db.FindBy("name", name)
+	profileEntity, err := r.db.FindBy("name= ?", name)
 	if err != nil {
 		return nil, err
 	}
 
-	profileModel, ok := any(profileEntity[0]).(*model.Profile)
+	profileModel, ok := any(profileEntity).(*model.Profile)
 	if !ok {
 		return nil, errors.New("failed to convert entity to profile model")
 	}
@@ -30,7 +30,6 @@ func (r *ProfileRepository[T]) FindByName(name string) (*domain.Profile, error) 
 	profileDomain := profileModel.ToDomain()
 
 	return profileDomain, nil
-
 }
 
 func (r *ProfileRepository[T]) Create(profile *domain.Profile) (*domain.Profile, error) {
