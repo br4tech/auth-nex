@@ -8,18 +8,18 @@ import (
 
 type IUserUseCase interface {
 	Authenticate(userReq *dto.UserTokenDTO) (*string, error)
-	CreateUser(user *domain.User) (*domain.User, error)
+	Create(user *domain.User) (*domain.User, error)
 	ValidateAccessToken(tokenString string) (*model.Claims, error)
 }
 
 type IPermissionUseCase interface {
-	FindProfileByName(name string) (*domain.Profile, error)
-	CreateProfile(name string) (*domain.Profile, error)
+	FindByName(name string) (*domain.Profile, error)
+	Create(name string) (*domain.Profile, error)
 }
 
 type ICompanyUseCase interface {
-	FindCompanyById(id int) (*domain.Company, error)
-	CreateCompany(company *domain.Company) (*domain.Company, error)
+	FindById(id int) (*domain.Company, error)
+	Create(company *domain.Company) (*domain.Company, error)
 }
 
 type ITenantUseCase interface {

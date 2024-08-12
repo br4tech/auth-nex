@@ -14,7 +14,7 @@ func TestPermissionUseCase_CreateProfile(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	permissionRepoMock := mock.NewMockIPermissionRepository(ctrl)
+	permissionRepoMock := mock.NewMockIProfileRepository(ctrl)
 	permissionUseCase := NewPermissionUseCase(permissionRepoMock)
 
 	permissionDomain := &domain.Profile{
@@ -22,9 +22,9 @@ func TestPermissionUseCase_CreateProfile(t *testing.T) {
 	}
 
 	t.Run("sucess", func(t *testing.T) {
-		permissionRepoMock.EXPECT().CreateProfile(gomock.Any()).Return(permissionDomain, nil)
+		permissionRepoMock.EXPECT().Create(gomock.Any()).Return(permissionDomain, nil)
 
-		createdPermission, _ := permissionUseCase.CreateProfile("admin")
+		createdPermission, _ := permissionUseCase.Create("admin")
 
 		assert.Equal(t, permissionDomain.Name, createdPermission.Name)
 	})
@@ -32,9 +32,9 @@ func TestPermissionUseCase_CreateProfile(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
 		permissionInvalid := errors.New("Name invalid")
 
-		permissionRepoMock.EXPECT().CreateProfile(gomock.Any()).Return(nil, permissionInvalid)
+		permissionRepoMock.EXPECT().Create(gomock.Any()).Return(nil, permissionInvalid)
 
-		createdPermission, err := permissionUseCase.CreateProfile("admin")
+		createdPermission, err := permissionUseCase.Create("admin")
 
 		assert.Error(t, err)
 		assert.Nil(t, createdPermission)

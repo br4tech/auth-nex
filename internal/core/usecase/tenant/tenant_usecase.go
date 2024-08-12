@@ -42,7 +42,7 @@ func (uc *TenantUseCase) CreateTenantWithCompanyAndAdmin(tenant *dto.TenantDTO) 
 		return nil, err
 	}
 
-	createdTenant, err := uc.tenantRepository.CreateTenant(tenantModel.ToDomain())
+	createdTenant, err := uc.tenantRepository.Create(tenantModel.ToDomain())
 	if err != nil {
 		return nil, err
 	}
@@ -52,13 +52,13 @@ func (uc *TenantUseCase) CreateTenantWithCompanyAndAdmin(tenant *dto.TenantDTO) 
 		return nil, errCompany
 	}
 
-	companyModel.TenantID = createdTenant.Id
+	companyModel.TenantId = createdTenant.Id
 
 	if err := validator.ValidateStruct(companyModel); err != nil {
 		return nil, err
 	}
 
-	createdCompany, err := uc.companyUseCase.CreateCompany(companyModel.ToDomain())
+	createdCompany, err := uc.companyUseCase.Create(companyModel.ToDomain())
 	if err != nil {
 		return nil, err
 	}
@@ -67,12 +67,12 @@ func (uc *TenantUseCase) CreateTenantWithCompanyAndAdmin(tenant *dto.TenantDTO) 
 	if errUser != nil {
 		return nil, errUser
 	}
-	companyModel.ID = uint(createdCompany.Id)
+	companyModel.Id = createdCompany.Id
 	userModel.TenantId = createdTenant.Id
 	userModel.ProfileId = 1
-	userModel.Companies = append(userModel.Companies, *companyModel)
+	// userModel.Companies = append(userModel.Companies, *companyModel)
 
-	_, err = uc.userUsecase.CreateUser(userModel.ToDomain())
+	_, err = uc.userUsecase.Create(userModel.ToDomain())
 
 	if err != nil {
 		return nil, err

@@ -76,16 +76,16 @@ func TestTenantUseCase_CreateTenantWithCompanyAndAdmin(t *testing.T) {
 	userDomain := &domain.User{
 		Name:      "João Silva",
 		Email:     "joao@email.com",
-		CPF:       &cpfPtr,
+		CPF:       cpfPtr,
 		Password:  "senha_forte",
-		ProfileId: &profileIdPtr,
+		ProfileId: profileIdPtr,
 		TenantId:  1,
 	}
 
 	t.Run("success", func(t *testing.T) {
-		companyUseCaseMock.EXPECT().CreateCompany(gomock.Any()).Return(companyDomain, nil)
-		userUseCaseMock.EXPECT().CreateUser(gomock.Any()).Return(userDomain, nil)
-		tenantRepoMock.EXPECT().CreateTenant(gomock.Any()).Return(tenantDomain, nil)
+		companyUseCaseMock.EXPECT().Create(gomock.Any()).Return(companyDomain, nil)
+		userUseCaseMock.EXPECT().Create(gomock.Any()).Return(userDomain, nil)
+		tenantRepoMock.EXPECT().Create(gomock.Any()).Return(tenantDomain, nil)
 
 		createdTenant, _ := tenantUseCase.CreateTenantWithCompanyAndAdmin(tenantDTO)
 
@@ -105,7 +105,7 @@ func TestTenantUseCase_CreateTenantWithCompanyAndAdmin(t *testing.T) {
 
 		invalidTenant := errors.New("Invalid tenant")
 
-		tenantRepoMock.EXPECT().CreateTenant(gomock.Any()).Return(nil, invalidTenant)
+		tenantRepoMock.EXPECT().Create(gomock.Any()).Return(nil, invalidTenant)
 
 		createdTenant, err := tenantUseCase.CreateTenantWithCompanyAndAdmin(invalidTenantDTO)
 

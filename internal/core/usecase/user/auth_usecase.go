@@ -25,7 +25,7 @@ func NewAuthUseCase(userRepository port.IUserRepository) port.IUserUseCase {
 }
 
 func (uc *AuthUseCase) Authenticate(userReq *dto.UserTokenDTO) (*string, error) {
-	user, err := uc.userRepository.FindUserByEmail(userReq.Email)
+	user, err := uc.userRepository.FindByEmail(userReq.Email)
 
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (uc *AuthUseCase) Authenticate(userReq *dto.UserTokenDTO) (*string, error) 
 	return &token, nil
 }
 
-func (uc *AuthUseCase) CreateUser(user *domain.User) (*domain.User, error) {
+func (uc *AuthUseCase) Create(user *domain.User) (*domain.User, error) {
 	userModel := &model.User{}
 
 	errUser := copier.Copy(userModel, user)
@@ -54,7 +54,7 @@ func (uc *AuthUseCase) CreateUser(user *domain.User) (*domain.User, error) {
 	if err := validator.ValidateStruct(userModel); err != nil {
 		return nil, err
 	}
-	uc.userRepository.CreateUser(userModel.ToDomain())
+	uc.userRepository.Create(userModel.ToDomain())
 
 	return userModel.ToDomain(), nil
 }

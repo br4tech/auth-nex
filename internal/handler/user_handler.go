@@ -25,7 +25,7 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 		return HandlerResponse(c, http.StatusInternalServerError, "Bad request")
 	}
 
-	_, err := h.userUseCase.CreateUser(reqBody.ToDomain())
+	_, err := h.userUseCase.Create(reqBody.ToDomain())
 	if err != nil {
 		return HandlerResponse(c, http.StatusInternalServerError, "Failed to create user")
 	}

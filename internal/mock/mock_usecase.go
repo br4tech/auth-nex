@@ -51,19 +51,19 @@ func (mr *MockIUserUseCaseMockRecorder) Authenticate(userReq interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authenticate", reflect.TypeOf((*MockIUserUseCase)(nil).Authenticate), userReq)
 }
 
-// CreateUser mocks base method.
-func (m *MockIUserUseCase) CreateUser(user *domain.User) (*domain.User, error) {
+// Create mocks base method.
+func (m *MockIUserUseCase) Create(user *domain.User) (*domain.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateUser", user)
+	ret := m.ctrl.Call(m, "Create", user)
 	ret0, _ := ret[0].(*domain.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateUser indicates an expected call of CreateUser.
-func (mr *MockIUserUseCaseMockRecorder) CreateUser(user interface{}) *gomock.Call {
+// Create indicates an expected call of Create.
+func (mr *MockIUserUseCaseMockRecorder) Create(user interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockIUserUseCase)(nil).CreateUser), user)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIUserUseCase)(nil).Create), user)
 }
 
 // ValidateAccessToken mocks base method.
@@ -104,34 +104,34 @@ func (m *MockIPermissionUseCase) EXPECT() *MockIPermissionUseCaseMockRecorder {
 	return m.recorder
 }
 
-// CreateProfile mocks base method.
-func (m *MockIPermissionUseCase) CreateProfile(name string) (*domain.Profile, error) {
+// Create mocks base method.
+func (m *MockIPermissionUseCase) Create(name string) (*domain.Profile, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateProfile", name)
+	ret := m.ctrl.Call(m, "Create", name)
 	ret0, _ := ret[0].(*domain.Profile)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateProfile indicates an expected call of CreateProfile.
-func (mr *MockIPermissionUseCaseMockRecorder) CreateProfile(name interface{}) *gomock.Call {
+// Create indicates an expected call of Create.
+func (mr *MockIPermissionUseCaseMockRecorder) Create(name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateProfile", reflect.TypeOf((*MockIPermissionUseCase)(nil).CreateProfile), name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockIPermissionUseCase)(nil).Create), name)
 }
 
-// FindProfileByName mocks base method.
-func (m *MockIPermissionUseCase) FindProfileByName(name string) (*domain.Profile, error) {
+// FindByName mocks base method.
+func (m *MockIPermissionUseCase) FindByName(name string) (*domain.Profile, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindProfileByName", name)
+	ret := m.ctrl.Call(m, "FindByName", name)
 	ret0, _ := ret[0].(*domain.Profile)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindProfileByName indicates an expected call of FindProfileByName.
-func (mr *MockIPermissionUseCaseMockRecorder) FindProfileByName(name interface{}) *gomock.Call {
+// FindByName indicates an expected call of FindByName.
+func (mr *MockIPermissionUseCaseMockRecorder) FindByName(name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindProfileByName", reflect.TypeOf((*MockIPermissionUseCase)(nil).FindProfileByName), name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByName", reflect.TypeOf((*MockIPermissionUseCase)(nil).FindByName), name)
 }
 
 // MockICompanyUseCase is a mock of ICompanyUseCase interface.
@@ -157,34 +157,34 @@ func (m *MockICompanyUseCase) EXPECT() *MockICompanyUseCaseMockRecorder {
 	return m.recorder
 }
 
-// CreateCompany mocks base method.
-func (m *MockICompanyUseCase) CreateCompany(company *domain.Company) (*domain.Company, error) {
+// Create mocks base method.
+func (m *MockICompanyUseCase) Create(company *domain.Company) (*domain.Company, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateCompany", company)
+	ret := m.ctrl.Call(m, "Create", company)
 	ret0, _ := ret[0].(*domain.Company)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateCompany indicates an expected call of CreateCompany.
-func (mr *MockICompanyUseCaseMockRecorder) CreateCompany(company interface{}) *gomock.Call {
+// Create indicates an expected call of Create.
+func (mr *MockICompanyUseCaseMockRecorder) Create(company interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateCompany", reflect.TypeOf((*MockICompanyUseCase)(nil).CreateCompany), company)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockICompanyUseCase)(nil).Create), company)
 }
 
-// FindCompanyById mocks base method.
-func (m *MockICompanyUseCase) FindCompanyById(id int) (*domain.Company, error) {
+// FindById mocks base method.
+func (m *MockICompanyUseCase) FindById(id int) (*domain.Company, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindCompanyById", id)
+	ret := m.ctrl.Call(m, "FindById", id)
 	ret0, _ := ret[0].(*domain.Company)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindCompanyById indicates an expected call of FindCompanyById.
-func (mr *MockICompanyUseCaseMockRecorder) FindCompanyById(id interface{}) *gomock.Call {
+// FindById indicates an expected call of FindById.
+func (mr *MockICompanyUseCaseMockRecorder) FindById(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindCompanyById", reflect.TypeOf((*MockICompanyUseCase)(nil).FindCompanyById), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockICompanyUseCase)(nil).FindById), id)
 }
 
 // MockITenantUseCase is a mock of ITenantUseCase interface.

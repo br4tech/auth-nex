@@ -16,8 +16,8 @@ func NewCompanyUseCase(companyRepository port.ICompanyRepository) port.ICompanyU
 	return &CompanyUseCase{companyRepository: companyRepository}
 }
 
-func (uc *CompanyUseCase) FindCompanyById(id int) (*domain.Company, error) {
-	company, err := uc.companyRepository.FindCompanyById(id)
+func (uc *CompanyUseCase) FindById(id int) (*domain.Company, error) {
+	company, err := uc.companyRepository.FindById(id)
 
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (uc *CompanyUseCase) FindCompanyById(id int) (*domain.Company, error) {
 	return company, nil
 }
 
-func (uc *CompanyUseCase) CreateCompany(company *domain.Company) (*domain.Company, error) {
+func (uc *CompanyUseCase) Create(company *domain.Company) (*domain.Company, error) {
 	companyModel := &model.Company{}
 
 	err := copier.Copy(companyModel, company)
@@ -38,7 +38,7 @@ func (uc *CompanyUseCase) CreateCompany(company *domain.Company) (*domain.Compan
 		return nil, err
 	}
 
-	createdCompany, err := uc.companyRepository.CreateCompany(companyModel.ToDomain())
+	createdCompany, err := uc.companyRepository.Create(companyModel.ToDomain())
 	if err != nil {
 		return nil, err
 	}

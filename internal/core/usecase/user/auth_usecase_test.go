@@ -29,7 +29,7 @@ func TestAuthUseCase(t *testing.T) {
 	}
 
 	t.Run("Authenticate - Success", func(t *testing.T) {
-		userRepoMock.EXPECT().FindUserByEmail(userDomain.Email).Return(userDomain, nil)
+		userRepoMock.EXPECT().FindByEmail(userDomain.Email).Return(userDomain, nil)
 
 		token, err := authUseCase.Authenticate(&dto.UserTokenDTO{
 			Email:    userDomain.Email,
@@ -45,7 +45,7 @@ func TestAuthUseCase(t *testing.T) {
 	})
 
 	t.Run("Authenticate - Invalid Password", func(t *testing.T) {
-		userRepoMock.EXPECT().FindUserByEmail(userDomain.Email).Return(userDomain, nil)
+		userRepoMock.EXPECT().FindByEmail(userDomain.Email).Return(userDomain, nil)
 
 		token, err := authUseCase.Authenticate(&dto.UserTokenDTO{
 			Email:    userDomain.Email,
@@ -57,9 +57,9 @@ func TestAuthUseCase(t *testing.T) {
 	})
 
 	t.Run("CreateUser - Success", func(t *testing.T) {
-		userRepoMock.EXPECT().CreateUser(gomock.Any()).Return(nil, nil)
+		userRepoMock.EXPECT().Create(gomock.Any()).Return(nil, nil)
 
-		createdUser, err := authUseCase.CreateUser(userDomain)
+		createdUser, err := authUseCase.Create(userDomain)
 
 		assert.NoError(t, err)
 		assert.Equal(t, userDomain, createdUser)

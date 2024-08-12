@@ -34,7 +34,7 @@ func TestCompanyUseCase_CreateCompany(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		companyRepoMock.EXPECT().Create(gomock.Any()).Return(companyDomain, nil)
 
-		createdCompany, _ := companyUsecase.CreateCompany(companyDomain)
+		createdCompany, _ := companyUsecase.Create(companyDomain)
 
 		assert.Equal(t, companyDomain.LegalName, createdCompany.LegalName)
 	})
@@ -43,7 +43,7 @@ func TestCompanyUseCase_CreateCompany(t *testing.T) {
 		companyInvalid := errors.New("Error in company")
 		companyRepoMock.EXPECT().Create(gomock.Any()).Return(nil, companyInvalid)
 
-		createdCompany, err := companyUsecase.CreateCompany(companyDomain)
+		createdCompany, err := companyUsecase.Create(companyDomain)
 
 		assert.Error(t, err)
 		assert.Nil(t, createdCompany)
