@@ -56,29 +56,23 @@ func TestPermissionRepository_FindByName(t *testing.T) {
 	t.Run("Sucess", func(t *testing.T) {
 		name := "Admin"
 
-		expectedProfiles := []*model.Profile{
-			{Name: name},
+		expectedProfiles := &model.Profile{
+			Name: name,
 		}
 
-		mockDB.EXPECT().FindBy("name", name).DoAndReturn(
-			func(f, v string) ([]*model.Profile, error) {
-				return expectedProfiles, nil
-			},
-		)
+		mockDB.EXPECT().FindBy("name= ?", name).Return(expectedProfiles, nil)
 
 		profile, err := repo.FindByName(name)
 		assert.NoError(t, err)
 		assert.NotNil(t, profile)
-		assert.Equal(t, expectedProfiles[0].Name, profile.Name)
+		assert.Equal(t, expectedProfiles.Name, profile.Name)
 	})
 
 	t.Run("ProfileNotFound", func(t *testing.T) {
 		name := "TesteA"
+		expectedError := errors.New("ProfileNotFound")
 
-		mockDB.EXPECT().FindBy("name", name).DoAndReturn(func(f, v string) ([]*model.User, error) {
-			return nil, errors.New("ProfileNotFound")
-		})
-
+		mockDB.EXPECT().FindBy("name= ?", name).Return(nil, expectedError)
 		profile, err := repo.FindByName(name)
 		assert.Error(t, err)
 		assert.Nil(t, profile)
