@@ -23,12 +23,12 @@ func TestUser_ToDomain(t *testing.T) {
 
 	assert.Equal(t, user.Name, domainUser.Name)
 	assert.Equal(t, user.Email, domainUser.Email)
-	assert.Equal(t, user.CPF, *domainUser.CPF)
+	assert.Equal(t, user.CPF, domainUser.CPF)
 	assert.Equal(t, user.Password, domainUser.Password)
 	assert.Equal(t, user.Phone, domainUser.Phone)
 	assert.Equal(t, user.TenantId, domainUser.TenantId)
 	assert.Equal(t, user.Role, domainUser.Role)
-	assert.Equal(t, user.ProfileId, *domainUser.ProfileId)
+	assert.Equal(t, user.ProfileId, domainUser.ProfileId)
 }
 
 func TestUser_FromDomain(t *testing.T) {
@@ -38,12 +38,12 @@ func TestUser_FromDomain(t *testing.T) {
 	domainUser := domain.User{
 		Name:      "João Silva",
 		Email:     "joao@example.com",
-		CPF:       &cpfPtr,
+		CPF:       cpfPtr,
 		Password:  "senha123",
 		Phone:     "19 99999-9999",
 		TenantId:  1,
 		Role:      "system",
-		ProfileId: &profileIdPtr,
+		ProfileId: profileIdPtr,
 	}
 
 	user := User{}
@@ -51,10 +51,10 @@ func TestUser_FromDomain(t *testing.T) {
 
 	assert.Equal(t, domainUser.Name, user.Name)
 	assert.Equal(t, domainUser.Email, user.Email)
-	assert.Equal(t, *domainUser.CPF, user.CPF)
+	assert.Equal(t, domainUser.CPF, user.CPF)
 	assert.Equal(t, domainUser.Password, user.Password)
 	assert.Equal(t, domainUser.Phone, user.Phone)
 	assert.Equal(t, domainUser.TenantId, user.TenantId)
 	assert.Equal(t, domainUser.Role, user.Role)
-	assert.Equal(t, *domainUser.ProfileId, user.ProfileId)
+	assert.Equal(t, domainUser.ProfileId, user.ProfileId)
 }

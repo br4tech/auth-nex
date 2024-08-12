@@ -47,7 +47,7 @@ func TestCompany_ToDomain(t *testing.T) {
 }
 
 func TestCompany_FromDomain(t *testing.T) {
-	domainCompany := domain.Company{
+	domainCompany := &domain.Company{
 		LegalName:         "Nome Legal LTDA",
 		TradeName:         "Nome Fantasia",
 		Document:          "12345678901234",
@@ -67,7 +67,7 @@ func TestCompany_FromDomain(t *testing.T) {
 	}
 
 	company := Company{}
-	company.FromDomain(&domainCompany)
+	company.FromDomain(domainCompany)
 
 	assert.Equal(t, domainCompany.LegalName, company.LegalName)
 	assert.Equal(t, domainCompany.TradeName, company.TradeName)

@@ -51,6 +51,15 @@ func (model *Company) FromDomain(domain *domain.Company) {
 	model.Schema = domain.Schema
 	model.User = convertUsersFromDomain(domain.Users)
 	model.Partners = convertPartnersFromDomain(domain.Partners)
+	model.Address = Address{
+		Street:     domain.Address.Street,
+		Number:     domain.Address.Number,
+		Complement: domain.Address.Complement,
+		District:   domain.Address.District,
+		City:       domain.Address.City,
+		State:      domain.Address.State,
+		ZipCode:    domain.Address.ZipCode,
+	}
 }
 
 func (model *Company) convertUsersToDomain() []domain.User {
