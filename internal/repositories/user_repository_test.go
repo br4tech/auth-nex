@@ -29,9 +29,9 @@ func TestUserRepository_Create(t *testing.T) {
 		Name:      "João Silva",
 		Email:     "joao@example.com",
 		Password:  "senha123",
-		CPF:       &cpfPtr,
+		CPF:       cpfPtr,
 		TenantId:  1,
-		ProfileId: &profileIdPtr,
+		ProfileId: profileIdPtr,
 	}
 
 	userModel := new(model.User)
@@ -112,8 +112,8 @@ func TestUserRepository_FindUserByEmail(t *testing.T) {
 		assert.Equal(t, expectedUser.Name, user.Name)
 		assert.Equal(t, expectedUser.Email, user.Email)
 		assert.Equal(t, expectedUser.CPF, user.CPF)
-		// assert.Equal(t, expectedUser.TenantId, user.TenantId)
-		// assert.Equal(t, expectedUser.ProfileId, user.ProfileId)
+		assert.Equal(t, expectedUser.TenantId, user.TenantId)
+		assert.Equal(t, expectedUser.ProfileId, user.ProfileId)
 	})
 
 	t.Run("UserNotFound", func(t *testing.T) {

@@ -32,22 +32,22 @@ func (model *User) ToDomain() *domain.User {
 	return &domain.User{
 		Name:      model.Name,
 		Email:     model.Email,
-		CPF:       &model.CPF,
+		CPF:       model.CPF,
 		Password:  model.Password,
 		Phone:     model.Phone,
 		TenantId:  model.TenantId,
 		Role:      model.Role,
-		ProfileId: &model.ProfileId,
+		ProfileId: model.ProfileId,
 	}
 }
 
 func (model *User) FromDomain(domain *domain.User) {
 	model.Name = domain.Name
 	model.Email = domain.Email
-	model.CPF = *domain.CPF
+	model.CPF = domain.CPF
 	model.Password = domain.Password
 	model.Phone = domain.Phone
 	model.TenantId = domain.TenantId
 	model.Role = domain.Role
-	model.ProfileId = *domain.ProfileId
+	model.ProfileId = domain.ProfileId
 }
