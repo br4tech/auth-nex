@@ -9,12 +9,12 @@ import (
 
 func main() {
 	cfg := config.GetConfig()
-	db := adapter.NewPostgresDatabase(&cfg)
+	postgresAdapter := adapter.NewPostgresAdapter[port.IModel](&cfg)
 
-	AuthnexMigrate(db)
+	AuthnexMigrate(postgresAdapter)
 }
 
-func AuthnexMigrate(db port.IDatabase) {
+func AuthnexMigrate(db port.IDatabase[port.IModel]) {
 	db.GetDb().Migrator().CreateTable(
 		&model.Tenant{},
 		&model.User{},
