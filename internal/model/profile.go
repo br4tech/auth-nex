@@ -5,14 +5,9 @@ import (
 )
 
 type Profile struct {
-	Model
-
-	Name  string `gorm:"unique;not null"`
-	Users []User `gorm:"many2many:user_profiles"`
-}
-
-func (model Profile) GetId() int {
-	return model.Id
+	Id          int          `gorm:"primaryKey"`
+	Name        string       `gorm:"unique;not null"`
+	Permissions []Permission `gorm:"many2many:profile_permissions;"`
 }
 
 func (model *Profile) ToDomain() *domain.Profile {

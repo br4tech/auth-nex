@@ -6,17 +6,18 @@ import (
 )
 
 type User struct {
-	Model
-	Name      string `gorm:"not null"`
-	Email     string `gorm:"unique;not null"`
-	CPF       string `gorm:"unique;not null"`
-	Password  string `gorm:"not null"`
-	Phone     string
-	TenantId  int `gorm:"unique;not null"`
-	Tenant    Tenant
-	Role      string `gorm:"not null"`
-	ProfileId int    `gorm:"unique;not null"`
-	Profile   Profile
+	Id       int    `gorm:"primaryKey"`
+	Name     string `gorm:"not null"`
+	Email    string `gorm:"unique;not null"`
+	CPF      string `gorm:"unique;not null"`
+	Password string `gorm:"not null"`
+	Phone    string
+
+	TenantId int
+	Tenant   Tenant `gorm:"foreignKey:TenantId"`
+
+	ProfileId int
+	Profile   Profile `gorm:"foreignKey:ProfileId"`
 }
 
 type Claims struct {
@@ -36,7 +37,6 @@ func (model *User) ToDomain() *domain.User {
 		Password:  model.Password,
 		Phone:     model.Phone,
 		TenantId:  model.TenantId,
-		Role:      model.Role,
 		ProfileId: model.ProfileId,
 	}
 }
@@ -48,6 +48,5 @@ func (model *User) FromDomain(domain *domain.User) {
 	model.Password = domain.Password
 	model.Phone = domain.Phone
 	model.TenantId = domain.TenantId
-	model.Role = domain.Role
 	model.ProfileId = domain.ProfileId
 }

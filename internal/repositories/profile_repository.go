@@ -1,52 +1,36 @@
 package repositories
 
 import (
-	"errors"
-
-	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
+	"gorm.io/gorm"
 )
 
-type ProfileRepository[T port.IModel] struct {
-	db port.IDatabase[T]
+type profileRepositoryImpl struct {
+	db *gorm.DB
 }
 
-func NewProfileRepository[T port.IModel](db port.IDatabase[T]) port.IProfileRepository {
-	return &ProfileRepository[T]{db: db}
+func NewProfileRepository(db *gorm.DB) port.IProfileRepository {
+	return &profileRepositoryImpl{
+		db: db,
+	}
 }
 
-func (r *ProfileRepository[T]) FindByName(name string) (*domain.Profile, error) {
-	profileEntity, err := r.db.FindBy("name= ?", name)
-	if err != nil {
-		return nil, err
-	}
-
-	profileModel, ok := any(profileEntity).(*model.Profile)
-	if !ok {
-		return nil, errors.New("failed to convert entity to profile model")
-	}
-
-	profileDomain := profileModel.ToDomain()
-
-	return profileDomain, nil
+func (repo *profileRepositoryImpl) Create(profile *model.Profile) error {
+	return repo.db.Create(profile).Error
 }
 
-func (r *ProfileRepository[T]) Create(profile *domain.Profile) (*domain.Profile, error) {
-	profileModel := new(model.Profile)
-	profileModel.FromDomain(profile)
+func (repo *profileRepositoryImpl) FindById(id int) (*model.Profile, error) {
+	var profile model.Profile
+	result := repo.db.First(&profile, id)
 
-	profileEntty, ok := any(profileModel).(T)
-	if !ok {
-		return nil, errors.New("entity type invalid to profile")
-	}
+	return &profile, result.Error
+}
 
-	profileId, err := r.db.Create(profileEntty)
-	if err != nil {
-		return nil, err
-	}
+func (repo *profileRepositoryImpl) Upate(profile *model.Profile) error {
+	return repo.db.Save(profile).Error
+}
 
-	profile.Id = profileId
-
-	return profile, nil
+func (repo *profileRepositoryImpl) Delete(id int) error {
+	return repo.db.Delete(&model.Profile{}, id).Error
 }

@@ -5,7 +5,7 @@ import (
 )
 
 type Company struct {
-	Model
+	Id                int     `gorm:"primaryKey"`
 	LegalName         string  `gorm:"not null"`
 	TradeName         string  `gorm:"not null"`
 	Document          string  `gorm:"unique;not null"`
@@ -17,10 +17,6 @@ type Company struct {
 	User              []User  `gorm:"many2many:user_companies;"`
 	Partners          []Partner
 	Activities        []Activity
-}
-
-func (model Company) GetId() int {
-	return model.Id
 }
 
 func (model Company) ToDomain() *domain.Company {

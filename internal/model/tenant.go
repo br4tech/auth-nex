@@ -5,14 +5,10 @@ import (
 )
 
 type Tenant struct {
-	Model
+	Id        int       `gorm:"primaryKey"`
 	Name      string    `gorm:"unique;not null;"`
 	Companies []Company `gorm:"many2many:tenant_companies;"`
 	Users     []User    `gorm:"many2many:tenant_users;"`
-}
-
-func (model Tenant) GetId() int {
-	return model.Id
 }
 
 func (model Tenant) ToDomain() *domain.Tenant {

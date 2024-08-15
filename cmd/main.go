@@ -1,6 +1,9 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
+
 	"github.com/br4tech/auth-nex/config"
 	"github.com/br4tech/auth-nex/internal/adapter"
 	"github.com/br4tech/auth-nex/internal/core/port"
@@ -15,12 +18,29 @@ import (
 
 func main() {
 	cfg := config.GetConfig()
-	postgresAdapter := adapter.NewPostgresAdapter[port.IModel](&cfg)
 
-	companyRepository := repositories.NewCompanyRepository(postgresAdapter.(port.IDatabase[model.Company]))
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
+		cfg.Db.Host,
+		cfg.Db.User,
+		cfg.Db.Password,
+		cfg.Db.DBName,
+		cfg.Db.Port,
+		cfg.Db.SSLMode,
+		cfg.Db.TimeZone,
+	)
+	db, err := sql.Open("postgres", dsn)
+	if err != nil {
+		panic("Erro de conexao com o banco")
+	}
+	db.SetMaxOpenConns(10)
+
+	tenantAdapter := adapter.NewPostgresAdapter[model.Tenant](db)
+	tenantRepository := repositories.NewTenantRepository(tenantAdapter)
+
 	// profileRepository := repositories.NewProfileRepository(postgresAdapter.(port.IDatabase[model.Profile]))
-	tenantRepository := repositories.NewTenantRepository(postgresAdapter.(port.IDatabase[model.Tenant]))
-	userRepository := repositories.NewUserRepository(postgresAdapter.(port.IDatabase[model.User]))
+	userRepository := repositories.NewUserRepository(postgresAdapter.(port.IPostgreDatabase[model.User]))
+	companyRepository := repositories.NewCompanyRepository(postgresAdapter.(port.IPostgreDatabase[model.Company]))
 
 	userUseCase := user.NewAuthUseCase(userRepository)
 	companyUseCase := company.NewCompanyUseCase(companyRepository)

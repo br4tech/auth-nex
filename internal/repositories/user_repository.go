@@ -1,87 +1,36 @@
 package repositories
 
 import (
-	"errors"
-
-	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
-	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
-type UserRepository[T port.IModel] struct {
-	db port.IDatabase[T]
+type userRepositoryImpl struct {
+	db *gorm.DB
 }
 
-func NewUserRepository[T port.IModel](db port.IDatabase[T]) port.IUserRepository {
-	return &UserRepository[T]{db: db}
+func NewUserRepository(db *gorm.DB) port.IUserRepository {
+	return &userRepositoryImpl{
+		db: db,
+	}
 }
 
-func (r *UserRepository[T]) FindByEmail(email string) (*domain.User, error) {
-	userEntity, err := r.db.FindBy("email=?", email)
-	if err != nil {
-		return nil, err
-	}
-
-	userModel, ok := any(userEntity).(*model.User)
-	if !ok {
-		return nil, errors.New("failed to convert entity to user model")
-	}
-
-	userDomain := userModel.ToDomain()
-
-	return userDomain, nil
+func (repo *userRepositoryImpl) Create(user *model.User) error {
+	return repo.db.Create(user).Error
 }
 
-func (r *UserRepository[T]) FindByPhone(phone string) (*domain.User, error) {
-	var userEntity T
+func (repo *userRepositoryImpl) FindById(id int) (*model.User, error) {
+	var user model.User
+	result := repo.db.First(&user, id)
 
-	_, err := r.db.FindBy("phone=?", phone)
-	if err != nil {
-		return nil, err
-	}
-
-	userModel, ok := any(&userEntity).(*model.User)
-	if !ok {
-		return nil, errors.New("failed to convert entity to user model")
-	}
-
-	userDomain := userModel.ToDomain()
-
-	return userDomain, nil
+	return &user, result.Error
 }
 
-func (r *UserRepository[T]) Create(user *domain.User) (*domain.User, error) {
-	userModel := new(model.User)
-	userModel.FromDomain(user)
-
-	hashedPassword, err := hashPassword(userModel.Password)
-
-	if err != nil {
-		return nil, err
-	}
-
-	userModel.Password = hashedPassword
-
-	userEntity, ok := any(userModel).(T)
-	if !ok {
-		return nil, errors.New("entity type invalid to user")
-	}
-
-	userId, err := r.db.Create(userEntity)
-	if err != nil {
-		return nil, err
-	}
-
-	user.Id = userId
-
-	return user, nil
+func (repo *userRepositoryImpl) Update(user *model.User) error {
+	return repo.db.Save(user).Error
 }
 
-func hashPassword(password string) (string, error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
-	}
-	return string(hashedPassword), nil
+func (repo *userRepositoryImpl) Delete(id int) error {
+	return repo.db.Delete(&model.User{}, id).Error
 }

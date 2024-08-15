@@ -1,39 +1,30 @@
 package adapter
 
 import (
+	"database/sql"
 	"errors"
-	"fmt"
 
-	"github.com/br4tech/auth-nex/config"
-	"github.com/br4tech/auth-nex/internal/core/port"
-	"github.com/br4tech/auth-nex/internal/model"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type PostgresAdapter[T port.IModel] struct {
+type PostgresAdapter[T any] struct {
 	Db *gorm.DB
 }
 
-func NewPostgresAdapter[T port.IModel](cfg *config.Config) port.IDatabase[T] {
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
-		cfg.Db.Host,
-		cfg.Db.User,
-		cfg.Db.Password,
-		cfg.Db.DBName,
-		cfg.Db.Port,
-		cfg.Db.SSLMode,
-		cfg.Db.TimeZone,
-	)
-
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+func NewPostgresAdapter[T any](db *sql.DB) *PostgresAdapter[T] {
+	gormDB, err := gorm.Open(postgres.New(postgres.Config{
+		Conn: db,
+	}), &gorm.Config{})
 	if err != nil {
-		panic("Falha ao conectar ao banco de dados")
+		panic("failed to connect database")
 	}
 
-	return &PostgresAdapter[T]{Db: db}
+	return &PostgresAdapter[T]{
+		Db: gormDB,
+	}
 }
+
 func (adapter *PostgresAdapter[T]) GetDb() *gorm.DB {
 	return adapter.Db
 }
@@ -89,14 +80,5 @@ func (adapter *PostgresAdapter[T]) Create(entity T) (int, error) {
 		return 0, create.Error
 	}
 
-	id := entity.GetId()
-
-	return id, nil
+	return 0, nil
 }
-
-// Implementação da interface IDatabase para cada modelo
-var _ port.IDatabase[model.Tenant] = (*PostgresAdapter[model.Tenant])(nil)
-var _ port.IDatabase[model.User] = (*PostgresAdapter[model.User])(nil)
-var _ port.IDatabase[model.Profile] = (*PostgresAdapter[model.Profile])(nil)
-var _ port.IDatabase[model.Partner] = (*PostgresAdapter[model.Partner])(nil)
-var _ port.IDatabase[model.Company] = (*PostgresAdapter[model.Company])(nil)

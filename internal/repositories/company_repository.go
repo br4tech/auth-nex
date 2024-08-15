@@ -1,53 +1,36 @@
 package repositories
 
 import (
-	"errors"
-
-	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
+	"gorm.io/gorm"
 )
 
-type CompanyRepository[T port.IModel] struct {
-	db port.IDatabase[T]
+type companyRepositoryImpl struct {
+	db *gorm.DB
 }
 
-func NewCompanyRepository[T port.IModel](db port.IDatabase[T]) port.ICompanyRepository {
-	return &CompanyRepository[T]{db: db}
+func NewCompanyRepository(db *gorm.DB) port.ICompanyRepository {
+	return &companyRepositoryImpl{
+		db: db,
+	}
 }
 
-func (r *CompanyRepository[T]) FindById(id int) (*domain.Company, error) {
-	var companyEntity T
-
-	_, err := r.db.FindBy("id = ?", id)
-	if err != nil {
-		return nil, err
-	}
-
-	companyModel, ok := any(&companyEntity).(*model.Company)
-	if !ok {
-		return nil, errors.New("failed to convert entity to company model")
-	}
-
-	companyDomain := companyModel.ToDomain()
-
-	return companyDomain, nil
+func (repo *companyRepositoryImpl) Create(company *model.Company) error {
+	return repo.db.Create(company).Error
 }
 
-func (r *CompanyRepository[T]) Create(company *domain.Company) (*domain.Company, error) {
-	companyModel := new(model.Company)
-	companyModel.FromDomain(company)
+func (repo *companyRepositoryImpl) FindById(id int) (*model.Company, error) {
+	var company model.Company
+	result := repo.db.First(&company, id)
 
-	companyEntity, ok := any(companyModel).(T)
-	if !ok {
-		return nil, errors.New("entity type invalid to company")
-	}
+	return &company, result.Error
+}
 
-	companyId, err := r.db.Create(companyEntity)
-	if err != nil {
-		return nil, err
-	}
-	company.Id = companyId
+func (repo *companyRepositoryImpl) Update(company *model.Company) error {
+	return repo.db.Save(company).Error
+}
 
-	return company, nil
+func (repo *companyRepositoryImpl) Delete(id int) error {
+	return repo.db.Delete(&model.Company{}, id).Error
 }

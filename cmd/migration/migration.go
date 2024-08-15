@@ -15,7 +15,7 @@ func main() {
 }
 
 func AuthnexMigrate(db port.IDatabase[port.IModel]) {
-	db.GetDb().Migrator().CreateTable(
+	db.GetDb().AutoMigrate(
 		&model.Tenant{},
 		&model.User{},
 		&model.Company{},

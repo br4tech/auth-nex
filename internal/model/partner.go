@@ -5,14 +5,10 @@ import (
 )
 
 type Partner struct {
-	Model
+	Id            int     `gorm:"primaryKey"`
 	Participation float64 `gorm:"not null"`
 	UserId        int
 	CompanyId     int
-}
-
-func (model Partner) GetId() int {
-	return model.Id
 }
 
 func (model *Partner) ToDomain() *domain.Partner {

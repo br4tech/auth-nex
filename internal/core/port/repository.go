@@ -2,27 +2,33 @@ package port
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
+	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type (
 	IProfileRepository interface {
-		FindByName(name string) (*domain.Profile, error)
-		Create(role *domain.Profile) (*domain.Profile, error)
+		Create(profile *model.Profile) error
+		FindById(id int) (*model.Profile, error)
+		Upate(profile *model.Profile) error
+		Delete(id int) error
 	}
 
 	IUserRepository interface {
-		FindByEmail(email string) (*domain.User, error)
-		FindByPhone(phone string) (*domain.User, error)
-		Create(user *domain.User) (*domain.User, error)
+		Create(user *model.User) error
+		FindById(id int) (*model.User, error)
+		Update(user *model.User) error
+		Delete(id int) error
 	}
 
 	ICompanyRepository interface {
-		FindById(id int) (*domain.Company, error)
-		Create(company *domain.Company) (*domain.Company, error)
+		Create(company *model.Company) error
+		FindById(id int) (*model.Company, error)
+		Update(company *model.Company) error
+		Delete(id int) error
 	}
 
 	ITenantRepository interface {
-		Create(tenant *domain.Tenant) (*domain.Tenant, error)
+		Create(tenant *domain.Tenant) error
 		FindByName(name string) (*domain.Tenant, error)
 	}
 )

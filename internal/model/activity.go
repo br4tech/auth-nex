@@ -5,7 +5,7 @@ import (
 )
 
 type Activity struct {
-	Model
+	Id          int    `gorm:"primaryKey"`
 	CNAE        string `gorm:"not null"`
 	Description string `gorm:"not null"`
 	CompanyID   uint   `gorm:"column:comapany_id"`

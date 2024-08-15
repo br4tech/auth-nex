@@ -11,7 +11,7 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestTenantUseCase_CreateTenantWithCompanyAndAdmin(t *testing.T) {
+func TestCreateTenant_Execute(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 

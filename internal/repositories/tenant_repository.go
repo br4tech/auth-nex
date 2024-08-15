@@ -8,35 +8,32 @@ import (
 	"github.com/br4tech/auth-nex/internal/model"
 )
 
-type TenantRepository[T port.IModel] struct {
-	db port.IDatabase[T]
+type TenantRepository struct {
+	tenantAdapter port.IPostgreDatabase[model.Tenant]
 }
 
-func NewTenantRepository[T port.IModel](db port.IDatabase[T]) port.ITenantRepository {
-	return &TenantRepository[T]{db: db}
+func NewTenantRepository(tenantAdapter port.IPostgreDatabase[model.Tenant]) port.ITenantRepository {
+	return &TenantRepository{
+		tenantAdapter: tenantAdapter,
+	}
 }
 
-func (r *TenantRepository[T]) Create(tenant *domain.Tenant) (*domain.Tenant, error) {
+func (r *TenantRepository) Create(tenant *domain.Tenant) error {
 	tenantModel := new(model.Tenant)
 	tenantModel.FromDomain(tenant)
 
-	tenantEntity, ok := any(tenantModel).(T)
-	if !ok {
-		return nil, errors.New("entity type invalid to tenant")
-	}
-
-	tenantId, err := r.db.Create(tenantEntity)
+	tenantId, err := r.tenantAdapter.Create(*tenantModel)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	tenant.Id = tenantId
 
-	return tenant, nil
+	return nil
 }
 
-func (r *TenantRepository[T]) FindByName(name string) (*domain.Tenant, error) {
-	tenantEntity, err := r.db.FindBy("name=?", name)
+func (r *TenantRepository) FindByName(name string) (*domain.Tenant, error) {
+	tenantEntity, err := r.tenantAdapter.FindBy("name=?", name)
 	if err != nil {
 		return nil, err
 	}
