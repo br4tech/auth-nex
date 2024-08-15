@@ -21,10 +21,17 @@ func (repo *tenantRepositoryImp) Create(tenant *model.Tenant) error {
 }
 
 func (repo *tenantRepositoryImp) FindById(id int) (*model.Tenant, error) {
-	var tenant model.Tenant
-	result := repo.db.First(&tenant, id)
+	var tenantModel model.Tenant
+	result := repo.db.First(&tenantModel, id)
 
-	return &tenant, result.Error
+	return &tenantModel, result.Error
+}
+
+func (repo *tenantRepositoryImp) FindByName(name string) (*model.Tenant, error) {
+	var tenantModel model.Tenant
+	result := repo.db.First(tenantModel, name)
+
+	return &tenantModel, result.Error
 }
 
 func (repo *tenantRepositoryImp) Update(tenant *model.Tenant) error {

@@ -16,5 +16,10 @@ func NewGetTenantByNameUseCase(tenantRepo port.ITenantRepository) *GetTenantByNa
 }
 
 func (uc *GetTenantByNameUseCase) Execute(name string) (*domain.Tenant, error) {
-	return uc.tenantRepo.FindByName(name)
+	tenant, err := uc.tenantRepo.FindByName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	return tenant.ToDomain(), nil
 }

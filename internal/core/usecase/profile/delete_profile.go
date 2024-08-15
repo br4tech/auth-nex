@@ -13,5 +13,5 @@ func NewDeleteProfileUseCase(profileRepo port.IProfileRepository) *DeleteProfile
 }
 
 func (uc *DeleteProfileUseCase) Execute(id int) error {
-	return nil
+	return uc.profileRepo.Delete(id)
 }

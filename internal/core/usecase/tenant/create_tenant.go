@@ -3,6 +3,7 @@ package tenant
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
+	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type CreateTenantUseCase struct {
@@ -16,5 +17,8 @@ func NewCreateTenantUseCase(tenantRepository port.ITenantRepository) *CreateTena
 }
 
 func (uc *CreateTenantUseCase) Execute(tenant *domain.Tenant) error {
-	return uc.tenantRepository.Create(tenant)
+	tenantModel := new(model.Tenant)
+	tenantModel.FromDomain(tenant)
+
+	return uc.tenantRepository.Create(tenantModel)
 }

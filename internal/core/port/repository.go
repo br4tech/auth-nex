@@ -29,6 +29,7 @@ type (
 	ITenantRepository interface {
 		Create(tenant *model.Tenant) error
 		FindById(id int) (*model.Tenant, error)
+		FindByName(name string) (*model.Tenant, error)
 		Update(tenant *model.Tenant) error
 		Delete(id int) error
 	}

@@ -3,6 +3,7 @@ package profile
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
+	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type UpdateProfileUseCase struct {
@@ -16,5 +17,8 @@ func NewUpdateProfile(profileRepo port.IProfileRepository) *UpdateProfileUseCase
 }
 
 func (uc *UpdateProfileUseCase) Execute(profile *domain.Profile) error {
-	return nil
+	profileModel := new(model.Profile)
+	profileModel.FromDomain(profile)
+
+	return uc.profileRepo.Upate(profileModel)
 }
