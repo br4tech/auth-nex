@@ -1,49 +1,36 @@
 package repositories
 
 import (
-	"errors"
-
-	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
+	"gorm.io/gorm"
 )
 
-type TenantRepository struct {
-	tenantAdapter port.IPostgreDatabase[model.Tenant]
+type tenantRepositoryImp struct {
+	db *gorm.DB
 }
 
-func NewTenantRepository(tenantAdapter port.IPostgreDatabase[model.Tenant]) port.ITenantRepository {
-	return &TenantRepository{
-		tenantAdapter: tenantAdapter,
+func NewTenantRepository(db *gorm.DB) port.ITenantRepository {
+	return &tenantRepositoryImp{
+		db: db,
 	}
 }
 
-func (r *TenantRepository) Create(tenant *domain.Tenant) error {
-	tenantModel := new(model.Tenant)
-	tenantModel.FromDomain(tenant)
-
-	tenantId, err := r.tenantAdapter.Create(*tenantModel)
-	if err != nil {
-		return err
-	}
-
-	tenant.Id = tenantId
-
-	return nil
+func (repo *tenantRepositoryImp) Create(tenant *model.Tenant) error {
+	return repo.db.Create(tenant).Error
 }
 
-func (r *TenantRepository) FindByName(name string) (*domain.Tenant, error) {
-	tenantEntity, err := r.tenantAdapter.FindBy("name=?", name)
-	if err != nil {
-		return nil, err
-	}
+func (repo *tenantRepositoryImp) FindById(id int) (*model.Tenant, error) {
+	var tenant model.Tenant
+	result := repo.db.First(&tenant, id)
 
-	tenantModel, ok := any(tenantEntity).(*model.Tenant)
-	if !ok {
-		return nil, errors.New("failed to convert entity to tenant model")
-	}
+	return &tenant, result.Error
+}
 
-	tenantDomain := tenantModel.ToDomain()
+func (repo *tenantRepositoryImp) Update(tenant *model.Tenant) error {
+	return repo.db.Save(tenant).Error
+}
 
-	return tenantDomain, nil
+func (repo *tenantRepositoryImp) Delete(id int) error {
+	return repo.db.Delete(&model.Tenant{}, id).Error
 }

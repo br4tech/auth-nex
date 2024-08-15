@@ -13,5 +13,5 @@ func NewDeleteCompanyUseCase(companyRepo port.ICompanyRepository) *DeleteCompany
 }
 
 func (uc *DeleteCompanyUsecase) Execute(id int) error {
-	return nil
+	return uc.companyRepo.Delete(id)
 }

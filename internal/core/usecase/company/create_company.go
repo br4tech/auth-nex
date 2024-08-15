@@ -3,6 +3,7 @@ package company
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
+	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type CreateCompanyUseCase struct {
@@ -16,5 +17,8 @@ func NewCreateCompanyUseCase(companyRepo port.ICompanyRepository) *CreateCompany
 }
 
 func (uc *CreateCompanyUseCase) Execute(company *domain.Company) error {
-	return uc.companyRepo.Create(company)
+	companyModel := new(model.Company)
+	companyModel.FromDomain(company)
+
+	return uc.companyRepo.Create(companyModel)
 }

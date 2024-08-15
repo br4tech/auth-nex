@@ -6,19 +6,19 @@ import (
 	"github.com/br4tech/auth-nex/internal/model"
 )
 
-type CreatePermissionUseCase struct {
+type UpdatePermissionUseCase struct {
 	permissionRepo port.IPermissionRepository
 }
 
-func NewCreatePermissionUseCase(permissionRepo port.IPermissionRepository) *CreatePermissionUseCase {
-	return &CreatePermissionUseCase{
+func NewUpdatePermissionUseCase(permissionRepo port.IPermissionRepository) *UpdatePermissionUseCase {
+	return &UpdatePermissionUseCase{
 		permissionRepo: permissionRepo,
 	}
 }
 
-func (uc *CreatePermissionUseCase) Execute(permission *domain.Permission) error {
+func (uc *UpdatePermissionUseCase) Execute(permission *domain.Permission) error {
 	permissionModel := new(model.Permission)
 	permissionModel.FromDomain(permission)
 
-	return uc.permissionRepo.Create(permissionModel)
+	return uc.permissionRepo.Update(permissionModel)
 }
