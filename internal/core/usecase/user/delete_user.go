@@ -13,5 +13,5 @@ func NewDeleteUserUseCase(userRepo port.IUserRepository) *DeleteUserUseCase {
 }
 
 func (uc *DeleteUserUseCase) Execute(id int) error {
-	return nil
+	return uc.userRepo.Delete(id)
 }

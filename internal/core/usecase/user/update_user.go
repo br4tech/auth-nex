@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
+	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type UpdateUserUseCase struct {
@@ -16,5 +17,8 @@ func NewUpdateUserUseCase(userRepo port.IUserRepository) *UpdateUserUseCase {
 }
 
 func (uc *UpdateUserUseCase) Execute(user *domain.User) error {
-	return nil
+	userModel := new(model.User)
+	userModel.FromDomain(user)
+
+	return uc.userRepo.Update(userModel)
 }
