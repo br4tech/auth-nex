@@ -12,19 +12,25 @@ func NewPermissionRepository(db *gorm.DB) port.IPermissionRepository{
 	}
 }
 
-func (repo *permissionRepositoryImpl) Create(permission *model.Permission) error {
-	return repo.db.Create(permission).Error
+func (repo *permissionRepositoryImpl) Create(permission *domain.Permission) error {
+	permissionModel := new(model.Permission)
+	permissionModel.FromDomain(permission)
+
+	return repo.db.Create(permissionModel).Error
 }
 
-func (repo *permissionRepositoryImpl) FindById(id int)(*model.Permission, error){
+func (repo *permissionRepositoryImpl) FindById(id int)(*domain.Permission, error){
 	var permission model.Permission
 	result := repo.db.First(&permission, id)
 
-	return &permission, result.Error
+	return permission.ToDomain(), result.Error
 }
 
-func (repo *permissionRepositoryImpl) Update(permission *model.Permission) error {
-	return repo.db.Save(permission).Error
+func (repo *permissionRepositoryImpl) Update(permission *domain.Permission) error {
+	permissionModel := new(model.Permission)
+	permissionModel.FromDomain(permission)
+	
+	return repo.db.Save(permissionModel).Error
 }
 
 func (repo *permissionRepositoryImpl) Delete(id int) error {

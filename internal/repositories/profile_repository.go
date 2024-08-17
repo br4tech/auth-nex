@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
 	"gorm.io/gorm"
@@ -16,19 +17,25 @@ func NewProfileRepository(db *gorm.DB) port.IProfileRepository {
 	}
 }
 
-func (repo *profileRepositoryImpl) Create(profile *model.Profile) error {
-	return repo.db.Create(profile).Error
+func (repo *profileRepositoryImpl) Create(profile *domain.Profile) error {
+	profileModel := new(model.Profile)
+	profileModel.FromDomain(profile)
+
+	return repo.db.Create(profileModel).Error
 }
 
-func (repo *profileRepositoryImpl) FindById(id int) (*model.Profile, error) {
+func (repo *profileRepositoryImpl) FindById(id int) (*domain.Profile, error) {
 	var profile model.Profile
 	result := repo.db.First(&profile, id)
 
-	return &profile, result.Error
+	return profile.ToDomain(), result.Error
 }
 
-func (repo *profileRepositoryImpl) Upate(profile *model.Profile) error {
-	return repo.db.Save(profile).Error
+func (repo *profileRepositoryImpl) Upate(profile *domain.Profile) error {
+	profileModel := new(model.Profile)
+	profileModel.FromDomain(profile)
+
+	return repo.db.Save(profileModel).Error
 }
 
 func (repo *profileRepositoryImpl) Delete(id int) error {

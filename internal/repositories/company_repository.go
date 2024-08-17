@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
 	"gorm.io/gorm"
@@ -16,19 +17,25 @@ func NewCompanyRepository(db *gorm.DB) port.ICompanyRepository {
 	}
 }
 
-func (repo *companyRepositoryImpl) Create(company *model.Company) error {
-	return repo.db.Create(company).Error
+func (repo *companyRepositoryImpl) Create(company *domain.Company) error {
+	companyModel := new(model.Company)
+	companyModel.FromDomain(company)
+
+	return repo.db.Create(companyModel).Error
 }
 
-func (repo *companyRepositoryImpl) FindById(id int) (*model.Company, error) {
+func (repo *companyRepositoryImpl) FindById(id int) (*domain.Company, error) {
 	var company model.Company
 	result := repo.db.First(&company, id)
 
-	return &company, result.Error
+	return company.ToDomain(), result.Error
 }
 
-func (repo *companyRepositoryImpl) Update(company *model.Company) error {
-	return repo.db.Save(company).Error
+func (repo *companyRepositoryImpl) Update(company *domain.Company) error {
+	companyModel := new(model.Company)
+	companyModel.FromDomain(company)
+
+	return repo.db.Save(companyModel).Error
 }
 
 func (repo *companyRepositoryImpl) Delete(id int) error {
