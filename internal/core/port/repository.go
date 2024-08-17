@@ -1,43 +1,41 @@
 package port
 
-import (
-	"github.com/br4tech/auth-nex/internal/model"
-)
+import "github.com/br4tech/auth-nex/internal/core/domain"
 
 type (
 	ICompanyRepository interface {
-		Create(company *model.Company) error
-		FindById(id int) (*model.Company, error)
-		Update(company *model.Company) error
+		Create(company *domain.Company) error
+		FindById(id int) (*domain.Company, error)
+		Update(company *domain.Company) error
 		Delete(id int) error
 	}
 
 	IPermissionRepository interface {
-		Create(permission *model.Permission) error
-		FindById(id int) (*model.Permission, error)
-		Update(permission *model.Permission) error
+		Create(permission *domain.Permission) error
+		FindById(id int) (*domain.Permission, error)
+		Update(permission *domain.Permission) error
 		Delete(id int) error
 	}
 
 	IProfileRepository interface {
-		Create(profile *model.Profile) error
-		FindById(id int) (*model.Profile, error)
-		Upate(profile *model.Profile) error
+		Create(profile *domain.Profile) error
+		FindById(id int) (*domain.Profile, error)
+		Upate(profile *domain.Profile) error
 		Delete(id int) error
 	}
 
 	ITenantRepository interface {
-		Create(tenant *model.Tenant) error
-		FindById(id int) (*model.Tenant, error)
-		FindByName(name string) (*model.Tenant, error)
-		Update(tenant *model.Tenant) error
+		Create(tenant *domain.Tenant) error
+		FindById(id int) (*domain.Tenant, error)
+		FindByName(name string) (*domain.Tenant, error)
+		Update(tenant *domain.Tenant) error
 		Delete(id int) error
 	}
 
 	IUserRepository interface {
-		Create(user *model.User) error
-		FindById(id int) (*model.User, error)
-		Update(user *model.User) error
+		Create(user *domain.User) error
+		FindById(id int) (*domain.User, error)
+		Update(user *domain.User) error
 		Delete(id int) error
 	}
 )
