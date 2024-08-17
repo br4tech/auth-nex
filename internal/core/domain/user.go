@@ -4,9 +4,9 @@ type User struct {
 	Id        int
 	Name      string `validate:"required"`
 	Email     string
-	CPF       string // Opcional (orbigatorio para SystemUser) - usamos um ponteiro para permitir nulo
-	Password  string // Opcional (orbigatorio para SystemUser) - usamos um ponteiro para permitir nulo
-	Phone     string // Opcional (mas obrigatório para ClientUser, a menos que Email esteja presente)
+	CPF       string
+	Password  string
+	Phone     string
 	TenantId  int    `validate:"required"`
 	Role      string `validate:"required,oneof=system client"`
 	ProfileId int    // Opcional (orbigatorio para SystemUser) - usamos um ponteiro para permitir nulo
