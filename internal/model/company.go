@@ -5,16 +5,18 @@ import (
 )
 
 type Company struct {
-	Id                int     `gorm:"primaryKey"`
-	LegalName         string  `gorm:"not null"`
-	TradeName         string  `gorm:"not null"`
-	Document          string  `gorm:"unique;not null"`
-	StateRegistration string  `gorm:"not null"`
-	Type              string  // Company type (MEI, ME, LTDA, etc.)
-	TenantId          int     `gorm:"column:tenant_id"`
-	Schema            string  `gorm:"not null"`
-	Address           Address `gorm:"polymorphic:Addressable;"`
-	User              []User  `gorm:"many2many:user_companies;"`
+	Id                int      `gorm:"primaryKey"`
+	LegalName         string   `gorm:"not null"`
+	TradeName         string   `gorm:"not null"`
+	Document          string   `gorm:"unique;not null"`
+	StateRegistration string   `gorm:"not null"`
+	Type              string   // Company type (MEI, ME, LTDA, etc.)
+	TenantId          int      `gorm:"column:tenant_id"`
+	Schema            string   `gorm:"not null"`
+	Address           Address  `gorm:"polymorphic:Addressable;"`
+	ParentCompanyId   int      `gorm:"default:null"` // ID da empresa matriz (pode ser nulo)
+	ParentCompany     *Company `gorm:"foreignKey:ParentCompanyId"`
+	User              []User   `gorm:"many2many:user_companies;"`
 	Partners          []Partner
 	Activities        []Activity
 }
@@ -27,8 +29,9 @@ func (model Company) ToDomain() *domain.Company {
 		Document:          model.Document,
 		StateRegistration: model.StateRegistration,
 		Type:              model.Type,
-		TenantId:          uint(model.TenantId),
+		TenantId:          model.TenantId,
 		Schema:            model.Schema,
+		ParentCompanyId:   model.ParentCompanyId,
 		Address:           *model.Address.ToDomain(),
 		Users:             model.convertUsersToDomain(),
 		Partners:          model.convertPartnersToDomain(),
@@ -45,6 +48,7 @@ func (model *Company) FromDomain(domain *domain.Company) {
 	model.Type = domain.Type
 	model.TenantId = int(domain.TenantId)
 	model.Schema = domain.Schema
+	model.ParentCompanyId = domain.ParentCompanyId
 	model.User = convertUsersFromDomain(domain.Users)
 	model.Partners = convertPartnersFromDomain(domain.Partners)
 	model.Address = Address{
