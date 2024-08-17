@@ -12,11 +12,15 @@ func NewPermissionRepository(db *gorm.DB) port.IPermissionRepository{
 	}
 }
 
-func (repo *permissionRepositoryImpl) Create(permission *domain.Permission) error {
+func (repo *permissionRepositoryImpl) Create(permission *domain.Permission) (*domain.Permission, error) {
 	permissionModel := new(model.Permission)
 	permissionModel.FromDomain(permission)
 
-	return repo.db.Create(permissionModel).Error
+		if err := repo.db.Create(permissionModel).Error; err != nil {
+		return nil, err
+	}
+
+	return permissionModel.ToDomain(), nil
 }
 
 func (repo *permissionRepositoryImpl) FindById(id int)(*domain.Permission, error){

@@ -17,11 +17,15 @@ func NewTenantRepository(db *gorm.DB) port.ITenantRepository {
 	}
 }
 
-func (repo *tenantRepositoryImp) Create(tenant *domain.Tenant) error {
+func (repo *tenantRepositoryImp) Create(tenant *domain.Tenant) (*domain.Tenant, error) {
 	tenantModel := new(model.Tenant)
 	tenantModel.FromDomain(tenant)
 
-	return repo.db.Create(tenantModel).Error
+	if err := repo.db.Create(tenantModel).Error; err != nil {
+		return nil, err
+	}
+
+	return tenantModel.ToDomain(), nil
 }
 
 func (repo *tenantRepositoryImp) FindById(id int) (*domain.Tenant, error) {

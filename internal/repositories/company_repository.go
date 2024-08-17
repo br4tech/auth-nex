@@ -17,11 +17,15 @@ func NewCompanyRepository(db *gorm.DB) port.ICompanyRepository {
 	}
 }
 
-func (repo *companyRepositoryImpl) Create(company *domain.Company) error {
+func (repo *companyRepositoryImpl) Create(company *domain.Company) (*domain.Company, error) {
 	companyModel := new(model.Company)
 	companyModel.FromDomain(company)
 
-	return repo.db.Create(companyModel).Error
+	if err := repo.db.Create(companyModel).Error; err != nil {
+		return nil, err
+	}
+
+	return companyModel.ToDomain(), nil
 }
 
 func (repo *companyRepositoryImpl) FindById(id int) (*domain.Company, error) {

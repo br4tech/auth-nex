@@ -17,11 +17,15 @@ func NewUserRepository(db *gorm.DB) port.IUserRepository {
 	}
 }
 
-func (repo *userRepositoryImpl) Create(user *domain.User) error {
+func (repo *userRepositoryImpl) Create(user *domain.User) (*domain.User, error) {
 	userModel := new(model.User)
 	userModel.FromDomain(user)
 
-	return repo.db.Create(user).Error
+	if err := repo.db.Create(userModel).Error; err != nil {
+		return nil, err
+	}
+
+	return userModel.ToDomain(), nil
 }
 
 func (repo *userRepositoryImpl) FindById(id int) (*domain.User, error) {

@@ -17,11 +17,15 @@ func NewProfileRepository(db *gorm.DB) port.IProfileRepository {
 	}
 }
 
-func (repo *profileRepositoryImpl) Create(profile *domain.Profile) error {
+func (repo *profileRepositoryImpl) Create(profile *domain.Profile) (*domain.Profile, error) {
 	profileModel := new(model.Profile)
 	profileModel.FromDomain(profile)
 
-	return repo.db.Create(profileModel).Error
+	if err := repo.db.Create(profileModel).Error; err != nil {
+		return nil, err
+	}
+
+	return profileModel.ToDomain(), nil
 }
 
 func (repo *profileRepositoryImpl) FindById(id int) (*domain.Profile, error) {
