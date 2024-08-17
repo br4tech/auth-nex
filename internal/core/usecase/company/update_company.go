@@ -3,7 +3,6 @@ package company
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
-	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type UpdateCompanyUseCase struct {
@@ -17,8 +16,5 @@ func NewUpdateCompany(companyRepo port.ICompanyRepository) *UpdateCompanyUseCase
 }
 
 func (uc *UpdateCompanyUseCase) Execute(company *domain.Company) error {
-	companyModel := new(model.Company)
-	companyModel.FromDomain(company)
-
-	return uc.companyRepo.Update(companyModel)
+	return uc.companyRepo.Update(company)
 }

@@ -3,7 +3,6 @@ package permission
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
-	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type UpdatePermissionUseCase struct {
@@ -17,8 +16,5 @@ func NewUpdatePermissionUseCase(permissionRepo port.IPermissionRepository) *Upda
 }
 
 func (uc *UpdatePermissionUseCase) Execute(permission *domain.Permission) error {
-	permissionModel := new(model.Permission)
-	permissionModel.FromDomain(permission)
-
-	return uc.permissionRepo.Update(permissionModel)
+	return uc.permissionRepo.Update(permission)
 }

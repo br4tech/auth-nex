@@ -3,7 +3,6 @@ package profile
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
-	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type CreateProfileUsecase struct {
@@ -17,8 +16,5 @@ func NewCreateProfileUseCase(profileRepo port.IProfileRepository) *CreateProfile
 }
 
 func (uc *CreateProfileUsecase) Execute(profile *domain.Profile) error {
-	profileModel := new(model.Profile)
-	profileModel.FromDomain(profile)
-
-	return uc.profileRepo.Create(profileModel)
+	return uc.profileRepo.Create(profile)
 }
