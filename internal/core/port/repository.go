@@ -6,7 +6,7 @@ type (
 	ICompanyRepository interface {
 		Create(company *domain.Company) (*domain.Company, error)
 		FindById(id int) (*domain.Company, error)
-		Update(company *domain.Company) error
+		Update(company *domain.Company) (*domain.Company, error)
 		Delete(id int) error
 	}
 
@@ -34,7 +34,9 @@ type (
 
 	IUserRepository interface {
 		Create(user *domain.User) (*domain.User, error)
+		FindBy(filter map[string]interface{}) (*domain.User, error)
 		FindById(id int) (*domain.User, error)
+		FindByEmail(email string) (*domain.User, error)
 		Update(user *domain.User) error
 		Delete(id int) error
 	}
