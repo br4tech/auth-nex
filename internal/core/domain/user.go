@@ -8,7 +8,7 @@ type User struct {
 	Password  string
 	Phone     string
 	TenantId  int    `validate:"required"`
-	Role      string `validate:"required,oneof=system client"`
+	Role      string `validate:"required,oneof=system_admin admin user client"`
 	ProfileId int    // Opcional (orbigatorio para SystemUser) - usamos um ponteiro para permitir nulo
 }
 

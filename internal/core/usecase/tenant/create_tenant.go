@@ -1,11 +1,8 @@
 package tenant
 
 import (
-	"errors"
-
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
-	"github.com/br4tech/auth-nex/internal/model"
 )
 
 type CreateTenantUseCase struct {
@@ -25,27 +22,54 @@ func NewCreateTenantUseCase(tenantRepository port.ITenantRepository,
 }
 
 func (uc *CreateTenantUseCase) Execute(tenant *domain.Tenant) error {
-	tenantModel := new(model.Tenant)
-	tenantModel.FromDomain(tenant)
-
-	return uc.tenantRepository.Create(tenantModel)
-}
-
-func (uc *CreateTenantUseCase) createTenant(tenant *domain.Tenant) error {
-	return nil
-}
-
-func (uc *CreateTenantUseCase) createCompany(tenantId int, company *domain.Company) error {
-	if tenantId == 0 {
-		return errors.New("Tenant Id invalid")
+	tenantId, err := uc.createTenant(tenant)
+	if err != nil {
+		return nil
 	}
 
-	company.TenantId = tenantId
-	companyModel := new(model)
+	tenant.Companies[0].TenantId = tenantId
+	err = uc.createCompany(&tenant.Companies[0])
+	if err != nil {
+		return err
+	}
 
-	return uc.companyRepository.Create(company)
+	tenant.Users[0].TenantId = tenantId
+	err = uc.createUserWithAdmin(&tenant.Users[0])
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (uc *CreateTenantUseCase) createUserWithAdmin(companyId int, user *domain.User) error {
+func (uc *CreateTenantUseCase) createTenant(tenant *domain.Tenant) (int, error) {
+
+	tenant, err := uc.tenantRepository.Create(tenant)
+	if err != nil {
+		return 0, err
+	}
+
+	return tenant.Id, nil
+}
+
+func (uc *CreateTenantUseCase) createCompany(company *domain.Company) error {
+	company.ParentCompanyId = 0 //seta empresa como matriz
+
+	company, err := uc.companyRepository.Create(company)
+	if err != nil {
+		return err
+	}
+
 	return nil
+}
+
+func (uc *CreateTenantUseCase) createUserWithAdmin(user *domain.User) error {
+	user.Role = "admin"
+
+	user, err := uc.userRepository.Create(user)
+	if err != nil {
+		return 0, err
+	}
+
+	return user.Id, nil
 }
