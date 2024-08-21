@@ -15,12 +15,10 @@ func (model *Activity) ToDomain() *domain.Activity {
 	return &domain.Activity{
 		CNAE:        model.CNAE,
 		Description: model.Description,
-		CompanyID:   model.CompanyID,
 	}
 }
 
 func (model *Activity) FromDomain(domain *domain.Activity) {
 	model.CNAE = domain.CNAE
 	model.Description = domain.Description
-	model.CompanyID = domain.CompanyID
 }

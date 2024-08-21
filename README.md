@@ -89,10 +89,10 @@ Obs: Caso execute sem o docker e compose, voce precisa ter um banco postgresql c
 5. Para criar os arquivos de mock, podemos executar o exemplo:
 
 ```bash
-  mockgen -source=internal/core/port/nome-da-interface -destination=internal/mock/mock_nome-da-interface.go --package=mock
+  mockgen -source=internal/core/port/nome-da-interface -destination=internal/test/mock/mock_nome-da-interface.go --package=mock
 ```
 
-Observação: Caso não possua instalado o mockgem, será necessário seguir os passos abaixo:
+Observação: Caso não possua instalado o mockgen, será necessário seguir os passos abaixo:
 
 ```bash
   sudo apt install mockgen
