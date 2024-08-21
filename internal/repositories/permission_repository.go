@@ -1,14 +1,19 @@
-``package repositories
+package repositories
 
-import "gorm.io/gorm"
+import (
+	"github.com/br4tech/auth-nex/internal/core/domain"
+	"github.com/br4tech/auth-nex/internal/core/port"
+	"github.com/br4tech/auth-nex/internal/model"
+	"gorm.io/gorm"
+)
 
 type permissionRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func NewPermissionRepository(db *gorm.DB) port.IPermissionRepository{
+func NewPermissionRepository(db *gorm.DB) port.IPermissionRepository {
 	return &permissionRepositoryImpl{
-		db: db
+		db: db,
 	}
 }
 
@@ -16,14 +21,14 @@ func (repo *permissionRepositoryImpl) Create(permission *domain.Permission) (*do
 	permissionModel := new(model.Permission)
 	permissionModel.FromDomain(permission)
 
-		if err := repo.db.Create(permissionModel).Error; err != nil {
+	if err := repo.db.Create(permissionModel).Error; err != nil {
 		return nil, err
 	}
 
 	return permissionModel.ToDomain(), nil
 }
 
-func (repo *permissionRepositoryImpl) FindById(id int)(*domain.Permission, error){
+func (repo *permissionRepositoryImpl) FindById(id int) (*domain.Permission, error) {
 	var permission model.Permission
 	result := repo.db.First(&permission, id)
 
@@ -33,7 +38,7 @@ func (repo *permissionRepositoryImpl) FindById(id int)(*domain.Permission, error
 func (repo *permissionRepositoryImpl) Update(permission *domain.Permission) error {
 	permissionModel := new(model.Permission)
 	permissionModel.FromDomain(permission)
-	
+
 	return repo.db.Save(permissionModel).Error
 }
 
