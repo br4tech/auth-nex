@@ -35,11 +35,15 @@ func (repo *permissionRepositoryImpl) FindById(id int) (*domain.Permission, erro
 	return permission.ToDomain(), result.Error
 }
 
-func (repo *permissionRepositoryImpl) Update(permission *domain.Permission) error {
+func (repo *permissionRepositoryImpl) Update(permission *domain.Permission) (*domain.Permission, error) {
 	permissionModel := new(model.Permission)
 	permissionModel.FromDomain(permission)
 
-	return repo.db.Save(permissionModel).Error
+	if err := repo.db.Save(permissionModel).Error; err != nil {
+		return nil, err
+	}
+
+	return permissionModel.ToDomain(), nil
 }
 
 func (repo *permissionRepositoryImpl) Delete(id int) error {

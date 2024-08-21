@@ -15,6 +15,10 @@ func NewUpdatePermissionUseCase(permissionRepo port.IPermissionRepository) *Upda
 	}
 }
 
-func (uc *UpdatePermissionUseCase) Execute(permission *domain.Permission) error {
-	return uc.permissionRepo.Update(permission)
+func (uc *UpdatePermissionUseCase) Execute(permission *domain.Permission) (*domain.Permission, error) {
+	permission, err := uc.permissionRepo.Update(permission)
+	if err != nil {
+		return nil, err
+	}
+	return permission, nil
 }

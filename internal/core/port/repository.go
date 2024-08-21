@@ -13,7 +13,7 @@ type (
 	IPermissionRepository interface {
 		Create(permission *domain.Permission) (*domain.Permission, error)
 		FindById(id int) (*domain.Permission, error)
-		Update(permission *domain.Permission) error
+		Update(permission *domain.Permission) (*domain.Permission, error)
 		Delete(id int) error
 	}
 

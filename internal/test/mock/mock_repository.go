@@ -161,11 +161,12 @@ func (mr *MockIPermissionRepositoryMockRecorder) FindById(id interface{}) *gomoc
 }
 
 // Update mocks base method.
-func (m *MockIPermissionRepository) Update(permission *domain.Permission) error {
+func (m *MockIPermissionRepository) Update(permission *domain.Permission) (*domain.Permission, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", permission)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*domain.Permission)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Update indicates an expected call of Update.
