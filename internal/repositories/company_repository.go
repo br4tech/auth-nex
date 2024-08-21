@@ -35,11 +35,15 @@ func (repo *companyRepositoryImpl) FindById(id int) (*domain.Company, error) {
 	return company.ToDomain(), result.Error
 }
 
-func (repo *companyRepositoryImpl) Update(company *domain.Company) error {
+func (repo *companyRepositoryImpl) Update(company *domain.Company) (*domain.Company, error) {
 	companyModel := new(model.Company)
 	companyModel.FromDomain(company)
 
-	return repo.db.Save(companyModel).Error
+	if err := repo.db.Save(companyModel).Error; err != nil {
+		return nil, err
+	}
+
+	return companyModel.ToDomain(), nil
 }
 
 func (repo *companyRepositoryImpl) Delete(id int) error {
