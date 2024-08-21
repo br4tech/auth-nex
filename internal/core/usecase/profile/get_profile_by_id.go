@@ -20,5 +20,5 @@ func (uc *GetProfileByIdUseCase) Execute(id int) (*domain.Profile, error) {
 	if err != nil {
 		return nil, err
 	}
-	return profile.ToDomain(), nil
+	return profile, nil
 }
