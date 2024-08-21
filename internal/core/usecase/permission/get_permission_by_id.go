@@ -21,5 +21,5 @@ func (uc *GetPermissionById) Execute(id int) (*domain.Permission, error) {
 		return nil, err
 	}
 
-	return permission.ToDomain(), nil
+	return permission, nil
 }

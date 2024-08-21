@@ -16,5 +16,10 @@ func NewCreatePermissionUseCase(permissionRepo port.IPermissionRepository) *Crea
 }
 
 func (uc *CreatePermissionUseCase) Execute(permission *domain.Permission) error {
-	return uc.permissionRepo.Create(permission)
+	_, err := uc.permissionRepo.Create(permission)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
