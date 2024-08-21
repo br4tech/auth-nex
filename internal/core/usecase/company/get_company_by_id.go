@@ -21,5 +21,5 @@ func (uc *GetCompanyByIdUseCase) Execute(id int) (*domain.Company, error) {
 		return nil, err
 	}
 
-	return comapany.ToDomain(), nil
+	return comapany, nil
 }
