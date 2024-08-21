@@ -21,5 +21,5 @@ func (uc *GetTenantByNameUseCase) Execute(name string) (*domain.Tenant, error) {
 		return nil, err
 	}
 
-	return tenant.ToDomain(), nil
+	return tenant, nil
 }

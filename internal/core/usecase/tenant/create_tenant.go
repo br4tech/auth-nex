@@ -55,7 +55,7 @@ func (uc *CreateTenantUseCase) createTenant(tenant *domain.Tenant) (int, error) 
 func (uc *CreateTenantUseCase) createCompany(company *domain.Company) error {
 	company.ParentCompanyId = 0 //seta empresa como matriz
 
-	company, err := uc.companyRepository.Create(company)
+	_, err := uc.companyRepository.Create(company)
 	if err != nil {
 		return err
 	}
@@ -66,10 +66,10 @@ func (uc *CreateTenantUseCase) createCompany(company *domain.Company) error {
 func (uc *CreateTenantUseCase) createUserWithAdmin(user *domain.User) error {
 	user.Role = "admin"
 
-	user, err := uc.userRepository.Create(user)
+	_, err := uc.userRepository.Create(user)
 	if err != nil {
-		return 0, err
+		return err
 	}
 
-	return user.Id, nil
+	return nil
 }
