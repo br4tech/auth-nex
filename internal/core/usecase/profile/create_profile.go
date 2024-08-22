@@ -15,11 +15,11 @@ func NewCreateProfileUseCase(profileRepo port.IProfileRepository) *CreateProfile
 	}
 }
 
-func (uc *CreateProfileUsecase) Execute(profile *domain.Profile) error {
-	_, err := uc.profileRepo.Create(profile)
+func (uc *CreateProfileUsecase) Execute(profile *domain.Profile) (*domain.Profile, error) {
+	profile, err := uc.profileRepo.Create(profile)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
-	return nil
+	return profile, nil
 }

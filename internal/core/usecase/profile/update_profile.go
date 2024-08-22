@@ -15,6 +15,11 @@ func NewUpdateProfile(profileRepo port.IProfileRepository) *UpdateProfileUseCase
 	}
 }
 
-func (uc *UpdateProfileUseCase) Execute(profile *domain.Profile) error {
-	return uc.profileRepo.Upate(profile)
+func (uc *UpdateProfileUseCase) Execute(profile *domain.Profile) (*domain.Profile, error) {
+	profile, err := uc.profileRepo.Upate(profile)
+	if err != nil {
+		return nil, err
+	}
+
+	return profile, nil
 }

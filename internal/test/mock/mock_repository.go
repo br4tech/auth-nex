@@ -243,11 +243,12 @@ func (mr *MockIProfileRepositoryMockRecorder) FindById(id interface{}) *gomock.C
 }
 
 // Upate mocks base method.
-func (m *MockIProfileRepository) Upate(profile *domain.Profile) error {
+func (m *MockIProfileRepository) Upate(profile *domain.Profile) (*domain.Profile, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Upate", profile)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*domain.Profile)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Upate indicates an expected call of Upate.
