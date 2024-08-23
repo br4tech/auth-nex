@@ -19,13 +19,13 @@ func NewUserHandler(userUseCase port.IUserUseCase) *UserHandler {
 }
 
 func (h *UserHandler) CreateUser(c echo.Context) error {
-	reqBody := new(dto.UserDTO)
+	reqBody := new(dto.UserClientDTO)
 
 	if err := c.Bind(reqBody); err != nil {
 		return HandlerResponse(c, http.StatusInternalServerError, "Bad request")
 	}
 
-	_, err := h.userUseCase.CreateUser(reqBody.ToDomain())
+	_, err := h.userUseCase.Create(reqBody.ToDomain())
 	if err != nil {
 		return HandlerResponse(c, http.StatusInternalServerError, "Failed to create user")
 	}

@@ -1,23 +1,28 @@
 package domain
 
 type User struct {
+	Id        int
 	Name      string `validate:"required"`
-	Email     string `validate:"required"`
-	CPF       string `validate:"required"`
-	Password  string `validate:"required"`
+	Email     string
+	CPF       string
+	Password  string
+	Phone     string
 	TenantId  int    `validate:"required"`
-	Companies []Company
-	ProfileId int `validate:"required"`
+	Role      string `validate:"required,oneof=system_admin admin user client"`
+	ProfileId int    // Opcional (orbigatorio para SystemUser) - usamos um ponteiro para permitir nulo
 }
 
-func NewUser(name string, email string, cpf string, password string,
-	profileId int, tenantId int) *User {
+func NewUser(id int, name string, email string, cpf string, password string, phone string,
+	tenantId int, role string, profileId int) *User {
 	return &User{
+		Id:        id,
 		Name:      name,
 		Email:     email,
 		CPF:       cpf,
 		Password:  password,
-		ProfileId: profileId,
+		Phone:     phone,
 		TenantId:  tenantId,
+		Role:      role,
+		ProfileId: profileId,
 	}
 }

@@ -25,7 +25,7 @@ func TestCreateUser(t *testing.T) {
 	e := echo.New()
 	reqBody := `{"username": "testuser", "email": "test@example.com", "password": "password"}`
 
-	mockUserUseCase.EXPECT().CreateUser(gomock.Any()).Return(nil, nil)
+	mockUserUseCase.EXPECT().Create(gomock.Any()).Return(nil, nil)
 
 	req := httptest.NewRequest(http.MethodPost, "/user", strings.NewReader(reqBody))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)

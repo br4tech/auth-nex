@@ -2,11 +2,10 @@ package model
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"gorm.io/gorm"
 )
 
 type Address struct {
-	gorm.Model
+	Id              int    `gorm:"primaryKey"`
 	Street          string `gorm:"not null"`
 	Number          string `gorm:"not null"`
 	Complement      string
@@ -16,6 +15,10 @@ type Address struct {
 	ZipCode         string `gorm:"not null"`
 	AddressableID   uint
 	AddressableType string
+}
+
+func (model Address) GetId() int {
+	return model.Id
 }
 
 func (model *Address) ToDomain() *domain.Address {

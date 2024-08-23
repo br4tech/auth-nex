@@ -6,21 +6,21 @@ type Company struct {
 	TradeName         string `validate:"required"`
 	Document          string `validate:"required"`
 	StateRegistration string `validate:"required"`
+	Type              string // Company type (MEI, ME, LTDA, etc.)
+	TenantId          int    `validate:"required"`
+	Schema            string
+	ParentCompanyId   int
 	Address           Address
+	Users             []User
 	Partners          []Partner
 	Activities        []Activity
-	Type              string // Company type (MEI, ME, LTDA, etc.)
-	TenantID          uint   `validate:"required"`
-	Schema            string
-	Users             []User
 }
 
-func NewCompany(id int, legalName string, tradeName string, document string,
-	stateRegistration string, address Address, partners []Partner,
-	activities []Activity, ctype string, tenantId uint, schema string,
+func NewCompany(legalName string, tradeName string, document string,
+	stateRegistration string, address Address, partners []Partner, parentCompanyId int,
+	activities []Activity, ctype string, tenantId int, schema string,
 	users []User) *Company {
 	return &Company{
-		Id:                id,
 		LegalName:         legalName,
 		TradeName:         tradeName,
 		Document:          document,
@@ -29,8 +29,9 @@ func NewCompany(id int, legalName string, tradeName string, document string,
 		Partners:          partners,
 		Activities:        activities,
 		Type:              ctype,
-		TenantID:          tenantId,
+		TenantId:          tenantId,
 		Schema:            schema,
 		Users:             users,
+		ParentCompanyId:   parentCompanyId,
 	}
 }

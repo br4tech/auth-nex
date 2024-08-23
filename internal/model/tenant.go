@@ -2,13 +2,10 @@ package model
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"gorm.io/gorm"
 )
 
 type Tenant struct {
-	gorm.Model
-
-	Id        int       `gorm:"primary_key;"`
+	Id        int       `gorm:"primaryKey"`
 	Name      string    `gorm:"unique;not null;"`
 	Companies []Company `gorm:"many2many:tenant_companies;"`
 	Users     []User    `gorm:"many2many:tenant_users;"`
@@ -52,7 +49,7 @@ func convertCompaniesFromDomain(domainCompanies []domain.Company, tenantId int) 
 		modelCompanies[i] = Company{
 			LegalName: domainCompany.LegalName,
 			TradeName: domainCompany.TradeName,
-			TenantID:  tenantId,
+			TenantId:  tenantId,
 		}
 	}
 	return modelCompanies

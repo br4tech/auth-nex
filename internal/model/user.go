@@ -3,24 +3,21 @@ package model
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/dgrijalva/jwt-go"
-	"gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
+	Id       int    `gorm:"primaryKey"`
+	Name     string `gorm:"not null"`
+	Email    string `gorm:"unique;not null"`
+	CPF      string `gorm:"unique;not null"`
+	Password string `gorm:"not null"`
+	Phone    string
 
-	Id            int     `gorm:"unique;not null"`
-	Name          string  `gorm:"not null"`
-	Email         string  `gorm:"unique;not null"`
-	Password      string  `gorm:"not null"`
-	CPF           string  `gorm:"unique;not null"`
-	Nationality   string  `gorm:"not null"`
-	MaritalStatus string  `gorm:"not null"`
-	Address       Address `gorm:"polymorphic:Addressable;"`
-	TenantId      int
-	Tenant        Tenant
-	Companies     []Company `gorm:"many2many:user_companies;"`
-	ProfileId     int
+	TenantId int
+	Tenant   Tenant `gorm:"foreignKey:TenantId"`
+
+	ProfileId int
+	Profile   Profile `gorm:"foreignKey:ProfileId"`
 }
 
 type Claims struct {
@@ -28,11 +25,17 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (model User) ToDomain() *domain.User {
+func (model User) GetId() int {
+	return model.Id
+}
+
+func (model *User) ToDomain() *domain.User {
 	return &domain.User{
 		Name:      model.Name,
 		Email:     model.Email,
+		CPF:       model.CPF,
 		Password:  model.Password,
+		Phone:     model.Phone,
 		TenantId:  model.TenantId,
 		ProfileId: model.ProfileId,
 	}
@@ -41,7 +44,9 @@ func (model User) ToDomain() *domain.User {
 func (model *User) FromDomain(domain *domain.User) {
 	model.Name = domain.Name
 	model.Email = domain.Email
+	model.CPF = domain.CPF
 	model.Password = domain.Password
+	model.Phone = domain.Phone
 	model.TenantId = domain.TenantId
 	model.ProfileId = domain.ProfileId
 }

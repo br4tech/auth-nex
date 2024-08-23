@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Compile a aplicação Go para o sistema operacional Linux e arquitetura AMD64
-RUN go build -o app cmd/wire_gen.go cmd/main.go
+RUN go build -o app cmd/main.go
 
 # Exponha a porta 8080 para o mundo externo
 EXPOSE 8080
