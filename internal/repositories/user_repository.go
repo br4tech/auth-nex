@@ -63,11 +63,15 @@ func (repo *userRepositoryImpl) FindBy(filter map[string]interface{}) (*domain.U
 	return user.ToDomain(), nil
 }
 
-func (repo *userRepositoryImpl) Update(user *domain.User) error {
+func (repo *userRepositoryImpl) Update(user *domain.User) (*domain.User, error) {
 	userModel := new(model.User)
 	userModel.FromDomain(user)
 
-	return repo.db.Save(userModel).Error
+	if err := repo.db.Save(userModel).Error; err != nil {
+		return nil, err
+	}
+
+	return userModel.ToDomain(), nil
 }
 
 func (repo *userRepositoryImpl) Delete(id int) error {

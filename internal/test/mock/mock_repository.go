@@ -452,11 +452,12 @@ func (mr *MockIUserRepositoryMockRecorder) FindById(id interface{}) *gomock.Call
 }
 
 // Update mocks base method.
-func (m *MockIUserRepository) Update(user *domain.User) error {
+func (m *MockIUserRepository) Update(user *domain.User) (*domain.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", user)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*domain.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Update indicates an expected call of Update.
