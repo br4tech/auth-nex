@@ -21,9 +21,8 @@ func TestGetUserAdminByEmailUseCase_Execute(t *testing.T) {
 
 	t.Run("Success", func(t *testing.T) {
 		userEmail := "admin@example.com"
-		expectedUser.Email = userEmail // Garantindo que o email do usuário seja o mesmo que estamos buscando
+		expectedUser.Email = userEmail
 
-		// Configura o mock para retornar o usuário esperado
 		userRepoMock.EXPECT().FindByEmail(userEmail).Return(expectedUser, nil)
 
 		user, err := getUserAdminByEmailUseCase.Execute(userEmail)
