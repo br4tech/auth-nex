@@ -28,7 +28,7 @@ type (
 		Create(tenant *domain.Tenant) (*domain.Tenant, error)
 		FindById(id int) (*domain.Tenant, error)
 		FindByName(name string) (*domain.Tenant, error)
-		Update(tenant *domain.Tenant) error
+		Update(tenant *domain.Tenant) (*domain.Tenant, error)
 		Delete(id int) error
 	}
 

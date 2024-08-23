@@ -24,7 +24,7 @@ func NewCreateTenantUseCase(tenantRepository port.ITenantRepository,
 func (uc *CreateTenantUseCase) Execute(tenant *domain.Tenant) error {
 	tenantId, err := uc.createTenant(tenant)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	tenant.Companies[0].TenantId = tenantId

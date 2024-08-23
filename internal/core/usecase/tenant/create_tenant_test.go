@@ -4,112 +4,76 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/br4tech/auth-nex/internal/core/domain"
-	"github.com/br4tech/auth-nex/internal/dto"
-	"github.com/br4tech/auth-nex/internal/mock"
+	"github.com/br4tech/auth-nex/internal/test/factories"
+	"github.com/br4tech/auth-nex/internal/test/mock"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 )
 
-func TestCreateTenant_Execute(t *testing.T) {
+func TestCreateTenantUseCase_Execute(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	tenantRepoMock := mock.NewMockITenantRepository(ctrl)
-	companyUseCaseMock := mock.NewMockICompanyUseCase(ctrl)
-	userUseCaseMock := mock.NewMockIUserUseCase(ctrl)
+	companyRepoMock := mock.NewMockICompanyRepository(ctrl)
+	userRepoMock := mock.NewMockIUserRepository(ctrl)
 
-	cpfPtr := "123.456.789-00"
-	profileIdPtr := 1
+	createTenantUseCase := NewCreateTenantUseCase(tenantRepoMock, companyRepoMock, userRepoMock)
 
-	tenantUseCase := NewTenantUseCase(tenantRepoMock, companyUseCaseMock, userUseCaseMock)
+	tenantToCreate := factories.NewTenantFactory()
+	createdTenant := factories.NewTenantFactory()
+	createdCompany := factories.NewCompanyFactory()
+	createdUser := factories.NewUserFactory("admin")
+	createdTenant.Id = 1
 
-	tenantDTO := &dto.TenantDTO{
-		Name: "app-0000",
-		Company: dto.CompanyDTO{
-			LegalName:         "Empresa Legal Ltda.",
-			TradeName:         "Empresa Legal",
-			Document:          "12345678901234",
-			StateRegistration: "123456789",
-			Address: dto.AddressDTO{
-				Street:     "Rua Principal",
-				Number:     "123",
-				Complement: "Apto 45",
-				District:   "Centro",
-				City:       "São Paulo",
-				State:      "SP",
-				ZipCode:    "01234567",
-			},
-			Type: "LTDA",
-		},
-		User: dto.UserSystemDTO{
-			Name:     "João Silva",
-			Email:    "joao@email.com",
-			CPF:      "12345678901",
-			Password: "senha_forte",
-			TenantId: 1,
-			Roles:    "system",
-		},
-	}
+	t.Run("Success", func(t *testing.T) {
+		companyToCreate := &tenantToCreate.Companies[0]
+		userToCreate := &tenantToCreate.Users[0]
 
-	tenantDomain := &domain.Tenant{
-		Name: "app-0000",
-	}
+		tenantRepoMock.EXPECT().Create(tenantToCreate).Return(createdTenant, nil)
+		companyRepoMock.EXPECT().Create(gomock.Any()).Return(createdCompany, nil)
+		userRepoMock.EXPECT().Create(gomock.Any()).Return(createdUser, nil)
 
-	companyDomain := &domain.Company{
-		LegalName:         "Empresa Legal Ltda.",
-		TradeName:         "Empresa Legal",
-		Document:          "12345678901234",
-		StateRegistration: "123456789",
-		Address: domain.Address{
-			Street:     "Rua Principal",
-			Number:     "123",
-			Complement: "Apto 45",
-			District:   "Centro",
-			City:       "São Paulo",
-			State:      "SP",
-			ZipCode:    "01234567",
-		},
-		Type: "LTDA",
-	}
+		err := createTenantUseCase.Execute(tenantToCreate)
 
-	userDomain := &domain.User{
-		Name:      "João Silva",
-		Email:     "joao@email.com",
-		CPF:       cpfPtr,
-		Password:  "senha_forte",
-		ProfileId: profileIdPtr,
-		TenantId:  1,
-	}
-
-	t.Run("success", func(t *testing.T) {
-		companyUseCaseMock.EXPECT().Create(gomock.Any()).Return(companyDomain, nil)
-		userUseCaseMock.EXPECT().Create(gomock.Any()).Return(userDomain, nil)
-		tenantRepoMock.EXPECT().Create(gomock.Any()).Return(tenantDomain, nil)
-
-		createdTenant, _ := tenantUseCase.CreateTenantWithCompanyAndAdmin(tenantDTO)
-
-		assert.Equal(t, tenantDTO.Name, createdTenant.Name)
-		assert.Equal(t, tenantDTO.Company.LegalName, createdTenant.Companies[0].LegalName)
-		assert.Equal(t, tenantDTO.Company.Document, createdTenant.Companies[0].Document)
-		assert.Equal(t, tenantDTO.User.Name, createdTenant.Users[0].Name)
-		assert.Equal(t, tenantDTO.User.Email, createdTenant.Users[0].Email)
+		assert.NoError(t, err)
+		assert.Equal(t, createdTenant.Id, companyToCreate.TenantId)
+		assert.Equal(t, createdTenant.Id, userToCreate.TenantId)
 	})
 
-	t.Run("Error", func(t *testing.T) {
+	t.Run("Error - Create Tenant fails", func(t *testing.T) {
+		expectedError := errors.New("Erro ao criar tenant")
 
-		invalidTenantDTO := &dto.TenantDTO{
-			Name:    "app-0001",
-			Company: dto.CompanyDTO{},
-		}
+		tenantRepoMock.EXPECT().Create(tenantToCreate).Return(nil, expectedError)
 
-		invalidTenant := errors.New("Invalid tenant")
-
-		tenantRepoMock.EXPECT().Create(gomock.Any()).Return(nil, invalidTenant)
-
-		createdTenant, err := tenantUseCase.CreateTenantWithCompanyAndAdmin(invalidTenantDTO)
+		err := createTenantUseCase.Execute(tenantToCreate)
 
 		assert.Error(t, err)
-		assert.Nil(t, createdTenant)
+		assert.Equal(t, expectedError, err)
+	})
+
+	t.Run("Error - Create Company fails", func(t *testing.T) {
+		expectedError := errors.New("Erro ao criar empresa")
+
+		tenantRepoMock.EXPECT().Create(tenantToCreate).Return(createdTenant, nil)
+		companyRepoMock.EXPECT().Create(gomock.Any()).Return(nil, expectedError)
+
+		err := createTenantUseCase.Execute(tenantToCreate)
+
+		assert.Error(t, err)
+		assert.Equal(t, expectedError, err)
+	})
+
+	t.Run("Error - Create User fails", func(t *testing.T) {
+		expectedError := errors.New("Erro ao criar u suário")
+
+		tenantRepoMock.EXPECT().Create(tenantToCreate).Return(createdTenant, nil)
+		companyRepoMock.EXPECT().Create(gomock.Any()).Return(createdCompany, nil)
+		userRepoMock.EXPECT().Create(gomock.Any()).Return(nil, expectedError)
+
+		err := createTenantUseCase.Execute(tenantToCreate)
+
+		assert.Error(t, err)
+		assert.Equal(t, expectedError, err)
 	})
 }

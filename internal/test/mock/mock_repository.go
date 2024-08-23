@@ -340,11 +340,12 @@ func (mr *MockITenantRepositoryMockRecorder) FindByName(name interface{}) *gomoc
 }
 
 // Update mocks base method.
-func (m *MockITenantRepository) Update(tenant *domain.Tenant) error {
+func (m *MockITenantRepository) Update(tenant *domain.Tenant) (*domain.Tenant, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", tenant)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*domain.Tenant)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Update indicates an expected call of Update.

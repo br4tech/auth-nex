@@ -42,11 +42,15 @@ func (repo *tenantRepositoryImp) FindByName(name string) (*domain.Tenant, error)
 	return tenantModel.ToDomain(), result.Error
 }
 
-func (repo *tenantRepositoryImp) Update(tenant *domain.Tenant) error {
+func (repo *tenantRepositoryImp) Update(tenant *domain.Tenant) (*domain.Tenant, error) {
 	tenantModel := new(model.Tenant)
 	tenantModel.FromDomain(tenant)
 
-	return repo.db.Save(tenant).Error
+	if err := repo.db.Save(tenant).Error; err != nil {
+		return nil, err
+	}
+
+	return tenantModel.ToDomain(), nil
 }
 
 func (repo *tenantRepositoryImp) Delete(id int) error {

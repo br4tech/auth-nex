@@ -15,6 +15,10 @@ func NewUpdateTenantUseCase(tenantRepo port.ITenantRepository) *UpdateTenantUseC
 	}
 }
 
-func (uc *UpdateTenantUseCase) Execute(tenant domain.Tenant) error {
-	return nil
+func (uc *UpdateTenantUseCase) Execute(tenant *domain.Tenant) (*domain.Tenant, error) {
+	tenant, err := uc.tenantRepo.Update(tenant)
+	if err != nil {
+		return nil, err
+	}
+	return tenant, err
 }
