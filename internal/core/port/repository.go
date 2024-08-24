@@ -20,7 +20,7 @@ type (
 	IProfileRepository interface {
 		Create(profile *domain.Profile) (*domain.Profile, error)
 		FindById(id int) (*domain.Profile, error)
-		Upate(profile *domain.Profile) (*domain.Profile, error)
+		Update(profile *domain.Profile) (*domain.Profile, error)
 		Delete(id int) error
 	}
 
