@@ -20,7 +20,7 @@ type (
 	IProfileRepository interface {
 		Create(profile *domain.Profile) (*domain.Profile, error)
 		FindById(id int) (*domain.Profile, error)
-		Upate(profile *domain.Profile) (*domain.Profile, error)
+		Update(profile *domain.Profile) (*domain.Profile, error)
 		Delete(id int) error
 	}
 
@@ -37,7 +37,7 @@ type (
 		FindBy(filter map[string]interface{}) (*domain.User, error)
 		FindById(id int) (*domain.User, error)
 		FindByEmail(email string) (*domain.User, error)
-		Update(user *domain.User) error
+		Update(user *domain.User) (*domain.User, error)
 		Delete(id int) error
 	}
 )

@@ -20,7 +20,7 @@ func (uc *CreateUserAttendanceUsecase) Execute(user *domain.User) error {
 
 	_, err := uc.userRepository.Create(user)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return nil

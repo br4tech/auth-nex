@@ -25,6 +25,10 @@ func (repo *profileRepositoryImpl) Create(profile *domain.Profile) (*domain.Prof
 		return nil, err
 	}
 
+	if err := repo.db.Model(profileModel).Association("Permissions").Append(profileModel.Permissions); err != nil {
+		return nil, err
+	}
+
 	return profileModel.ToDomain(), nil
 }
 
@@ -35,7 +39,7 @@ func (repo *profileRepositoryImpl) FindById(id int) (*domain.Profile, error) {
 	return profile.ToDomain(), result.Error
 }
 
-func (repo *profileRepositoryImpl) Upate(profile *domain.Profile) (*domain.Profile, error) {
+func (repo *profileRepositoryImpl) Update(profile *domain.Profile) (*domain.Profile, error) {
 	profileModel := new(model.Profile)
 	profileModel.FromDomain(profile)
 

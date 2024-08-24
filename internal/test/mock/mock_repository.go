@@ -242,19 +242,19 @@ func (mr *MockIProfileRepositoryMockRecorder) FindById(id interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockIProfileRepository)(nil).FindById), id)
 }
 
-// Upate mocks base method.
-func (m *MockIProfileRepository) Upate(profile *domain.Profile) (*domain.Profile, error) {
+// Update mocks base method.
+func (m *MockIProfileRepository) Update(profile *domain.Profile) (*domain.Profile, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Upate", profile)
+	ret := m.ctrl.Call(m, "Update", profile)
 	ret0, _ := ret[0].(*domain.Profile)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Upate indicates an expected call of Upate.
-func (mr *MockIProfileRepositoryMockRecorder) Upate(profile interface{}) *gomock.Call {
+// Update indicates an expected call of Update.
+func (mr *MockIProfileRepositoryMockRecorder) Update(profile interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Upate", reflect.TypeOf((*MockIProfileRepository)(nil).Upate), profile)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockIProfileRepository)(nil).Update), profile)
 }
 
 // MockITenantRepository is a mock of ITenantRepository interface.
@@ -452,11 +452,12 @@ func (mr *MockIUserRepositoryMockRecorder) FindById(id interface{}) *gomock.Call
 }
 
 // Update mocks base method.
-func (m *MockIUserRepository) Update(user *domain.User) error {
+func (m *MockIUserRepository) Update(user *domain.User) (*domain.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", user)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*domain.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Update indicates an expected call of Update.

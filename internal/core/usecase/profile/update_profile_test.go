@@ -21,9 +21,8 @@ func TestUpdateProfileUseCase_Execute(t *testing.T) {
 	updatedProfile := factories.NewProfileFactory("atendendte")
 
 	t.Run("Success", func(t *testing.T) {
-		updatedProfile.Name = "Nome Atualizado" // Simulando uma atualização no nome
+		updatedProfile.Name = "Nome Atualizado"
 
-		// Configura o mock para retornar o perfil atualizado
 		profileRepoMock.EXPECT().Update(profileToUpdate).Return(updatedProfile, nil)
 
 		profile, err := updateProfileUseCase.Execute(profileToUpdate)

@@ -15,11 +15,11 @@ func NewUpdateUserAdminUsecase(userRepository port.IUserRepository) *UpdateUserA
 	}
 }
 
-func (uc *UpdateUserAdminUsecase) Execute(user *domain.User) error {
-	err := uc.userRepository.Update(user)
+func (uc *UpdateUserAdminUsecase) Execute(user *domain.User) (*domain.User, error) {
+	user, err := uc.userRepository.Update(user)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return user, nil
 }

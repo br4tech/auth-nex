@@ -8,7 +8,6 @@ type Activity struct {
 	Id          int    `gorm:"primaryKey"`
 	CNAE        string `gorm:"not null"`
 	Description string `gorm:"not null"`
-	CompanyID   uint   `gorm:"column:comapany_id"`
 }
 
 func (model *Activity) ToDomain() *domain.Activity {

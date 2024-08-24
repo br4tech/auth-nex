@@ -1,4 +1,4 @@
-package user
+package authentication
 
 import (
 	"testing"
@@ -6,8 +6,8 @@ import (
 
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/dto"
-	"github.com/br4tech/auth-nex/internal/mock"
 	"github.com/br4tech/auth-nex/internal/model"
+	"github.com/br4tech/auth-nex/internal/test/mock"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
