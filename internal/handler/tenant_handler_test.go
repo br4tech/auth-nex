@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"github.com/br4tech/auth-nex/internal/mock"
+	"github.com/br4tech/auth-nex/internal/test/mock"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"

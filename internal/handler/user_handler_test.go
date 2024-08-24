@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/br4tech/auth-nex/internal/handler"
-	"github.com/br4tech/auth-nex/internal/mock"
+	"github.com/br4tech/auth-nex/internal/test/mock"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert" // or your preferred assertion library
 	"go.uber.org/mock/gomock"
