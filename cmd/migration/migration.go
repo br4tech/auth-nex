@@ -1,26 +1,19 @@
 package main
 
-import (
-	"github.com/br4tech/auth-nex/config"
-	"github.com/br4tech/auth-nex/internal/adapter"
-	"github.com/br4tech/auth-nex/internal/core/port"
-	"github.com/br4tech/auth-nex/internal/model"
-)
-
 func main() {
-	cfg := config.GetConfig()
-	postgresAdapter := adapter.NewPostgresAdapter[port.IModel](&cfg)
+	// 	cfg := config.GetConfig()
+	// 	postgresAdapter := adapter.NewPostgresAdapter(&cfg)
 
-	AuthnexMigrate(postgresAdapter)
-}
+	// 	AuthnexMigrate(postgresAdapter)
+	// }
 
-func AuthnexMigrate(db port.IDatabase[port.IModel]) {
-	db.GetDb().AutoMigrate(
-		&model.Tenant{},
-		&model.User{},
-		&model.Company{},
-		&model.Activity{},
-		&model.Address{},
-		&model.Partner{},
-	)
+	//	func AuthnexMigrate(db *gorm.DB) {
+	//		db.GetDb().AutoMigrate(
+	//			&model.Tenant{},
+	//			&model.User{},
+	//			&model.Company{},
+	//			&model.Activity{},
+	//			&model.Address{},
+	//			&model.Partner{},
+	//		)
 }
