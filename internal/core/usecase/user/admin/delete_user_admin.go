@@ -6,7 +6,7 @@ type DeleteUserAdminUsecase struct {
 	userRepository port.IUserRepository
 }
 
-func NewDeleteUserAdminUsecase(userRepository port.IUserRepository) *DeleteUserAdminUsecase {
+func NewDeleteUserAdminUsecase(userRepository port.IUserRepository) port.IDeleteUsecase {
 	return &DeleteUserAdminUsecase{
 		userRepository: userRepository,
 	}

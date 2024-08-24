@@ -9,7 +9,7 @@ type UpdateUserAdminUsecase struct {
 	userRepository port.IUserRepository
 }
 
-func NewUpdateUserAdminUsecase(userRepository port.IUserRepository) *UpdateUserAdminUsecase {
+func NewUpdateUserAdminUsecase(userRepository port.IUserRepository) port.IUpdateUserUsecase {
 	return &UpdateUserAdminUsecase{
 		userRepository: userRepository,
 	}

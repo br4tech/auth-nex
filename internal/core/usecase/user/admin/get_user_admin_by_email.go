@@ -9,7 +9,7 @@ type GetUserAdminByEmailUseCase struct {
 	userRepository port.IUserRepository
 }
 
-func NewGetUserAdminByEmailUseCase(userRepository port.IUserRepository) *GetUserAdminByEmailUseCase {
+func NewGetUserAdminByEmailUseCase(userRepository port.IUserRepository) port.IGetUserByEmailUseCase {
 	return &GetUserAdminByEmailUseCase{
 		userRepository: userRepository,
 	}

@@ -15,7 +15,7 @@ type CreateTenantUseCase struct {
 func NewCreateTenantUseCase(tenantRepository port.ITenantRepository,
 	companyRepository port.ICompanyRepository, userRepository port.IUserRepository,
 	profileRepository port.IProfileRepository,
-) *CreateTenantUseCase {
+) port.ICreateTenantUseCase {
 	return &CreateTenantUseCase{
 		tenantRepository:  tenantRepository,
 		userRepository:    userRepository,

@@ -9,7 +9,7 @@ type CreateUserAttendanceUsecase struct {
 	userRepository port.IUserRepository
 }
 
-func NewCreateUserAttendanceUsecase(userRepository port.IUserRepository) *CreateUserAttendanceUsecase {
+func NewCreateUserAttendanceUsecase(userRepository port.IUserRepository) port.ICreateUserUsecase {
 	return &CreateUserAttendanceUsecase{
 		userRepository: userRepository,
 	}

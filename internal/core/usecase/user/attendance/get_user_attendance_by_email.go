@@ -9,7 +9,7 @@ type GetUserAttendanceByEmailUsecase struct {
 	userRepository port.IUserRepository
 }
 
-func NewGetUserAttendanceByEmailUsecase(userRepository port.IUserRepository) *GetUserAttendanceByEmailUsecase {
+func NewGetUserAttendanceByEmailUsecase(userRepository port.IUserRepository) port.IGetUserByEmailUseCase {
 	return &GetUserAttendanceByEmailUsecase{
 		userRepository: userRepository,
 	}

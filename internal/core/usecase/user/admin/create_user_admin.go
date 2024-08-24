@@ -9,7 +9,7 @@ type CreateUserAdminUsecase struct {
 	userReposiotry port.IUserRepository
 }
 
-func NewCreateUsereAdminUseCase(userReposiotry port.IUserRepository) *CreateUserAdminUsecase {
+func NewCreateUsereAdminUseCase(userReposiotry port.IUserRepository) port.ICreateUserUsecase {
 	return &CreateUserAdminUsecase{
 		userReposiotry: userReposiotry,
 	}
