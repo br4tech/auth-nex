@@ -7,6 +7,7 @@ import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
 	"github.com/br4tech/auth-nex/internal/core/port"
 	"github.com/br4tech/auth-nex/internal/model"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -23,6 +24,13 @@ func NewUserRepository(db *gorm.DB) port.IUserRepository {
 func (repo *userRepositoryImpl) Create(user *domain.User) (*domain.User, error) {
 	userModel := new(model.User)
 	userModel.FromDomain(user)
+
+	hashedPassword, err := hashPassword(userModel.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	user.Password = hashedPassword
 
 	if err := repo.db.Create(userModel).Error; err != nil {
 		return nil, err
@@ -76,4 +84,12 @@ func (repo *userRepositoryImpl) Update(user *domain.User) (*domain.User, error) 
 
 func (repo *userRepositoryImpl) Delete(id int) error {
 	return repo.db.Delete(&model.User{}, id).Error
+}
+
+func hashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hashedPassword), nil
 }

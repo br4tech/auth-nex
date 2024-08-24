@@ -25,6 +25,10 @@ func (repo *profileRepositoryImpl) Create(profile *domain.Profile) (*domain.Prof
 		return nil, err
 	}
 
+	if err := repo.db.Model(profileModel).Association("Permissions").Append(profileModel.Permissions); err != nil {
+		return nil, err
+	}
+
 	return profileModel.ToDomain(), nil
 }
 

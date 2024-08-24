@@ -8,16 +8,16 @@ import (
 type User struct {
 	Id       int    `gorm:"primaryKey"`
 	Name     string `gorm:"not null"`
-	Email    string `gorm:"unique;not null"`
-	CPF      string `gorm:"unique;not null"`
+	Email    string
+	CPF      string
 	Password string `gorm:"not null"`
 	Phone    string
+	Role     string `gorm:"not null"`
 
 	TenantId int
 	Tenant   Tenant `gorm:"foreignKey:TenantId"`
 
-	ProfileId int
-	Profile   Profile `gorm:"foreignKey:ProfileId"`
+	Profiles []Profile `gorm:"many2many:user_profiles;"`
 }
 
 type Claims struct {
@@ -30,14 +30,19 @@ func (model User) GetId() int {
 }
 
 func (model *User) ToDomain() *domain.User {
+	var domainProfiles []domain.Profile
+	for _, profileModel := range model.Profiles {
+		domainProfiles = append(domainProfiles, *profileModel.ToDomain())
+	}
+
 	return &domain.User{
-		Name:      model.Name,
-		Email:     model.Email,
-		CPF:       model.CPF,
-		Password:  model.Password,
-		Phone:     model.Phone,
-		TenantId:  model.TenantId,
-		ProfileId: model.ProfileId,
+		Name:     model.Name,
+		Email:    model.Email,
+		CPF:      model.CPF,
+		Password: model.Password,
+		Phone:    model.Phone,
+		TenantId: model.TenantId,
+		Profiles: domainProfiles,
 	}
 }
 
@@ -48,5 +53,13 @@ func (model *User) FromDomain(domain *domain.User) {
 	model.Password = domain.Password
 	model.Phone = domain.Phone
 	model.TenantId = domain.TenantId
-	model.ProfileId = domain.ProfileId
+
+	var profileModels []Profile
+	for _, domainProfile := range domain.Profiles {
+		profileModel := Profile{}
+		profileModel.FromDomain(&domainProfile)
+		profileModels = append(profileModels, profileModel)
+	}
+
+	model.Profiles = profileModels
 }
