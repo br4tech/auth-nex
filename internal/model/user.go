@@ -25,10 +25,6 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (model User) GetId() int {
-	return model.Id
-}
-
 func (model *User) ToDomain() *domain.User {
 	var domainProfiles []domain.Profile
 	for _, profileModel := range model.Profiles {
@@ -42,6 +38,7 @@ func (model *User) ToDomain() *domain.User {
 		Password: model.Password,
 		Phone:    model.Phone,
 		TenantId: model.TenantId,
+		Role:     model.Role,
 		Profiles: domainProfiles,
 	}
 }
@@ -53,6 +50,7 @@ func (model *User) FromDomain(domain *domain.User) {
 	model.Password = domain.Password
 	model.Phone = domain.Phone
 	model.TenantId = domain.TenantId
+	model.Role = domain.Role
 
 	var profileModels []Profile
 	for _, domainProfile := range domain.Profiles {
