@@ -39,7 +39,7 @@ func (repo *profileRepositoryImpl) FindById(id int) (*domain.Profile, error) {
 	return profile.ToDomain(), result.Error
 }
 
-func (repo *profileRepositoryImpl) Upate(profile *domain.Profile) (*domain.Profile, error) {
+func (repo *profileRepositoryImpl) Update(profile *domain.Profile) (*domain.Profile, error) {
 	profileModel := new(model.Profile)
 	profileModel.FromDomain(profile)
 
