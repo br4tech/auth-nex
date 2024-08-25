@@ -1,84 +1,24 @@
 package adapter
 
 import (
-	"database/sql"
-	"errors"
+	"fmt"
+	"log"
 
-	"gorm.io/driver/postgres"
+	"github.com/br4tech/auth-nex/config"
+	"gorm.io/driver/postgres" // Adapte para o driver do seu banco de dados
 	"gorm.io/gorm"
 )
 
-type PostgresAdapter[T any] struct {
-	Db *gorm.DB
-}
+func NewPostgresAdapter(cfg config.Config) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
+		cfg.Db.Host, cfg.Db.User, cfg.Db.Password, cfg.Db.DBName, cfg.Db.Port, cfg.Db.SSLMode, cfg.Db.TimeZone)
 
-func NewPostgresAdapter[T any](db *sql.DB) *PostgresAdapter[T] {
-	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		return nil, fmt.Errorf("failed to connect database: %w", err)
 	}
 
-	return &PostgresAdapter[T]{
-		Db: gormDB,
-	}
-}
+	log.Println("Connected to the database!") // Ou use um logger mais robusto
 
-func (adapter *PostgresAdapter[T]) GetDb() *gorm.DB {
-	return adapter.Db
-}
-
-func (adapter *PostgresAdapter[T]) FindAll() ([]T, error) {
-	if adapter.Db == nil {
-		return nil, errors.New("database connection not established")
-	}
-
-	var results []T
-
-	result := adapter.Db.Find(&results)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return results, nil
-}
-
-func (adapter *PostgresAdapter[T]) Find(query interface{}, args ...interface{}) ([]*T, error) {
-	if adapter.Db == nil {
-		return nil, errors.New("database connection not established")
-	}
-
-	var results []*T
-	if err := adapter.Db.Where(query, args...).Find(&results).Error; err != nil {
-		return nil, err
-	}
-
-	return results, nil
-}
-
-func (adapter *PostgresAdapter[T]) FindBy(query interface{}, args ...interface{}) (*T, error) {
-	if adapter.Db == nil {
-		return nil, errors.New("database connection not established")
-	}
-
-	var result T
-	if err := adapter.Db.Where(query, args...).First(&result).Error; err != nil {
-		return nil, err
-	}
-
-	return &result, nil
-}
-
-func (adapter *PostgresAdapter[T]) Create(entity T) (int, error) {
-	if adapter.Db == nil {
-		return 0, errors.New("database connection not established")
-	}
-
-	create := adapter.Db.Create(entity)
-	if create.Error != nil {
-		return 0, create.Error
-	}
-
-	return 0, nil
+	return db, nil
 }

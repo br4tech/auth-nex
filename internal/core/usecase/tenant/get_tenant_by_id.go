@@ -9,7 +9,7 @@ type GetTenantByIdUseCase struct {
 	tenantRepo port.ITenantRepository
 }
 
-func NewGetTenantByIdUseCase(tenantRepo port.ITenantRepository) *GetTenantByIdUseCase {
+func NewGetTenantByIdUseCase(tenantRepo port.ITenantRepository) port.IGetTenantByIdUseCase {
 	return &GetTenantByIdUseCase{
 		tenantRepo: tenantRepo,
 	}

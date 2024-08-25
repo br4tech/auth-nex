@@ -9,7 +9,7 @@ type UpdateTenantUseCase struct {
 	tenantRepo port.ITenantRepository
 }
 
-func NewUpdateTenantUseCase(tenantRepo port.ITenantRepository) *UpdateTenantUseCase {
+func NewUpdateTenantUseCase(tenantRepo port.ITenantRepository) port.IUpdateTenantUseCase {
 	return &UpdateTenantUseCase{
 		tenantRepo: tenantRepo,
 	}

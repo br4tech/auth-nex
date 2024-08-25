@@ -9,7 +9,7 @@ type CreateUserManagerUseCase struct {
 	userRepository port.IUserRepository
 }
 
-func NewCreateUserManagerUseCase(userRepository port.IUserRepository) *CreateUserManagerUseCase {
+func NewCreateUserManagerUseCase(userRepository port.IUserRepository) port.ICreateUserUsecase {
 	return &CreateUserManagerUseCase{
 		userRepository: userRepository,
 	}

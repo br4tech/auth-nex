@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/br4tech/auth-nex/internal/core/domain"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type User struct {
@@ -21,7 +21,7 @@ type User struct {
 }
 
 type Claims struct {
-	Email string `json:"email"`
+	Id int `json:"id"`
 	jwt.StandardClaims
 }
 
