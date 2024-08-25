@@ -1,4 +1,4 @@
-package authentication
+package auth
 
 import (
 	"testing"
@@ -14,12 +14,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func TestAuthUseCase(t *testing.T) {
+func TestAuthenticateUserUseCase(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	userRepoMock := mock.NewMockIUserRepository(ctrl)
-	authUseCase := NewAuthUseCase(userRepoMock)
+	AuthenticateUserUseCase := NewAuthenticateUserUseCase(userRepoMock)
 
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("123456"), bcrypt.DefaultCost)
 
@@ -31,7 +31,7 @@ func TestAuthUseCase(t *testing.T) {
 	t.Run("Authenticate - Success", func(t *testing.T) {
 		userRepoMock.EXPECT().FindByEmail(userDomain.Email).Return(userDomain, nil)
 
-		token, err := authUseCase.Authenticate(&dto.UserTokenDTO{
+		token, err := AuthenticateUserUseCase.Authenticate(&dto.UserTokenDTO{
 			Email:    userDomain.Email,
 			Password: "123456",
 		})
@@ -39,7 +39,7 @@ func TestAuthUseCase(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotEmpty(t, token)
 
-		claims, err := authUseCase.ValidateAccessToken(*token)
+		claims, err := AuthenticateUserUseCase.ValidateAccessToken(*token)
 		assert.NoError(t, err)
 		assert.Equal(t, userDomain.Email, claims.Email)
 	})
@@ -47,7 +47,7 @@ func TestAuthUseCase(t *testing.T) {
 	t.Run("Authenticate - Invalid Password", func(t *testing.T) {
 		userRepoMock.EXPECT().FindByEmail(userDomain.Email).Return(userDomain, nil)
 
-		token, err := authUseCase.Authenticate(&dto.UserTokenDTO{
+		token, err := AuthenticateUserUseCase.Authenticate(&dto.UserTokenDTO{
 			Email:    userDomain.Email,
 			Password: "wrongpassword",
 		})
@@ -59,7 +59,7 @@ func TestAuthUseCase(t *testing.T) {
 	t.Run("CreateUser - Success", func(t *testing.T) {
 		userRepoMock.EXPECT().Create(gomock.Any()).Return(nil, nil)
 
-		createdUser, err := authUseCase.Create(userDomain)
+		createdUser, err := AuthenticateUserUseCase.Create(userDomain)
 
 		assert.NoError(t, err)
 		assert.Equal(t, userDomain, createdUser)
@@ -68,7 +68,7 @@ func TestAuthUseCase(t *testing.T) {
 	t.Run("ValidateAccessToken - Success", func(t *testing.T) {
 		token, _ := generateAccessToken(userDomain.Email)
 
-		claims, err := authUseCase.ValidateAccessToken(token)
+		claims, err := AuthenticateUserUseCase.ValidateAccessToken(token)
 
 		assert.NoError(t, err)
 		assert.Equal(t, userDomain.Email, claims.Email)
@@ -85,7 +85,7 @@ func TestAuthUseCase(t *testing.T) {
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 		tokenString, _ := token.SignedString(jwtKey)
 
-		_, err := authUseCase.ValidateAccessToken(tokenString)
+		_, err := AuthenticateUserUseCase.ValidateAccessToken(tokenString)
 
 		assert.Error(t, err)
 	})

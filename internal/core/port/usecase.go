@@ -21,11 +21,15 @@ type (
 		Execute(tenant *domain.Tenant) (*domain.Tenant, error)
 	}
 
+	IGenerateTokenUseCase interface {
+		Execute(id int) (string, error)
+	}
+
 	ICreateUserUsecase interface {
 		Execute(user *domain.User) error
 	}
 
-	IDeleteUsecase interface {
+	IDeleteUserUsecase interface {
 		Execute(id int) error
 	}
 
