@@ -6,7 +6,7 @@ type DeleteUserAttendanceUsecase struct {
 	userRepository port.IUserRepository
 }
 
-func NewDeleteUserAttendanceUsecase(userRepository port.IUserRepository) port.IDeleteUsecase {
+func NewDeleteUserAttendanceUsecase(userRepository port.IUserRepository) port.IDeleteUserUsecase {
 	return &DeleteUserAttendanceUsecase{
 		userRepository: userRepository,
 	}
