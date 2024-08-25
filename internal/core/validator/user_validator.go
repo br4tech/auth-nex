@@ -12,7 +12,7 @@ func ValidateUserSystem(user *domain.User) error {
 	if user.Role != "system" {
 		return errors.New("invalid user role")
 	}
-	if user.Email == "" || user.CPF == "" || user.ProfileId == 0 {
+	if user.Email == "" || user.CPF == "" {
 		return errors.New("missing required fields for system user")
 	}
 	return validate.Struct(user)

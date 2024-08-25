@@ -2,6 +2,7 @@ package validator
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/go-playground/validator"
 )
@@ -47,4 +48,12 @@ func ValidateStruct(d any) error {
 	}
 
 	return nil
+}
+
+func IsRequiredFieldMissing(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	return strings.Contains(err.Error(), "required")
 }
