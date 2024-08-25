@@ -37,6 +37,7 @@ type (
 		FindBy(filter map[string]interface{}) (*domain.User, error)
 		FindById(id int) (*domain.User, error)
 		FindByEmail(email string) (*domain.User, error)
+		FindByPhone(phone string) (*domain.User, error)
 		Update(user *domain.User) (*domain.User, error)
 		Delete(id int) error
 	}

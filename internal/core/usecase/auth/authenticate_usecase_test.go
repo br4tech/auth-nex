@@ -1,92 +1,118 @@
 package auth
 
 import (
+	"errors"
 	"testing"
-	"time"
 
-	"github.com/br4tech/auth-nex/internal/core/domain"
+	"github.com/br4tech/auth-nex/internal/core/validator"
 	"github.com/br4tech/auth-nex/internal/dto"
-	"github.com/br4tech/auth-nex/internal/model"
+	"github.com/br4tech/auth-nex/internal/test/factories"
 	"github.com/br4tech/auth-nex/internal/test/mock"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
-	"golang.org/x/crypto/bcrypt"
 )
 
-func TestAuthenticateUserUseCase(t *testing.T) {
+func TestAuthenticateUserUseCase_Execute(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	userRepoMock := mock.NewMockIUserRepository(ctrl)
-	AuthenticateUserUseCase := NewAuthenticateUserUseCase(userRepoMock)
+	generateTokenUseCaseMock := mock.NewMockIGenerateTokenUseCase(ctrl)
 
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("123456"), bcrypt.DefaultCost)
-
-	userDomain := &domain.User{
-		Email:    "test@example.com",
-		Password: string(hashedPassword),
+	authenticateUserUseCase := &AuthenticateUserUseCase{
+		userRepository:       userRepoMock,
+		generateTokenUseCase: generateTokenUseCaseMock,
 	}
 
-	t.Run("Authenticate - Success", func(t *testing.T) {
-		userRepoMock.EXPECT().FindByEmail(userDomain.Email).Return(userDomain, nil)
+	t.Run("Success - Email and Password", func(t *testing.T) {
+		userReq := &dto.UserTokenDTO{
+			Email:    "test@example.com",
+			Password: "senha123",
+		}
+		expectedUser := factories.NewUserFactory("admin")
+		expectedUser.Email = userReq.Email
+		expectedUser.Password = validator.HashPassword(userReq.Password)
+		expectedToken := "token_valido"
 
-		token, err := AuthenticateUserUseCase.Authenticate(&dto.UserTokenDTO{
-			Email:    userDomain.Email,
-			Password: "123456",
-		})
+		userRepoMock.EXPECT().FindByEmail(userReq.Email).Return(expectedUser, nil)
+		generateTokenUseCaseMock.EXPECT().Execute(expectedUser.Id).Return(expectedToken, nil)
+
+		token, err := authenticateUserUseCase.Execute(userReq)
 
 		assert.NoError(t, err)
-		assert.NotEmpty(t, token)
-
-		claims, err := AuthenticateUserUseCase.ValidateAccessToken(*token)
-		assert.NoError(t, err)
-		assert.Equal(t, userDomain.Email, claims.Email)
+		assert.NotNil(t, token)
+		assert.Equal(t, expectedToken, *token)
 	})
 
-	t.Run("Authenticate - Invalid Password", func(t *testing.T) {
-		userRepoMock.EXPECT().FindByEmail(userDomain.Email).Return(userDomain, nil)
+	t.Run("Success - Phone", func(t *testing.T) {
+		userReq := &dto.UserTokenDTO{
+			Phone: "+5511987654321",
+		}
+		expectedUser := factories.NewUserFactory("customer")
+		expectedUser.Phone = userReq.Phone
+		expectedToken := "token_valido"
 
-		token, err := AuthenticateUserUseCase.Authenticate(&dto.UserTokenDTO{
-			Email:    userDomain.Email,
-			Password: "wrongpassword",
-		})
+		userRepoMock.EXPECT().FindByPhone(userReq.Phone).Return(expectedUser, nil) // Adaptado para o método FindBy
+		generateTokenUseCaseMock.EXPECT().Execute(expectedUser.Id).Return(expectedToken, nil)
+
+		token, err := authenticateUserUseCase.Execute(userReq)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, token)
+		assert.Equal(t, expectedToken, *token)
+	})
+
+	t.Run("Error - Invalid email/password", func(t *testing.T) {
+		userReq := &dto.UserTokenDTO{
+			Email:    "test@example.com",
+			Password: "senha_errada",
+		}
+		expectedUser := factories.NewUserFactory("admin")
+		expectedUser.Email = userReq.Email
+		expectedUser.Password = validator.HashPassword("senha123")
+
+		userRepoMock.EXPECT().FindByEmail(userReq.Email).Return(expectedUser, nil)
+
+		token, err := authenticateUserUseCase.Execute(userReq)
 
 		assert.Error(t, err)
 		assert.Nil(t, token)
+		assert.Equal(t, "Incorrect password", err.Error())
 	})
 
-	t.Run("CreateUser - Success", func(t *testing.T) {
-		userRepoMock.EXPECT().Create(gomock.Any()).Return(nil, nil)
-
-		createdUser, err := AuthenticateUserUseCase.Create(userDomain)
-
-		assert.NoError(t, err)
-		assert.Equal(t, userDomain, createdUser)
-	})
-
-	t.Run("ValidateAccessToken - Success", func(t *testing.T) {
-		token, _ := generateAccessToken(userDomain.Email)
-
-		claims, err := AuthenticateUserUseCase.ValidateAccessToken(token)
-
-		assert.NoError(t, err)
-		assert.Equal(t, userDomain.Email, claims.Email)
-	})
-
-	t.Run("ValidateAccessToken - Expired", func(t *testing.T) {
-		claims := &model.Claims{
-			Email: userDomain.Email,
-			StandardClaims: jwt.StandardClaims{
-				ExpiresAt: time.Now().Add(-1 * time.Hour).Unix(), // Expired an hour ago
-			},
+	t.Run("Error - User not found", func(t *testing.T) {
+		userReq := &dto.UserTokenDTO{
+			Email:    "nonexistent@example.com",
+			Password: "senha123",
 		}
+		expectedError := errors.New("Usuário não encontrado")
 
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-		tokenString, _ := token.SignedString(jwtKey)
+		userRepoMock.EXPECT().FindByEmail(userReq.Email).Return(nil, expectedError)
 
-		_, err := AuthenticateUserUseCase.ValidateAccessToken(tokenString)
+		token, err := authenticateUserUseCase.Execute(userReq)
 
 		assert.Error(t, err)
+		assert.Nil(t, token)
+		assert.Equal(t, expectedError, err)
+	})
+
+	t.Run("Error - Generate token fails", func(t *testing.T) {
+		userReq := &dto.UserTokenDTO{
+			Email:    "test@example.com",
+			Password: "senha123",
+		}
+		expectedUser := factories.NewUserFactory("admin")
+		expectedUser.Email = userReq.Email
+		expectedUser.Password = validator.HashPassword(userReq.Password)
+		expectedError := errors.New("Erro ao gerar token")
+
+		userRepoMock.EXPECT().FindByEmail(userReq.Email).Return(expectedUser, nil)
+		generateTokenUseCaseMock.EXPECT().Execute(expectedUser.Id).Return("", expectedError)
+
+		token, err := authenticateUserUseCase.Execute(userReq)
+
+		assert.Error(t, err)
+		assert.Nil(t, token)
+		assert.Equal(t, expectedError, err)
 	})
 }

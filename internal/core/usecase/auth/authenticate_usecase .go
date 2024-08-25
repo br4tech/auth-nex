@@ -59,7 +59,7 @@ func (uc *AuthenticateUserUseCase) authenticateWithEmailAndPassword(email string
 }
 
 func (uc *AuthenticateUserUseCase) authenticateWithCelular(celular string) (*domain.User, error) {
-	user, err := uc.userRepository.FindByEmail(celular)
+	user, err := uc.userRepository.FindByPhone(celular)
 
 	if err != nil {
 		return nil, err
