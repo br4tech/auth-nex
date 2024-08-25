@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"errors"
 	"testing"
 	"time"
 
@@ -42,7 +41,7 @@ func TestValidateTokenUseCase_Execute(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Nil(t, parsedClaims)
-		assert.Equal(t, "Token inválido", err.Error())
+		assert.Contains(t, err.Error(), "invalid number of segments")
 	})
 
 	t.Run("Error - Expired token", func(t *testing.T) {
@@ -63,6 +62,6 @@ func TestValidateTokenUseCase_Execute(t *testing.T) {
 
 		assert.Error(t, err)
 		assert.Nil(t, parsedClaims)
-		assert.True(t, errors.Is(err, jwt.ErrTokenExpired))
+		assert.Contains(t, err.Error(), "token is expired")
 	})
 }

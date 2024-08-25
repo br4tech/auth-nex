@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/br4tech/auth-nex/internal/model"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/stretchr/testify/assert"
 )
 

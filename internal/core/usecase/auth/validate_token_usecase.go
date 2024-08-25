@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"errors"
+
 	"github.com/br4tech/auth-nex/internal/model"
 	"github.com/golang-jwt/jwt"
 )
@@ -27,5 +29,5 @@ func (uc *ValidateTokenUseCase) Execute(tokenString string) (*model.Claims, erro
 		return claims, nil
 	}
 
-	return nil, jwt.NewValidationError("Token inválido", jwt.ValidationErrorMalformed)
+	return nil, errors.New("Token inválido")
 }
